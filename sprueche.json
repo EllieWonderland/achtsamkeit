@@ -1,102 +1,182 @@
 [
   {
+    "id": "S001",
     "text": "Mein Atem ist mein Anker, der mich auch in stürmischen Zeiten im Hier und Jetzt hält.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Achtsamkeit"]
   },
   {
+    "id": "S002",
     "text": "Ich erlaube mir, eine Pause zu machen, ohne etwas leisten zu müssen.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Achtsamkeit"]
   },
   {
+    "id": "S003",
     "text": "Gedanken sind nur Wolken am Himmel meines Bewusstseins – ich lasse sie einfach weiterziehen.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Achtsamkeit"]
   },
   {
+    "id": "S004",
     "text": "Nicht alles muss heute perfekt sein. Ich tue mein Bestes, und das ist genug.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Achtsamkeit"]
   },
   {
+    "id": "S005",
     "text": "In der Ruhe liegt die Kraft.",
-    "author": "Konfuzius",
+    "author": "Deutsches Sprichwort",
     "tags": ["Stress", "Achtsamkeit"]
   },
   {
+    "id": "S006",
     "text": "Mit jedem tiefen Ausatmen lasse ich ein Stück Anspannung des Tages los.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Achtsamkeit"]
   },
   {
+    "id": "S007",
     "text": "Nichts bringt uns mehr vom Weg ab als die Eile.",
-    "author": "Friedrich Nietzsche",
+    "author": "Unbekannt",
     "tags": ["Stress", "Achtsamkeit"]
   },
   {
+    "id": "S008",
     "text": "Stress ist das, was wir denken, Entspannung ist das, was wir sind.",
     "author": "Unbekannt",
     "tags": ["Stress", "Achtsamkeit"]
   },
   {
+    "id": "S009",
     "text": "Ich fokussiere mich auf diesen einen Moment, alles andere hat später noch Zeit.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Achtsamkeit"]
   },
   {
+    "id": "S010",
     "text": "Strebe nach Stille, und du wirst die Antwort auf den Lärm finden.",
     "author": "Unbekannt",
     "tags": ["Stress", "Achtsamkeit"]
   },
   {
+    "id": "S011",
     "text": "Auch an anstrengenden Tagen finde ich mindestens eine kleine Sache, die mir ein Lächeln geschenkt hat.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Dankbarkeit"]
   },
   {
+    "id": "S012",
     "text": "Ich bin dankbar für die Herausforderungen von heute, denn sie zeigen mir, wie stark ich sein kann.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Dankbarkeit"]
   },
   {
+    "id": "S013",
     "text": "Wenn der Trubel zu laut wird, besinne ich mich auf die leisen Dinge, für die ich von Herzen dankbar bin.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Dankbarkeit"]
   },
   {
+    "id": "S014",
     "text": "Jeder noch so stressige Tag hat auch seine hellen Momente, wenn wir nur genau hinsehen.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Dankbarkeit"]
   },
   {
+    "id": "S015",
     "text": "Dankbarkeit ist der ruhige Hafen, den ich ansteuere, wenn die Wellen des Alltags zu hoch schlagen.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Dankbarkeit"]
   },
   {
+    "id": "S016",
     "text": "Selbst im größten Chaos gibt es etwas Gutes. Ich lenke meinen Blick auf das, was bereits wunderbar ist.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Dankbarkeit"]
   },
   {
+    "id": "S017",
     "text": "Ich danke meinem Körper, dass er mich auch an Tagen voller Stress zuverlässig trägt.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Dankbarkeit"]
   },
   {
+    "id": "S018",
     "text": "Ein dankbarer Gedanke am Abend bringt Frieden in einen ruhelosen Geist.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Dankbarkeit"]
   },
   {
+    "id": "S019",
     "text": "Wenn der Tag mir viel abverlangt hat, bin ich umso dankbarer für ein weiches Bett und einen ruhigen Moment.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Dankbarkeit"]
   },
   {
+    "id": "S020",
     "text": "Dankbarkeit verwandelt den Stress des Mangels in die Fülle des gegenwärtigen Augenblicks.",
     "author": "Eigene Affirmation",
     "tags": ["Stress", "Dankbarkeit"]
+  },
+  {
+    "id": "S021",
+    "text": "Ich bin voller Energie und Vorfreude – heute gehört mir!",
+    "author": "Eigene Affirmation",
+    "tags": ["Energie", "Motivation"]
+  },
+  {
+    "id": "S022",
+    "text": "Die Freude von heute ist die Kraft für morgen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Freude", "Energie"]
+  },
+  {
+    "id": "S023",
+    "text": "Ich genieße die Leichtigkeit dieses Moments und lasse mich von ihr tragen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Freude", "Achtsamkeit"]
+  },
+  {
+    "id": "S024",
+    "text": "Das Glück klopft leise an – ich öffne die Tür.",
+    "author": "Eigene Affirmation",
+    "tags": ["Freude", "Achtsamkeit"]
+  },
+  {
+    "id": "S025",
+    "text": "Ausgeglichenheit ist kein Zufall, sondern die Frucht achtsamer Momente.",
+    "author": "Eigene Affirmation",
+    "tags": ["Ausgeglichenheit", "Achtsamkeit"]
+  },
+  {
+    "id": "S026",
+    "text": "Ich bin im Einklang mit mir selbst – das ist heute alles, was ich brauche.",
+    "author": "Eigene Affirmation",
+    "tags": ["Ausgeglichenheit", "Achtsamkeit"]
+  },
+  {
+    "id": "S027",
+    "text": "Auch Traurigkeit darf sein. Ich halte mich selbst sanft, wie ich es bei einer guten Freundin tun würde.",
+    "author": "Eigene Affirmation",
+    "tags": ["Traurigkeit", "Selbstfürsorge"]
+  },
+  {
+    "id": "S028",
+    "text": "Meine Gefühle sind Wellen – sie kommen und gehen. Ich bin der Ozean darunter.",
+    "author": "Eigene Affirmation",
+    "tags": ["Traurigkeit", "Achtsamkeit"]
+  },
+  {
+    "id": "S029",
+    "text": "Es ist in Ordnung, sich nicht in Ordnung zu fühlen. Morgen ist ein neuer Anfang.",
+    "author": "Eigene Affirmation",
+    "tags": ["Traurigkeit", "Selbstfürsorge"]
+  },
+  {
+    "id": "S030",
+    "text": "Ich kümmere mich liebevoll um mich selbst – das ist keine Schwäche, sondern Stärke.",
+    "author": "Eigene Affirmation",
+    "tags": ["Selbstfürsorge", "Ausgeglichenheit"]
   }
 ]
