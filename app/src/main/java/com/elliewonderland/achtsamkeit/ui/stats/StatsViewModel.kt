@@ -17,6 +17,7 @@ data class StatsUiState(
     val freezeAvailableThisMonth: Boolean = false,
     val moodDistribution: Map<String, Int> = emptyMap(),
     val gratitudeDistribution: Map<String, Int> = emptyMap(),
+    val energyDistribution: Map<String, Int> = emptyMap(),
     val isLoading: Boolean = false,
 )
 
@@ -40,12 +41,14 @@ class StatsViewModel : ViewModel() {
             _state.update { it.copy(isLoading = true) }
             val moodDist     = repo.getMoodDistribution(uid, days)
             val gratDist     = repo.getGratitudeDistribution(uid, days)
+            val energyDist   = repo.getEnergyDistribution(uid, days)
             val streak       = repo.getCurrentStreak(uid)
             val freezeAvail  = repo.isStreakFreezeAvailableThisMonth(uid)
             _state.update {
                 it.copy(
                     moodDistribution         = moodDist,
                     gratitudeDistribution    = gratDist,
+                    energyDistribution       = energyDist,
                     streak                   = streak,
                     freezeAvailableThisMonth = freezeAvail,
                     isLoading                = false,

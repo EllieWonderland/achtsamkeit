@@ -66,7 +66,7 @@ fun AppNavHost(choice: ThemeChoice) {
             composable(Screen.Tagebuch.route)      { TagebuchScreen(navController) }
             composable(Screen.Statistik.route)     { StatistikScreen(navController) }
             composable(Screen.Profil.route)        { ProfilScreen(navController, choice) }
-            composable(Screen.ThemePicker.route)   { ThemePickerScreen(choice) }
+            composable(Screen.ThemePicker.route)   { ThemePickerScreen(choice, navController) }
             composable(Screen.NotifSettings.route) { NotificationSettingsScreen(navController) }
             composable(Screen.Favorites.route)     { FavoritesScreen(navController) }
             composable(Screen.WeeklyReview.route)  { WeeklyReviewScreen(navController) }

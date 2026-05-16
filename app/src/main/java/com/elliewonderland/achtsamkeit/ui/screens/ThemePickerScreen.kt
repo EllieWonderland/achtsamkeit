@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,13 +19,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
 import com.elliewonderland.achtsamkeit.ui.theme.*
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThemePickerScreen(
     current: ThemeChoice,
+    navController: NavController,
 ) {
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -35,25 +39,47 @@ fun ThemePickerScreen(
 
     LaunchedEffect(Unit) { isPremium = PremiumRepository.isPremium() }
 
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(
+                            "Aussehen",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = colors.inkSoft,
+                        )
+                        Text(
+                            "Dein Look",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = colors.ink,
+                        )
+                    }
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector        = Icons.AutoMirrored.Outlined.ArrowBack,
+                            contentDescription = "Zurück",
+                            tint               = colors.ink,
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = colors.background,
+                ),
+            )
+        },
+        containerColor = colors.background,
+    ) { innerPadding ->
+
     Column(
         Modifier
             .fillMaxSize()
-            .background(colors.background)
-            .padding(horizontal = 24.dp, vertical = 20.dp),
+            .padding(innerPadding)
+            .padding(horizontal = 24.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(28.dp),
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(
-                "Aussehen",
-                style = MaterialTheme.typography.labelSmall,
-                color = colors.inkSoft,
-            )
-            Text(
-                "Dein Look",
-                style = MaterialTheme.typography.displaySmall,
-                color = colors.ink,
-            )
-        }
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(
@@ -107,6 +133,8 @@ fun ThemePickerScreen(
             }
         }
     }
+
+    } // end Scaffold content
 
     if (showUpgradeDialog) {
         AlertDialog(

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elliewonderland.achtsamkeit.data.repository.EntryRepository
 import com.elliewonderland.achtsamkeit.data.repository.ReviewRepository
+import com.elliewonderland.achtsamkeit.data.repository.StatsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +16,7 @@ data class HeuteUiState(
     val hasEveningEntry: Boolean = false,
     val weeklyUnlocked: Boolean = false,
     val monthlyUnlocked: Boolean = false,
+    val streak: Int = 0,
     val isLoading: Boolean = true,
 )
 
@@ -22,6 +24,7 @@ class HeuteViewModel : ViewModel() {
 
     private val repo       = EntryRepository()
     private val reviewRepo = ReviewRepository()
+    private val statsRepo  = StatsRepository()
 
     private val _uiState = MutableStateFlow(HeuteUiState())
     val uiState: StateFlow<HeuteUiState> = _uiState.asStateFlow()
@@ -32,11 +35,13 @@ class HeuteViewModel : ViewModel() {
             val hasEvening      = runCatching { repo.hasEntryToday(userId, "evening") }.onFailure { Log.e("HeuteViewModel", "hasEntryToday evening failed", it) }.getOrDefault(false)
             val weeklyUnlocked  = runCatching { reviewRepo.isWeeklyReviewUnlocked(userId) }.onFailure { Log.e("HeuteViewModel", "isWeeklyReviewUnlocked failed", it) }.getOrDefault(false)
             val monthlyUnlocked = reviewRepo.isMonthlyReviewUnlocked()
+            val streak          = runCatching { statsRepo.getCurrentStreak(userId) }.onFailure { Log.e("HeuteViewModel", "getCurrentStreak failed", it) }.getOrDefault(0)
             _uiState.value = HeuteUiState(
                 hasMorningEntry = hasMorning,
                 hasEveningEntry = hasEvening,
                 weeklyUnlocked  = weeklyUnlocked,
                 monthlyUnlocked = monthlyUnlocked,
+                streak          = streak,
                 isLoading       = false,
             )
         }

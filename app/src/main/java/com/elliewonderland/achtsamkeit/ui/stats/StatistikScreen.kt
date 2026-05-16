@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
 import com.elliewonderland.achtsamkeit.ui.components.ShimmerCard
 import com.elliewonderland.achtsamkeit.ui.premium.PaywallCard
+import com.elliewonderland.achtsamkeit.ui.stats.components.EnergyBarChart
 import com.elliewonderland.achtsamkeit.ui.stats.components.GratitudePieChart
 import com.elliewonderland.achtsamkeit.ui.stats.components.MoodBarChart
 import com.elliewonderland.achtsamkeit.ui.stats.components.StreakCard
@@ -100,6 +101,10 @@ fun StatistikScreen(
             } else {
                 StatCard(title = "Stimmungsverteilung") {
                     MoodBarChart(distribution = state.moodDistribution)
+                }
+
+                StatCard(title = "Energielevel") {
+                    EnergyBarChart(distribution = state.energyDistribution)
                 }
 
                 StatCard(title = "Dankbarkeits-Momente") {

@@ -42,6 +42,18 @@ class StatsRepository {
         return (snap.getLong("current_streak") ?: 0L).toInt()
     }
 
+    suspend fun getEnergyDistribution(userId: String, days: Int): Map<String, Int> {
+        val since = System.currentTimeMillis() - days * 86_400_000L
+        val snap = db.collection("users").document(userId)
+            .collection("entries")
+            .whereGreaterThan("created_at", since)
+            .get().await()
+        return snap.documents
+            .groupingBy { it.getString("energy") ?: "" }
+            .eachCount()
+            .filter { it.key.isNotEmpty() }
+    }
+
     suspend fun isStreakFreezeAvailableThisMonth(userId: String): Boolean {
         val currentMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))
         val snap = db.collection("users").document(userId).get().await()
