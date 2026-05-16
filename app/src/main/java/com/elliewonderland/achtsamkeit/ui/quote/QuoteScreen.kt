@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.quote
+﻿package com.elliewonderland.achtsamkeit.ui.quote
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
@@ -76,7 +76,7 @@ fun QuoteScreen(navController: NavController, entryId: String) {
             }
             is QuoteUiState.Ready -> {
                 Text(
-                    text      = "„${s.quote.text}"",
+                    text      = "\u201E${s.quote.text}\u201C",
                     style     = MaterialTheme.typography.headlineSmall,
                     color     = AppTheme.colors.ink,
                     textAlign = TextAlign.Center,
@@ -104,7 +104,7 @@ fun QuoteScreen(navController: NavController, entryId: String) {
                         )
                     }
                     IconButton(onClick = {
-                        val shareText = "„${s.quote.text}" – ${s.quote.author}"
+                        val shareText = "\u201E${s.quote.text}\u201C – ${s.quote.author}"
                         val intent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
                             putExtra(Intent.EXTRA_TEXT, shareText)
