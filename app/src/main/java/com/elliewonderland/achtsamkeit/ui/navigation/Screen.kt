@@ -10,6 +10,7 @@ sealed class Screen(val route: String) {
     object Profil        : Screen("profil")
     object ThemePicker   : Screen("theme_picker")
     object NotifSettings : Screen("notif_settings")
+    object Favorites     : Screen("favorites")
     object WeeklyReview  : Screen("weekly_review")
     object MonthlyReview : Screen("monthly_review")
     object Quote         : Screen("quote/{entryId}") {

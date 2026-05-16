@@ -1,9 +1,11 @@
 package com.elliewonderland.achtsamkeit.data.repository
 
 import com.elliewonderland.achtsamkeit.data.local.QuoteLoader
+import com.elliewonderland.achtsamkeit.model.FavoriteQuote
 import com.elliewonderland.achtsamkeit.model.Quote
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 
@@ -42,6 +44,20 @@ class QuoteRepository(private val loader: QuoteLoader) {
                 "saved_at"   to FieldValue.serverTimestamp(),
                 "quote_text" to quote.text,
             )).await()
+        }
+    }
+
+    suspend fun getFavorites(userId: String): List<FavoriteQuote> {
+        val snap = db.collection("users").document(userId)
+            .collection("favorites")
+            .orderBy("saved_at", Query.Direction.DESCENDING)
+            .get().await()
+        return snap.documents.map { doc ->
+            FavoriteQuote(
+                id      = doc.id,
+                text    = doc.getString("quote_text") ?: "",
+                savedAt = doc.getTimestamp("saved_at")?.toDate()?.time ?: 0L,
+            )
         }
     }
 

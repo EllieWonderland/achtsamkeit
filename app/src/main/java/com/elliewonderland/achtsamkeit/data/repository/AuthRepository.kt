@@ -32,7 +32,35 @@ class AuthRepository {
     }
 
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
+    fun getUserEmail(): String = auth.currentUser?.email ?: ""
     fun logout() = auth.signOut()
+
+    suspend fun getUserDisplayName(userId: String): String {
+        val snap = db.collection("users").document(userId).get().await()
+        return snap.getString("display_name")
+            ?: auth.currentUser?.email?.substringBefore("@")
+            ?: ""
+    }
+
+    suspend fun deleteAccount(userId: String) {
+        deleteSubcollection(userId, "entries")
+        deleteSubcollection(userId, "quote_cooldowns")
+        deleteSubcollection(userId, "favorites")
+        db.collection("users").document(userId).delete().await()
+        auth.currentUser?.delete()?.await()
+    }
+
+    private suspend fun deleteSubcollection(userId: String, name: String) {
+        val ref = db.collection("users").document(userId).collection(name)
+        while (true) {
+            val snap = ref.limit(500).get().await()
+            if (snap.isEmpty) break
+            val batch = db.batch()
+            snap.documents.forEach { batch.delete(it.reference) }
+            batch.commit().await()
+            if (snap.size() < 500) break
+        }
+    }
 
     private suspend fun ensureUserDocument(user: FirebaseUser, name: String = "") {
         val doc  = db.collection("users").document(user.uid)

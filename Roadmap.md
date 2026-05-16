@@ -24,7 +24,8 @@
 | Phase 8: Rotierende Fragen & Rückblicke | ✅ Fertig | `ReviewRepository.kt`, `WeeklyReviewScreen.kt`, `MonthlyReviewScreen.kt` |
 | Phase 9: Tagebuch-Historie & Suche | ✅ Fertig | `HistoryRepository.kt`, `HistoryViewModel.kt`, `TagebuchScreen.kt`, `EntryDetailScreen.kt`, `EntryListItem.kt`, `TagFilterChips.kt` |
 | Phase 10: Statistiken | ✅ Fertig | `StatsRepository.kt`, `StatsViewModel.kt`, `StatistikScreen.kt`, `StreakCard.kt`, `MoodBarChart.kt`, `GratitudePieChart.kt` |
-| Phase 11–13 | ❌ Offen | — |
+| Phase 11: Account & Datenschutz | ✅ Fertig | `ProfilScreen.kt`, `ProfilViewModel.kt`, `FavoritesScreen.kt`, `FavoritesViewModel.kt`, `FavoriteQuote.kt` |
+| Phase 12–13 | ❌ Offen | — |
 
 ---
 
@@ -992,7 +993,7 @@ Column
 ```
 
 ### Account-Löschung — korrekte Reihenfolge
-- [ ] Account-Löschung implementieren:
+- [x] Account-Löschung implementieren:
 
 ```kotlin
 suspend fun deleteAccount(userId: String) {
@@ -1011,7 +1012,7 @@ suspend fun deleteAccount(userId: String) {
 > ⚠️ `deleteCollection()` muss Dokumente in Batches löschen (max. 500 pro Batch-Operation). Firebase-Dokumentation: *"Deleting collections from a mobile client is not recommended"* — alternativ via Cloud Function ausführen.
 
 ### Daten-Export
-- [ ] Daten-Export Funktion implementieren:
+- [x] Daten-Export Funktion implementieren:
 
 ```kotlin
 suspend fun exportUserData(userId: String): String {
