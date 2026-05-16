@@ -1,5 +1,6 @@
 package com.elliewonderland.achtsamkeit.ui.stats
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,17 +20,26 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
+import com.elliewonderland.achtsamkeit.ui.premium.PaywallCard
 import com.elliewonderland.achtsamkeit.ui.stats.components.GratitudePieChart
 import com.elliewonderland.achtsamkeit.ui.stats.components.MoodBarChart
 import com.elliewonderland.achtsamkeit.ui.stats.components.StreakCard
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun StatistikScreen(
@@ -37,6 +47,11 @@ fun StatistikScreen(
     vm: StatsViewModel = viewModel(),
 ) {
     val state by vm.state.collectAsState()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    var isPremium by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { isPremium = PremiumRepository.isPremium() }
 
     Column(
         modifier = Modifier
@@ -67,7 +82,7 @@ fun StatistikScreen(
 
         if (state.isLoading) {
             Box(
-                modifier        = Modifier.fillMaxWidth().height(200.dp),
+                modifier         = Modifier.fillMaxWidth().height(200.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(color = AppTheme.colors.accent)
@@ -75,12 +90,25 @@ fun StatistikScreen(
         } else {
             StreakCard(streak = state.streak)
 
-            StatCard(title = "Stimmungsverteilung") {
-                MoodBarChart(distribution = state.moodDistribution)
-            }
+            if (!isPremium && state.days > 30) {
+                PaywallCard(
+                    description = "Statistiken über 30 Tage hinaus sind ein Premium-Feature. Upgrade, um Muster über bis zu 90 Tage zu entdecken.",
+                    onUpgrade   = {
+                        scope.launch {
+                            val activity = context as? Activity ?: return@launch
+                            val success = PremiumRepository.purchase(activity)
+                            if (success) isPremium = true
+                        }
+                    },
+                )
+            } else {
+                StatCard(title = "Stimmungsverteilung") {
+                    MoodBarChart(distribution = state.moodDistribution)
+                }
 
-            StatCard(title = "Dankbarkeits-Momente") {
-                GratitudePieChart(distribution = state.gratitudeDistribution)
+                StatCard(title = "Dankbarkeits-Momente") {
+                    GratitudePieChart(distribution = state.gratitudeDistribution)
+                }
             }
         }
     }

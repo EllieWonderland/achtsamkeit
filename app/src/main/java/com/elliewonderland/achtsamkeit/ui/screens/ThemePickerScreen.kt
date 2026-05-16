@@ -1,11 +1,14 @@
 package com.elliewonderland.achtsamkeit.ui.screens
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.rememberCoroutineScope
@@ -15,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
 import com.elliewonderland.achtsamkeit.ui.theme.*
 import kotlinx.coroutines.launch
 
@@ -25,6 +29,11 @@ fun ThemePickerScreen(
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
     val colors = AppTheme.colors
+
+    var isPremium by remember { mutableStateOf(false) }
+    var showUpgradeDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) { isPremium = PremiumRepository.isPremium() }
 
     Column(
         Modifier
@@ -54,13 +63,19 @@ fun ThemePickerScreen(
             )
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Variant.entries.forEach { v ->
+                    val isLocked = !isPremium && v != Variant.HAIN
                     VariantCard(
-                        variant = v,
+                        variant  = v,
                         selected = v == current.variant,
-                        palette = current.palette,
+                        palette  = current.palette,
+                        isLocked = isLocked,
                         modifier = Modifier.weight(1f),
-                        onClick = {
-                            scope.launch { ThemePreferences.setVariant(ctx, v) }
+                        onClick  = {
+                            if (isLocked) {
+                                showUpgradeDialog = true
+                            } else {
+                                scope.launch { ThemePreferences.setVariant(ctx, v) }
+                            }
                         },
                     )
                 }
@@ -92,6 +107,42 @@ fun ThemePickerScreen(
             }
         }
     }
+
+    if (showUpgradeDialog) {
+        AlertDialog(
+            onDismissRequest = { showUpgradeDialog = false },
+            title = {
+                Text("Premium-Stil", style = MaterialTheme.typography.titleMedium)
+            },
+            text = {
+                Text(
+                    "Velvet und Aura sind Premium-Stile. Upgrade auf Premium, um alle Stile freizuschalten.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = colors.inkSoft,
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showUpgradeDialog = false
+                        scope.launch {
+                            val activity = ctx as? Activity ?: return@launch
+                            val success = PremiumRepository.purchase(activity)
+                            if (success) isPremium = true
+                        }
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = colors.accent),
+                ) {
+                    Text("Upgrade")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showUpgradeDialog = false }) {
+                    Text("Später")
+                }
+            },
+        )
+    }
 }
 
 @Composable
@@ -99,45 +150,68 @@ private fun VariantCard(
     variant: Variant,
     selected: Boolean,
     palette: Palette,
+    isLocked: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     val ac = AppTheme.colors
     val preview = remember(variant, palette) { buildAppColors(variant, palette) }
 
-    Column(
-        modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(if (selected) ac.ink else ac.surface)
-            .border(
-                width = if (selected) 0.dp else 1.dp,
-                color = ac.hair,
-                shape = RoundedCornerShape(16.dp),
-            )
-            .clickable(onClick = onClick)
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Box(
+    Box(modifier) {
+        Column(
             Modifier
                 .fillMaxWidth()
-                .height(46.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(preview.background),
-            contentAlignment = Alignment.Center,
+                .clip(RoundedCornerShape(16.dp))
+                .background(if (selected) ac.ink else ac.surface)
+                .border(
+                    width = if (selected) 0.dp else 1.dp,
+                    color = ac.hair,
+                    shape = RoundedCornerShape(16.dp),
+                )
+                .clickable(onClick = onClick)
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Box(
                 Modifier
-                    .size(22.dp)
-                    .clip(CircleShape)
-                    .background(preview.accent)
+                    .fillMaxWidth()
+                    .height(46.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(preview.background),
+                contentAlignment = Alignment.Center,
+            ) {
+                Box(
+                    Modifier
+                        .size(22.dp)
+                        .clip(CircleShape)
+                        .background(preview.accent)
+                )
+            }
+            Text(
+                variant.displayName,
+                style = MaterialTheme.typography.titleMedium,
+                color = if (selected) ac.background else ac.ink,
             )
         }
-        Text(
-            variant.displayName,
-            style = MaterialTheme.typography.titleMedium,
-            color = if (selected) ac.background else ac.ink,
-        )
+
+        if (isLocked) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(6.dp)
+                    .size(22.dp)
+                    .clip(CircleShape)
+                    .background(ac.accent),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector        = Icons.Outlined.Lock,
+                    contentDescription = "Premium",
+                    tint               = ac.onAccent,
+                    modifier           = Modifier.size(13.dp),
+                )
+            }
+        }
     }
 }
 

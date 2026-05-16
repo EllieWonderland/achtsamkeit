@@ -25,7 +25,8 @@
 | Phase 9: Tagebuch-Historie & Suche | ✅ Fertig | `HistoryRepository.kt`, `HistoryViewModel.kt`, `TagebuchScreen.kt`, `EntryDetailScreen.kt`, `EntryListItem.kt`, `TagFilterChips.kt` |
 | Phase 10: Statistiken | ✅ Fertig | `StatsRepository.kt`, `StatsViewModel.kt`, `StatistikScreen.kt`, `StreakCard.kt`, `MoodBarChart.kt`, `GratitudePieChart.kt` |
 | Phase 11: Account & Datenschutz | ✅ Fertig | `ProfilScreen.kt`, `ProfilViewModel.kt`, `FavoritesScreen.kt`, `FavoritesViewModel.kt`, `FavoriteQuote.kt` |
-| Phase 12–13 | ❌ Offen | — |
+| Phase 12: Monetarisierung | ✅ Fertig | `AchtsamkeitApp.kt`, `PremiumRepository.kt`, `PaywallCard.kt`, Feature-Gating in Statistik, Monatsrückblick, ThemePicker |
+| Phase 13 | ❌ Offen | — |
 
 ---
 
@@ -1033,9 +1034,9 @@ Konto anlegen → Daten exportieren → JSON korrekt. Konto löschen → Firebas
 
 ### Google Play Console
 
-1. [ ] In-App-Produkt → Abonnement: `premium_monthly` (z.B. 2,99 €/Monat)
-2. [ ] Testgruppe anlegen (interne Tester können kostenlos kaufen)
-3. [ ] Produkt-ID in RevenueCat eintragen
+1. [x] In-App-Produkt → Abonnement: `premium_monthly` (z.B. 2,99 €/Monat)
+2. [x] Testgruppe anlegen (interne Tester können kostenlos kaufen)
+3. [x] Produkt-ID in RevenueCat eintragen
 
 ### RevenueCat initialisieren (`Application.onCreate()`)
 
@@ -1077,9 +1078,9 @@ if (!isPremium && selectedDays > 30) {
 ```
 
 Premium-Features (Vorschlag):
-- [ ] Statistiken über 30 Tage hinaus
-- [ ] Monatsrückblick freischalten
-- [ ] Alle 3 Varianten (Velvet + Aura) freischalten (Hain ist immer kostenlos)
+- [x] Statistiken über 30 Tage hinaus
+- [x] Monatsrückblick freischalten
+- [x] Alle 3 Varianten (Velvet + Aura) freischalten (Hain ist immer kostenlos)
 - [ ] Favoriten-Liste ohne Limit
 
 ### Verifizierung Phase 12
