@@ -5,6 +5,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -86,15 +87,18 @@ class EntryRepository {
     }
 
     suspend fun hasEntryToday(userId: String, type: String): Boolean {
-        val startOfDay = LocalDate.now()
-            .atStartOfDay(ZoneId.systemDefault())
-            .toInstant()
-            .toEpochMilli()
         val snap = db.collection("users").document(userId)
             .collection("entries")
             .whereEqualTo("type", type)
-            .whereGreaterThan("created_at", startOfDay)
+            .whereGreaterThan("created_at", startOfCurrentJournalDay())
             .get().await()
         return !snap.isEmpty
     }
+}
+
+// Tagesbeginn um 4:00 Uhr: wer zwischen 0:00–3:59 Uhr einen Eintrag macht, gehört noch zum Vortag.
+private fun startOfCurrentJournalDay(): Long {
+    val now = LocalDateTime.now()
+    val journalDate = if (now.hour < 4) now.toLocalDate().minusDays(1) else now.toLocalDate()
+    return journalDate.atTime(4, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 }

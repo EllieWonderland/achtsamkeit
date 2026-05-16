@@ -1260,7 +1260,7 @@ Alle sichtbaren UI-Texte umstellen. **Technische Werte** (`type = "morning"` / `
 
 ### Priorität 2 — Mitternacht-Problem: `startOfDay` auf 4:00 Uhr setzen
 
-- [ ] `EntryRepository.kt` + `HistoryRepository.kt`: `LocalDate.now().atStartOfDay()` → `LocalDate.now().atTime(4, 0)` als Tagesbeginn. Wer nach Mitternacht (z.B. 0:30–3:59 Uhr) einen Abend-Eintrag macht, gehört noch zum „gestrigen" Tag, nicht zum neuen.
+- [x] `EntryRepository.kt` + `ReviewRepository.kt`: `LocalDate.now().atStartOfDay()` → `atTime(4, 0)` als Tagesbeginn. Wer nach Mitternacht (z.B. 0:30–3:59 Uhr) einen Abend-Eintrag macht, gehört noch zum „gestrigen" Tag, nicht zum neuen.
 
 ### Priorität 3 — Statistik-Paywall anpassen
 

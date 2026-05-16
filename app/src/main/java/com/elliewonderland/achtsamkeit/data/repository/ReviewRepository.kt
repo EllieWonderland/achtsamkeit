@@ -13,7 +13,8 @@ class ReviewRepository {
     suspend fun isWeeklyReviewUnlocked(userId: String): Boolean {
         val monday = LocalDate.now()
             .with(DayOfWeek.MONDAY)
-            .atStartOfDay(ZoneId.systemDefault())
+            .atTime(4, 0)
+            .atZone(ZoneId.systemDefault())
             .toInstant()
             .toEpochMilli()
         val snap = db.collection("users").document(userId)
