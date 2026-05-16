@@ -6,6 +6,7 @@ import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class EntryRepository {
 
@@ -56,21 +57,32 @@ class EntryRepository {
     }
 
     private suspend fun updateStreak(userId: String) {
-        val today = LocalDate.now().toString()
-        val yesterday = LocalDate.now().minusDays(1).toString()
-        val userRef = db.collection("users").document(userId)
-        val snap = userRef.get().await()
-        val lastDate = snap.getString("last_entry_date") ?: ""
+        val today         = LocalDate.now().toString()
+        val yesterday     = LocalDate.now().minusDays(1).toString()
+        val currentMonth  = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))
+        val userRef       = db.collection("users").document(userId)
+        val snap          = userRef.get().await()
+        val lastDate      = snap.getString("last_entry_date") ?: ""
         val currentStreak = (snap.getLong("current_streak") ?: 0L).toInt()
-        val newStreak = when (lastDate) {
-            today     -> currentStreak
-            yesterday -> currentStreak + 1
-            else      -> 1
+        val freezeUsedMonth = snap.getString("streak_freeze_used_month") ?: ""
+
+        val updates = when (lastDate) {
+            today     -> mapOf("last_entry_date" to today, "current_streak" to currentStreak)
+            yesterday -> mapOf("last_entry_date" to today, "current_streak" to currentStreak + 1)
+            else -> {
+                // Streak wäre gebrochen — prüfe ob Freeze noch verfügbar
+                if (currentStreak > 0 && freezeUsedMonth != currentMonth) {
+                    mapOf(
+                        "last_entry_date"          to today,
+                        "current_streak"           to currentStreak,
+                        "streak_freeze_used_month" to currentMonth,
+                    )
+                } else {
+                    mapOf("last_entry_date" to today, "current_streak" to 1)
+                }
+            }
         }
-        userRef.update(mapOf(
-            "last_entry_date" to today,
-            "current_streak"  to newStreak,
-        )).await()
+        userRef.update(updates).await()
     }
 
     suspend fun hasEntryToday(userId: String, type: String): Boolean {

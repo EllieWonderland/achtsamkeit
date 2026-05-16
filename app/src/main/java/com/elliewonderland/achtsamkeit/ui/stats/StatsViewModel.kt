@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 data class StatsUiState(
     val days: Int = 30,
     val streak: Int = 0,
+    val freezeAvailableThisMonth: Boolean = false,
     val moodDistribution: Map<String, Int> = emptyMap(),
     val gratitudeDistribution: Map<String, Int> = emptyMap(),
     val isLoading: Boolean = false,
@@ -37,15 +38,17 @@ class StatsViewModel : ViewModel() {
         val days = _state.value.days
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            val moodDist = repo.getMoodDistribution(uid, days)
-            val gratDist = repo.getGratitudeDistribution(uid, days)
-            val streak   = repo.getCurrentStreak(uid)
+            val moodDist     = repo.getMoodDistribution(uid, days)
+            val gratDist     = repo.getGratitudeDistribution(uid, days)
+            val streak       = repo.getCurrentStreak(uid)
+            val freezeAvail  = repo.isStreakFreezeAvailableThisMonth(uid)
             _state.update {
                 it.copy(
-                    moodDistribution      = moodDist,
-                    gratitudeDistribution = gratDist,
-                    streak                = streak,
-                    isLoading             = false,
+                    moodDistribution         = moodDist,
+                    gratitudeDistribution    = gratDist,
+                    streak                   = streak,
+                    freezeAvailableThisMonth = freezeAvail,
+                    isLoading                = false,
                 )
             }
         }

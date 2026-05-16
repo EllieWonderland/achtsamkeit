@@ -84,7 +84,7 @@ fun StatistikScreen(
             ShimmerCard(height = 200.dp)
             ShimmerCard(height = 200.dp)
         } else {
-            StreakCard(streak = state.streak)
+            StreakCard(streak = state.streak, freezeAvailableThisMonth = state.freezeAvailableThisMonth)
 
             if (!isPremium && state.days > 30) {
                 PaywallCard(

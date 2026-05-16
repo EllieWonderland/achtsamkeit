@@ -3,6 +3,8 @@ package com.elliewonderland.achtsamkeit.data.repository
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class StatsRepository {
 
@@ -38,5 +40,12 @@ class StatsRepository {
     suspend fun getCurrentStreak(userId: String): Int {
         val snap = db.collection("users").document(userId).get().await()
         return (snap.getLong("current_streak") ?: 0L).toInt()
+    }
+
+    suspend fun isStreakFreezeAvailableThisMonth(userId: String): Boolean {
+        val currentMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))
+        val snap = db.collection("users").document(userId).get().await()
+        val freezeUsedMonth = snap.getString("streak_freeze_used_month") ?: ""
+        return freezeUsedMonth != currentMonth
     }
 }

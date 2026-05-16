@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
 @Composable
-fun StreakCard(streak: Int) {
+fun StreakCard(streak: Int, freezeAvailableThisMonth: Boolean = false) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors   = CardDefaults.cardColors(containerColor = AppTheme.colors.surfaceAlt),
@@ -41,6 +41,14 @@ fun StreakCard(streak: Int) {
                     style = MaterialTheme.typography.bodyMedium,
                     color = AppTheme.colors.inkSoft,
                 )
+                if (streak > 0 && freezeAvailableThisMonth) {
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text  = "🛡️ Du hast noch 1 Gnadentag diesen Monat",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = AppTheme.colors.inkSoft,
+                    )
+                }
             }
         }
     }

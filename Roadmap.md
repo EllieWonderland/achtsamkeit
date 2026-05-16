@@ -1253,10 +1253,10 @@ Alle sichtbaren UI-Texte umstellen. **Technische Werte** (`type = "morning"` / `
 
 ### Priorität 2 — Streak-Freeze (1× pro Monat)
 
-- [ ] Neues Firestore-Feld im User-Dokument: `streak_freeze_used_month: String` (Format: `"2026-05"`)
-- [ ] In `EntryRepository.updateStreak()`: Wenn `lastDate` weder heute noch gestern ist UND der aktuelle Monat noch keinen Freeze genutzt hat → Streak behalten + `streak_freeze_used_month` auf aktuellen Monat setzen
-- [ ] `StreakCard.kt`: Kleiner Hinweis „Du hast noch 1 Gnadentag diesen Monat" anzeigen (oder Icon)
-- [ ] Ohne Freeze verlieren Nutzerinnen bei Urlaub/Krankheit sofort ihren Streak → Motivation bricht
+- [x] Neues Firestore-Feld im User-Dokument: `streak_freeze_used_month: String` (Format: `"2026-05"`)
+- [x] In `EntryRepository.updateStreak()`: Wenn `lastDate` weder heute noch gestern ist UND der aktuelle Monat noch keinen Freeze genutzt hat → Streak behalten + `streak_freeze_used_month` auf aktuellen Monat setzen
+- [x] `StreakCard.kt`: Kleiner Hinweis „Du hast noch 1 Gnadentag diesen Monat" anzeigen (oder Icon)
+- [x] Ohne Freeze verlieren Nutzerinnen bei Urlaub/Krankheit sofort ihren Streak → Motivation bricht
 
 ### Priorität 2 — Mitternacht-Problem: `startOfDay` auf 4:00 Uhr setzen
 
