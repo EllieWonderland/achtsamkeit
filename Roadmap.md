@@ -12,14 +12,15 @@
 | Bereich | Status | Details |
 |---------|--------|---------|
 | Konzept & Inhalte | ✅ Fertig | `App_Inhalte.md`, `TechStack.md`, `Konzept_UX.md` |
-| Sprüche-Pool | ✅ Fertig | 30 Sprüche (S001–S030) in `sprueche.json` |
+| Sprüche-Pool | ✅ Fertig | 360 Sprüche (S001–S360) in `sprueche.json` |
 | Design-System Handoff | ✅ Fertig | `handoff/` komplett mit allen Kotlin-Theme-Dateien |
 | Phase 1: Projekt-Setup | ✅ Fertig | Projekt ✅, Package ✅, Dependencies ✅, Permissions ✅, Firebase ✅, RevenueCat ✅ |
 | Phase 2: Design-System einbinden | ✅ Fertig | Alle Theme-Dateien eingebunden, `MainActivity.kt` verdrahtet, RevenueCat-Key in BuildConfig |
 | Phase 3: Authentication & Onboarding | ✅ Fertig | `model/User.kt`, `AuthRepository.kt`, `AuthViewModel.kt`, `LoginScreen.kt`, `RegisterScreen.kt`, `OnboardingScreen.kt` |
 | Phase 4: Navigation & App Shell | ✅ Fertig | `Screen.kt`, `NavGraph.kt`, `BottomNavBar.kt`, `AppScaffold.kt` |
 | Phase 5: Kern-Feature — Tageseintrag | ✅ Fertig | `Entry.kt`, `EntryRepository.kt`, `EntryViewModel.kt`, `HeuteViewModel.kt`, alle Section-Komponenten, `EntryScreen.kt`, `HeuteScreen.kt`, `guided_questions.json` |
-| Phase 6–13 | ❌ Offen | — |
+| Phase 6: Spruch-Logik & Favoriten | ✅ Fertig | `Quote.kt`, `QuoteLoader.kt`, `QuoteRepository.kt`, `QuoteViewModel.kt`, `QuoteScreen.kt` |
+| Phase 7–13 | ❌ Offen | — |
 
 ---
 
@@ -616,9 +617,9 @@ Column (vertikal scrollbar)
 ### `ui/heute/HeuteScreen.kt`
 
 Prüft via `EntryRepository.hasEntryToday()`:
-- [ ] Morgen-Eintrag fehlt → Button "Morgen starten" aktiv
-- [ ] Abend-Eintrag fehlt → Button "Abend starten" aktiv (erst ab 17 Uhr sichtbar)
-- [ ] Beide vorhanden → "Heute abgeschlossen ✓" + ggf. Wochenrückblick-Button
+- [x] Morgen-Eintrag fehlt → Button "Morgen starten" aktiv
+- [x] Abend-Eintrag fehlt → Button "Abend starten" aktiv (erst ab 17 Uhr sichtbar)
+- [x] Beide vorhanden → "Heute abgeschlossen ✓" + ggf. Wochenrückblick-Button
 
 ### Verifizierung Phase 5
 Eintrag vollständig ausfüllen → Firestore zeigt neues Dokument in `users/{uid}/entries/` mit korrekt abgeleiteten Tags.
