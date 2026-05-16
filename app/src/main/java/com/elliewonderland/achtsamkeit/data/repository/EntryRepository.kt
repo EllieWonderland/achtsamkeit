@@ -16,7 +16,7 @@ class EntryRepository {
     fun deriveTags(entry: Entry): List<String> {
         val tags = mutableListOf<String>()
         when (entry.mood) {
-            "stress"  -> tags.add("Stress")
+            "stress"  -> { tags.add("Stress"); tags.add("Angst") }
             "joy"     -> tags.add("Freude")
             "balance" -> tags.add("Ausgeglichenheit")
             "sadness" -> { tags.add("Traurigkeit"); tags.add("Trauer") }

@@ -59,7 +59,7 @@
 
 - [x] **🔴 Ausgeglichenheit/Selbstfürsorge/Energie ausgebaut:** 72 neue Sprüche (S361–S432) — Ausgeglichenheit: 3→30, Selbstfürsorge: 3→28, Energie: 2→20, Stress: 20→41.
 - [x] **⚠️ Tag-Inkonsistenz gefixt:** `deriveTags` vergibt jetzt bei `mood = "sadness"` sowohl `"Traurigkeit"` als auch `"Trauer"` → alle 33 Sprüche für traurige Nutzerinnen verfügbar.
-- [ ] **ℹ️ Entscheiden:** Tags `Liebe`, `Angst`, `Freundschaft`, `Motivation` sind in `sprueche.json` vorhanden, werden aber durch `deriveTags` nie ausgespielt. Entweder in `deriveTags` einbinden oder als allgemeinen Fallback-Pool belassen.
+- [x] **ℹ️ Entschieden:** `Angst` (60 Quotes) → `deriveTags` bei `mood = "stress"` ergänzt. `Liebe` (120), `Freundschaft` (60), `Motivation` (1) bleiben als allgemeiner Fallback-Pool.
 - [x] **⚠️ Stress:** Von 20 auf 41 Sprüche erhöht.
 
 ---
