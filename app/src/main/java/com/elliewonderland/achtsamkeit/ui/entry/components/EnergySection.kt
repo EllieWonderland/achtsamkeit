@@ -17,16 +17,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
-private val options = listOf(
-    "full"   to "Akku voll – ich könnte Bäume ausreißen!",
+private val morningOptions = listOf(
+    "full"   to "Akku voll – ich starte mit voller Kraft.",
     "medium" to "Solides Mittelfeld.",
     "low"    to "Im Energiesparmodus.",
-    "empty"  to "Komplett leer – ich brauche dringend Ruhe.",
+    "empty"  to "Komplett leer – ich brauche Ruhe.",
+)
+
+private val eveningOptions = listOf(
+    "full"   to "Akku noch voll – ein produktiver Tag.",
+    "medium" to "Solides Mittelfeld.",
+    "low"    to "Im Energiesparmodus.",
+    "empty"  to "Komplett leer – ich brauche dringend Erholung.",
 )
 
 @Composable
-fun EnergySection(selected: String, onSelect: (String) -> Unit) {
-    SectionCard(title = "Wie ist mein Energielevel heute?") {
+fun EnergySection(type: String, selected: String, onSelect: (String) -> Unit) {
+    val title = if (type == "morning") "Wie starte ich heute in den Tag?" else "Wie fühle ich mich jetzt nach dem Tag?"
+    val options = if (type == "morning") morningOptions else eveningOptions
+    SectionCard(title = title) {
         options.forEach { (value, label) ->
             Row(
                 modifier = Modifier

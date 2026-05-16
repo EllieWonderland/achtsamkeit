@@ -87,8 +87,8 @@ private fun formatDate(dateStr: String): String {
 }
 
 private fun typeLabel(type: String): String = when (type) {
-    "morning"        -> "Morgen"
-    "evening"        -> "Abend"
+    "morning"        -> "Morgenroutine"
+    "evening"        -> "Abendroutine"
     "weekly_review"  -> "Wochenrückblick"
     "monthly_review" -> "Monatsrückblick"
     else             -> type

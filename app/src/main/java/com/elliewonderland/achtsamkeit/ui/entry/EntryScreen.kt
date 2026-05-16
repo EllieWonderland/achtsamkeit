@@ -47,11 +47,13 @@ fun EntryScreen(navController: NavController, type: String) {
     val userId = Firebase.auth.currentUser?.uid ?: ""
     val displayName = Firebase.auth.currentUser?.displayName?.let { it.ifBlank { null } }
 
-    val isEvening = LocalTime.now().hour >= 17
-    val greeting = when {
-        type == "morning" -> "Guten Morgen${displayName?.let { ", $it" } ?: ""}!"
-        isEvening         -> "Guten Abend${displayName?.let { ", $it" } ?: ""}!"
-        else              -> "Hallo${displayName?.let { ", $it" } ?: ""}!"
+    val greeting = when (type) {
+        "morning" -> "Guten Morgen${displayName?.let { ", $it" } ?: ""}!"
+        else      -> "Guten Abend${displayName?.let { ", $it" } ?: ""}!"
+    }
+    val subtitle = when (type) {
+        "morning" -> "Deine Morgenroutine — nimm dir 3 Minuten nur für dich."
+        else      -> "Deine Abendroutine — lass den Tag sanft ausklingen."
     }
 
     LaunchedEffect(type) { vm.initType(type) }
@@ -85,20 +87,23 @@ fun EntryScreen(navController: NavController, type: String) {
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text     = "Nimm dir 3 Minuten nur für dich.",
+                    text     = subtitle,
                     style    = MaterialTheme.typography.bodyMedium,
                     color    = AppTheme.colors.inkSoft,
                     modifier = Modifier.padding(horizontal = 16.dp),
                 )
                 Spacer(Modifier.height(16.dp))
             }
-            item { EnergySection(selected = form.energyLevel, onSelect = vm::updateEnergyLevel) }
-            item { MoodSection(selected = form.mood, onSelect = vm::updateMood) }
-            item { GratitudeSection(selected = form.gratitudeAreas, onToggle = vm::toggleGratitudeArea) }
-            item { RatingSection(selected = form.dayRating, onSelect = vm::updateDayRating) }
-            item { SelfCareSection(selected = form.selfCare, onToggle = vm::toggleSelfCare) }
+            item { EnergySection(type = type, selected = form.energyLevel, onSelect = vm::updateEnergyLevel) }
+            item { MoodSection(type = type, selected = form.mood, onSelect = vm::updateMood) }
+            item { GratitudeSection(type = type, selected = form.gratitudeAreas, onToggle = vm::toggleGratitudeArea) }
+            if (type == "evening") {
+                item { RatingSection(selected = form.dayRating, onSelect = vm::updateDayRating) }
+            }
+            item { SelfCareSection(type = type, selected = form.selfCare, onToggle = vm::toggleSelfCare) }
             item {
                 MindfulnessSection(
+                    type          = type,
                     selectedFocus = form.mindfulnessFocus,
                     selectedPause = form.mindfulnessPause,
                     onFocusSelect = vm::updateMindfulnessFocus,

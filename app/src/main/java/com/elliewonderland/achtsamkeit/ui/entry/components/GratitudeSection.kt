@@ -25,8 +25,9 @@ private val options = listOf(
 )
 
 @Composable
-fun GratitudeSection(selected: List<String>, onToggle: (String) -> Unit) {
-    SectionCard(title = "Aus welchem Bereich kam mein heutiger Dankbarkeits-Moment?") {
+fun GratitudeSection(type: String, selected: List<String>, onToggle: (String) -> Unit) {
+    val title = if (type == "morning") "Wofür bin ich heute oder generell dankbar?" else "Aus welchem Bereich kam mein heutiger Dankbarkeits-Moment?"
+    SectionCard(title = title) {
         options.forEach { (value, label) ->
             Row(
                 modifier = Modifier

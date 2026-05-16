@@ -16,7 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
-private val options = listOf(
+private val morningOptions = listOf(
+    "water"     to "Ausreichend Wasser trinken.",
+    "outside"   to "Mich an der frischen Luft bewegen.",
+    "food"      to "Etwas essen, das mir wirklich guttut.",
+    "hobby"     to "Zeit für ein Hobby oder mich selbst nehmen.",
+    "breathing" to "Bewusst und tief durchatmen.",
+)
+
+private val eveningOptions = listOf(
     "water"     to "Ausreichend Wasser getrunken.",
     "outside"   to "Mich an der frischen Luft bewegt.",
     "food"      to "Etwas gegessen, das mir wirklich gutgetan hat.",
@@ -25,8 +33,10 @@ private val options = listOf(
 )
 
 @Composable
-fun SelfCareSection(selected: List<String>, onToggle: (String) -> Unit) {
-    SectionCard(title = "Was habe ich heute für mein Wohlbefinden getan?") {
+fun SelfCareSection(type: String, selected: List<String>, onToggle: (String) -> Unit) {
+    val title = if (type == "morning") "Was möchte ich heute für mein Wohlbefinden tun?" else "Was habe ich heute für mein Wohlbefinden getan?"
+    val options = if (type == "morning") morningOptions else eveningOptions
+    SectionCard(title = title) {
         options.forEach { (value, label) ->
             Row(
                 modifier = Modifier

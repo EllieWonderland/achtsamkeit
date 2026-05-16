@@ -289,8 +289,8 @@ private fun DetailRow(label: String, value: String) {
 }
 
 private fun typeLabelFull(type: String): String = when (type) {
-    "morning"        -> "Morgeneintrag"
-    "evening"        -> "Abendeintrag"
+    "morning"        -> "Morgenroutine"
+    "evening"        -> "Abendroutine"
     "weekly_review"  -> "Wochenrückblick"
     "monthly_review" -> "Monatsrückblick"
     else             -> "Eintrag"

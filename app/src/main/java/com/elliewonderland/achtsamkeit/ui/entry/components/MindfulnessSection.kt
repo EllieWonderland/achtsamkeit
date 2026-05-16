@@ -17,13 +17,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
-private val focusOptions = listOf(
+private val morningFocusOptions = listOf(
+    "present" to "Ja, ich bin angekommen — präsent und geerdet.",
+    "future"  to "Teilweise — meine Gedanken wandern schon zu den Aufgaben des Tages.",
+    "past"    to "Kaum — ich bin in Gedanken noch bei gestern.",
+)
+
+private val morningPauseOptions = listOf(
+    "yes_pure"       to "Ja, ganz bewusst (Kaffee, Stille, Stretching).",
+    "yes_distracted" to "Ein bisschen, aber schon mit Handy o.Ä.",
+    "no"             to "Nein, ich bin direkt in den Trubel gestartet.",
+)
+
+private val eveningFocusOptions = listOf(
     "past"    to "In der Vergangenheit (gegrübelt oder in Erinnerungen geschwelgt)",
     "future"  to "In der Zukunft (geplant oder gesorgt)",
     "present" to "Überwiegend im gegenwärtigen Moment",
 )
 
-private val pauseOptions = listOf(
+private val eveningPauseOptions = listOf(
     "yes_pure"       to "Ja, ganz ohne Ablenkung (kein Handy, kein TV).",
     "yes_distracted" to "Ja, aber nebenbei etwas anderes gemacht.",
     "no"             to "Nein, ich war im Dauer-Rotations-Modus.",
@@ -31,14 +43,20 @@ private val pauseOptions = listOf(
 
 @Composable
 fun MindfulnessSection(
+    type: String,
     selectedFocus: String,
     selectedPause: String,
     onFocusSelect: (String) -> Unit,
     onPauseSelect: (String) -> Unit,
 ) {
+    val focusQuestion = if (type == "morning") "Bin ich heute Morgen im Moment angekommen?" else "Wo waren meine Gedanken heute die meiste Zeit?"
+    val pauseQuestion = if (type == "morning") "Habe ich mir heute Morgen einen ruhigen Moment gegönnt?" else "Habe ich heute bewusst eine Pause eingelegt?"
+    val focusOptions  = if (type == "morning") morningFocusOptions else eveningFocusOptions
+    val pauseOptions  = if (type == "morning") morningPauseOptions else eveningPauseOptions
+
     SectionCard(title = "Achtsamkeit im Hier und Jetzt") {
         Text(
-            "Wo waren meine Gedanken heute die meiste Zeit?",
+            focusQuestion,
             style = MaterialTheme.typography.bodyMedium,
             color = AppTheme.colors.inkSoft,
         )
@@ -63,7 +81,7 @@ fun MindfulnessSection(
 
         Spacer(Modifier.height(12.dp))
         Text(
-            "Habe ich heute bewusst eine Pause eingelegt?",
+            pauseQuestion,
             style = MaterialTheme.typography.bodyMedium,
             color = AppTheme.colors.inkSoft,
         )

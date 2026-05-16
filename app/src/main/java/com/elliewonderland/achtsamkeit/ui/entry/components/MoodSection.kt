@@ -24,8 +24,9 @@ private val options = listOf(
 )
 
 @Composable
-fun MoodSection(selected: String, onSelect: (String) -> Unit) {
-    SectionCard(title = "Welches Grundgefühl hat meinen Tag heute dominiert?") {
+fun MoodSection(type: String, selected: String, onSelect: (String) -> Unit) {
+    val title = if (type == "morning") "Welches Gefühl begleitet mich heute Morgen?" else "Welches Grundgefühl hat meinen Tag heute dominiert?"
+    SectionCard(title = title) {
         options.forEach { (value, label) ->
             Row(
                 modifier = Modifier

@@ -27,6 +27,40 @@
 | Phase 11: Account & Datenschutz | ✅ Fertig | `ProfilScreen.kt`, `ProfilViewModel.kt`, `FavoritesScreen.kt`, `FavoritesViewModel.kt`, `FavoriteQuote.kt` |
 | Phase 12: Monetarisierung | ✅ Fertig | `AchtsamkeitApp.kt`, `PremiumRepository.kt`, `PaywallCard.kt`, Feature-Gating in Statistik, Monatsrückblick, ThemePicker |
 | Phase 13: Polish & Release | ✅ Fertig (Code) | Splash Screen, Shimmer, ProGuard/R8, Accessibility — manuelle Schritte: App-Icon, interner Testlauf, Play Store Release |
+| Phase 14: Bugfixes & Verbesserungen | ✅ Fertig (Code) | Offline-Bug, Streak-Optimierung, JSON async, Eintrag löschen |
+| Phase 15: UX-Überarbeitung & Sprach-Umbenennung | 🔧 In Arbeit | Formular morgens/abends differenzieren, Morgenroutine/Abendroutine, Guided Questions ausbauen, Validierung, Streak-Freeze |
+| Sprüche-Pool | ⚠️ Lücken | Ausgeglichenheit/Traurigkeit/Selbstfürsorge/Energie stark unterrepräsentiert — siehe Sprüchezähler |
+
+---
+
+## Sprüchezähler
+
+> Zählt wie viele Sprüche es pro Tag in `sprueche.json` gibt. Zeigt, wo dringend neue Sprüche hinzugefügt werden müssen.
+
+**Gesamt: 360 Sprüche (S001–S360)**
+
+| Tag | Anzahl | In `deriveTags` genutzt? | Bewertung |
+|-----|--------|--------------------------|-----------|
+| Achtsamkeit | 195 | ✅ (implizit via Fallback) | ✅ Sehr gut |
+| Dankbarkeit | 160 | ✅ (`achievement`-Checkbox, Rating ≥ 3) | ✅ Gut |
+| Liebe | 120 | ❌ (nicht in `deriveTags`) | ℹ️ Wird nie gezielt ausgespielt |
+| Freude | 63 | ✅ (`mood = "joy"`) | ✅ Gut |
+| Angst | 60 | ❌ (nicht in `deriveTags`) | ℹ️ Wird nie gezielt ausgespielt |
+| Freundschaft | 60 | ❌ (nicht in `deriveTags`) | ℹ️ Wird nie gezielt ausgespielt |
+| Trauer | 30 | ❌ (nicht in `deriveTags`) | ⚠️ Verwechslungsgefahr mit „Traurigkeit"! |
+| Stress | 20 | ✅ (`mood = "stress"`, `energy = "empty"`) | ⚠️ Wenig — Stress ist häufiger Zustand |
+| Ausgeglichenheit | 3 | ✅ (`mood = "balance"`) | 🔴 Kritisch — nur 3 Sprüche! |
+| Traurigkeit | 3 | ✅ (`mood = "sadness"`) | 🔴 Kritisch — nur 3 Sprüche! |
+| Selbstfürsorge | 3 | ✅ (`breathing`/`outside` Self-Care) | 🔴 Kritisch — nur 3 Sprüche! |
+| Energie | 2 | ✅ (`energy = "full"`) | 🔴 Kritisch — nur 2 Sprüche! |
+| Motivation | 1 | ❌ (nicht in `deriveTags`) | ⚠️ Fast nicht vorhanden |
+
+### Was zu tun ist
+
+- [ ] **🔴 Dringend:** Sprüche für `Ausgeglichenheit`, `Traurigkeit`, `Selbstfürsorge`, `Energie` auf mind. **20–30** erhöhen (aktuell je 2–3!)
+- [ ] **⚠️ Tag-Inkonsistenz fixen:** In `sprueche.json` gibt es 30 Sprüche mit Tag `"Trauer"` und 3 mit `"Traurigkeit"` — das sind zwei verschiedene Tags. `deriveTags` nutzt `"Traurigkeit"`. Entweder alle `"Trauer"`-Sprüche auf `"Traurigkeit"` umbenennen **oder** in `deriveTags` beide Tags vergeben: `tags.add("Traurigkeit"); tags.add("Trauer")` — dann werden alle 33 Sprüche für traurige Nutzerinnen verfügbar.
+- [ ] **ℹ️ Entscheiden:** Tags `Liebe`, `Angst`, `Freundschaft`, `Motivation` sind in `sprueche.json` vorhanden, werden aber durch `deriveTags` nie ausgespielt. Entweder in `deriveTags` einbinden (z.B. `Angst` bei `mood = "stress"`) oder als allgemeinen Fallback-Pool belassen.
+- [ ] **⚠️ Stress:** Nur 20 Sprüche für einen der häufigsten Zustände. Auf mind. 40–50 erhöhen.
 
 ---
 
@@ -1127,3 +1161,128 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
   2. [ ] Screenshots (Pflicht: mind. 2 Phone-Screenshots), Kurz- und Langbeschreibung auf Deutsch
   3. [ ] Datenschutzerklärung-URL in Play Console eintragen (Pflicht)
   4. [ ] Release Track: **Intern → Geschlossen (Beta) → Produktion**
+
+---
+
+## Phase 15: UX-Überarbeitung & Sprach-Umbenennung
+
+> Diese Phase enthält alle Verbesserungen aus dem Code-Review (Mai 2026). Priorität 1 zuerst — das sind inhaltlich die stärksten Änderungen.
+
+### Priorität 1 — Formular morgens/abends inhaltlich differenzieren
+
+**Das ist der größte inhaltliche Fehler der aktuellen App:** Beide Formulare zeigen identische Sektionen, obwohl mehrere davon morgens semantisch unmöglich sind.
+
+**Ziel:**
+- Morgen-Eintrag = **Morgenroutine** (Achtsamkeit, Intention, Ankommen im Tag)
+- Abend-Eintrag = **Abendroutine** (Dankbarkeit, Rückblick, Loslassen)
+
+#### Änderungen in `EntryScreen.kt` + Section-Komponenten
+
+| Section | Morgenroutine | Abendroutine |
+|---------|--------------|--------------|
+| `EnergySection` | „Wie starte ich heute in den Tag?" ✓ | „Wie fühle ich mich jetzt nach dem Tag?" |
+| `MoodSection` | „Welches Gefühl begleitet mich heute Morgen?" | „Welches Grundgefühl hat meinen Tag dominiert?" ✓ |
+| `GratitudeSection` | „Wofür bin ich heute oder generell dankbar?" (kein „heutiger Moment") | „Aus welchem Bereich kam mein heutiger Dankbarkeits-Moment?" ✓ |
+| `RatingSection` | **Entfernen** — Tag hat gerade erst begonnen | „Wie bewerte ich den heutigen Tag?" ✓ |
+| `SelfCareSection` | „Was möchte ich heute für mich tun?" (Intention statt Rückblick) | „Was habe ich heute für mein Wohlbefinden getan?" ✓ |
+| `MindfulnessSection` | „Wie präsent fühle ich mich gerade?" + „Was nehme ich mir heute bewusst vor?" | „Wo waren meine Gedanken heute?" + „Habe ich heute eine Pause gemacht?" ✓ |
+| `GuidedQuestionSection` | Morgen-Fragen ✓ | Abend-Fragen ✓ |
+| `FreeTextSection` | ✓ | ✓ |
+
+**Implementierung:**
+- [ ] `type`-Parameter an alle Section-Komponenten durchreichen (`type: String` — `"morning"` oder `"evening"`)
+- [ ] `RatingSection` in `EntryScreen.kt` nur bei `type == "evening"` anzeigen
+- [ ] `SelfCareSection`: Titel per `type` steuern (Intention vs. Rückblick)
+- [ ] `GratitudeSection`: Titel per `type` steuern
+- [ ] `MoodSection`: Titel per `type` steuern
+- [ ] `EnergySection`: Titel per `type` steuern
+- [ ] `MindfulnessSection`: Beide Fragen per `type` umformulieren
+- [ ] Entry-Modell ist nicht betroffen — alle Felder bleiben gleich, nur die UI-Texte ändern sich
+
+### Priorität 1 — Umbenennung: „Morgen" → „Morgenroutine" / „Abend" → „Abendroutine"
+
+Alle sichtbaren UI-Texte umstellen. **Technische Werte** (`type = "morning"` / `"evening"` im Code und in Firestore) bleiben unverändert.
+
+- [ ] `HeuteScreen.kt`: Button „Morgen starten" → **„Morgenroutine starten"**, Button „Abend starten" → **„Abendroutine starten"**
+- [ ] `HeuteScreen.kt`: „Abend-Eintrag ab 17 Uhr verfügbar." → **„Abendroutine ab 17 Uhr verfügbar."**
+- [ ] `EntryScreen.kt`: Greeting-Logik anpassen — bei `type == "morning"` → z.B. „Guten Morgen, {Name}! Deine Morgenroutine." / `type == "evening"` → „Guten Abend, {Name}! Deine Abendroutine."
+- [ ] `EntryScreen.kt`: Subtitle „Nimm dir 3 Minuten nur für dich." kann bleiben (passt für beide)
+- [ ] `TagebuchScreen.kt` / `EntryListItem.kt`: Anzeige „Morgen" / „Abend" im Eintrag-Preview → **„Morgenroutine"** / **„Abendroutine"**
+- [ ] `EntryDetailScreen.kt`: Label für `type` → **„Morgenroutine"** / **„Abendroutine"**
+- [ ] `HeuteScreen.kt`: Statustext „Heute abgeschlossen ✓" bleibt, passt gut
+
+### Priorität 1 — `HeuteScreen.kt`: Begrüßungstext je nach Tageszeit
+
+- [ ] `HeuteScreen.kt:66`: `Text("Wie war dein Tag?")` erscheint auch morgens um 7 Uhr — mit `isEvening`-Flag anpassen:
+  ```kotlin
+  val subtitle = if (isEvening) "Wie war dein Tag?" else "Wie startest du in den Tag?"
+  Text(subtitle, ...)
+  ```
+
+### Priorität 2 — Guided Questions ausbauen
+
+- [ ] `guided_questions.json`: Morgen-Fragen auf mindestens **15** erhöhen (aktuell: 5 — Wiederholung alle 5 Tage!)
+- [ ] `guided_questions.json`: Abend-Fragen auf mindestens **15** erhöhen
+
+**Vorschläge für neue Morgen-Fragen:**
+- „Welche drei Worte beschreiben meinen aktuellen Gemütszustand?"
+- „Was ist das Eine, das ich heute unbedingt erledigen möchte?"
+- „Wie kann ich heute jemandem eine Freude machen?"
+- „Was gibt mir heute Kraft?"
+- „Wofür bin ich gerade dankbar?"
+- „Was lasse ich heute bewusst los?"
+- „Wie möchte ich auf Herausforderungen heute reagieren?"
+- „Was brauche ich heute besonders von mir selbst?"
+- „Welche Stärke möchte ich heute einsetzen?"
+- „Was wäre ein kleines Abenteuer für heute?"
+
+**Vorschläge für neue Abend-Fragen:**
+- „Was hat mich heute überrascht?"
+- „Wem oder was möchte ich heute Danke sagen?"
+- „Was hat mir heute Energie gegeben — was hat sie genommen?"
+- „Welchen Moment von heute würde ich gerne festhalten?"
+- „Was hätte ich gebraucht, das ich mir nicht gegönnt habe?"
+- „Worüber habe ich heute gelacht?"
+- „Was war heute besonders schwer — und wie bin ich damit umgegangen?"
+- „Welche kleine Entscheidung hat heute einen Unterschied gemacht?"
+- „Was nehme ich mir für morgen vor?"
+- „Wie fühlt es sich an, diesen Tag abzuschließen?"
+
+### Priorität 2 — Soft-Validierung beim Speichern
+
+- [ ] `EntryViewModel.kt`: Vor dem Speichern prüfen ob `mood` und `energyLevel` gesetzt sind. Bei leerem Formular keine harte Sperre, aber Snackbar: „Du hast noch keine Stimmung und kein Energielevel ausgewählt. Trotzdem speichern?"
+- [ ] Leere Einträge verfälschen die Statistiken — zumindest einen Soft-Hinweis geben
+
+### Priorität 2 — Streak-Freeze (1× pro Monat)
+
+- [ ] Neues Firestore-Feld im User-Dokument: `streak_freeze_used_month: String` (Format: `"2026-05"`)
+- [ ] In `EntryRepository.updateStreak()`: Wenn `lastDate` weder heute noch gestern ist UND der aktuelle Monat noch keinen Freeze genutzt hat → Streak behalten + `streak_freeze_used_month` auf aktuellen Monat setzen
+- [ ] `StreakCard.kt`: Kleiner Hinweis „Du hast noch 1 Gnadentag diesen Monat" anzeigen (oder Icon)
+- [ ] Ohne Freeze verlieren Nutzerinnen bei Urlaub/Krankheit sofort ihren Streak → Motivation bricht
+
+### Priorität 2 — Mitternacht-Problem: `startOfDay` auf 4:00 Uhr setzen
+
+- [ ] `EntryRepository.kt` + `HistoryRepository.kt`: `LocalDate.now().atStartOfDay()` → `LocalDate.now().atTime(4, 0)` als Tagesbeginn. Wer nach Mitternacht (z.B. 0:30–3:59 Uhr) einen Abend-Eintrag macht, gehört noch zum „gestrigen" Tag, nicht zum neuen.
+
+### Priorität 3 — Statistik-Paywall anpassen
+
+- [ ] `StatistikScreen.kt:89`: Grenze von `state.days > 30` auf `state.days > 30` belassen, aber den kostenfreien Zeitraum überdenken:
+  - **Aktuell:** 7 und 30 Tage kostenlos, 90 Tage Premium
+  - **Empfehlung:** 30 Tage kostenlos, 90 Tage Premium — nach 7 Tagen hat man kaum Daten für aussagekräftige Charts
+
+### Priorität 3 — `deriveTags`: „empty" Energie ≠ Stress
+
+- [ ] `EntryRepository.kt:23`: `"empty" -> tags.add("Stress")` überdenken. Erschöpft-aber-ruhig (`energy=empty` + `mood=balance`) bekommt aktuell Stress-Sprüche. Optionen:
+  - Neuer Tag `"Erschöpfung"` einführen und Sprüche dafür anlegen
+  - Oder: `"empty"` Energie nur als Stress taggen wenn auch `mood == "stress"`
+
+### Priorität 3 — Benachrichtigung nach Eintrag canceln
+
+- [ ] Nach erfolgreichem Speichern eines Morgen- oder Abendeintrags die Erinnerung für diesen Tag stornieren
+- [ ] Erfordert zuerst Migration zu lokalen Notifications (Phase 14 Task)
+
+### Priorität 3 — Lokale Notifications statt FCM
+
+- [ ] `AchtsameMessagingService.kt` durch `AlarmManager`/`WorkManager` ersetzen
+- [ ] Vorteil: Offline-fähig, exakt zur eingestellten Zeit, kein Firebase-Backend nötig
+- [ ] Detaillierter Plan in Phase 14 (fehlende Features)

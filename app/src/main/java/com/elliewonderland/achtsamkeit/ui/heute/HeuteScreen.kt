@@ -60,7 +60,7 @@ fun HeuteScreen(navController: NavController) {
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            "Wie war dein Tag?",
+            if (isEvening) "Wie war dein Tag?" else "Wie startest du in den Tag?",
             style = MaterialTheme.typography.bodyLarge,
             color = AppTheme.colors.inkSoft,
         )
@@ -91,7 +91,7 @@ fun HeuteScreen(navController: NavController) {
                         colors   = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.accent),
                     ) {
                         Text(
-                            "Morgen starten",
+                            "Morgenroutine starten",
                             style = MaterialTheme.typography.labelLarge,
                             color = AppTheme.colors.onAccent,
                         )
@@ -105,12 +105,12 @@ fun HeuteScreen(navController: NavController) {
                         modifier = Modifier.fillMaxWidth(),
                         colors   = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.accent),
                     ) {
-                        Text("Abend starten", style = MaterialTheme.typography.labelLarge)
+                        Text("Abendroutine starten", style = MaterialTheme.typography.labelLarge)
                     }
                 } else if (!isEvening && uiState.hasMorningEntry && !uiState.hasEveningEntry) {
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        "Abend-Eintrag ab 17 Uhr verfügbar.",
+                        "Abendroutine ab 17 Uhr verfügbar.",
                         style = MaterialTheme.typography.bodySmall,
                         color = AppTheme.colors.inkSoft,
                     )
