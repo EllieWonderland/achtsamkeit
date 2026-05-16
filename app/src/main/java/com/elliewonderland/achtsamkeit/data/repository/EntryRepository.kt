@@ -2,6 +2,7 @@ package com.elliewonderland.achtsamkeit.data.repository
 
 import com.elliewonderland.achtsamkeit.model.Entry
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
@@ -85,7 +86,7 @@ class EntryRepository {
                 }
             }
         }
-        userRef.update(updates).await()
+        userRef.set(updates, SetOptions.merge()).await()
     }
 
     suspend fun hasEntryToday(userId: String, type: String): Boolean {

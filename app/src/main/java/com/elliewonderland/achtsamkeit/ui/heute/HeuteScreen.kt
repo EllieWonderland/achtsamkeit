@@ -141,18 +141,17 @@ fun HeuteScreen(navController: NavController) {
                     onClick     = { navController.navigate(Screen.Entry.createRoute("morning")) },
                 )
 
-                RoutineCard(
-                    emoji       = "🌙",
-                    title       = "Abendroutine",
-                    subtitle    = when {
-                        uiState.hasEveningEntry -> "Erledigt"
-                        isEvening               -> "Jetzt starten"
-                        else                    -> "Verfügbar ab 17 Uhr"
-                    },
-                    isDone      = uiState.hasEveningEntry,
-                    isLocked    = !isEvening && !uiState.hasEveningEntry,
-                    onClick     = { navController.navigate(Screen.Entry.createRoute("evening")) },
-                )
+                // Abendroutine erst ab 17 Uhr einblenden
+                if (isEvening || uiState.hasEveningEntry) {
+                    RoutineCard(
+                        emoji       = "🌙",
+                        title       = "Abendroutine",
+                        subtitle    = if (uiState.hasEveningEntry) "Erledigt" else "Jetzt starten",
+                        isDone      = uiState.hasEveningEntry,
+                        isLocked    = false,
+                        onClick     = { navController.navigate(Screen.Entry.createRoute("evening")) },
+                    )
+                }
             }
         }
 
