@@ -1,0 +1,47 @@
+package com.elliewonderland.achtsamkeit.ui.history
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.elliewonderland.achtsamkeit.data.repository.HistoryRepository
+import com.elliewonderland.achtsamkeit.model.Entry
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+data class HistoryUiState(
+    val entries: List<Entry> = emptyList(),
+    val isLoading: Boolean = false,
+    val selectedTag: String? = null,
+    val searchText: String = "",
+)
+
+class HistoryViewModel : ViewModel() {
+
+    private val repo = HistoryRepository()
+
+    private val _uiState = MutableStateFlow(HistoryUiState())
+    val uiState: StateFlow<HistoryUiState> = _uiState
+
+    fun load(userId: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            val entries = runCatching { repo.getEntries(userId) }.getOrDefault(emptyList())
+            _uiState.update { it.copy(entries = entries, isLoading = false) }
+        }
+    }
+
+    fun selectTag(userId: String, tag: String?) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(selectedTag = tag, isLoading = true) }
+            val entries = runCatching {
+                if (tag == null) repo.getEntries(userId) else repo.getEntriesByTag(userId, tag)
+            }.getOrDefault(emptyList())
+            _uiState.update { it.copy(entries = entries, isLoading = false) }
+        }
+    }
+
+    fun setSearchText(text: String) {
+        _uiState.update { it.copy(searchText = text) }
+    }
+}

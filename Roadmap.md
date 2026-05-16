@@ -22,7 +22,8 @@
 | Phase 6: Spruch-Logik & Favoriten | ✅ Fertig | `Quote.kt`, `QuoteLoader.kt`, `QuoteRepository.kt`, `QuoteViewModel.kt`, `QuoteScreen.kt` |
 | Phase 7: Push-Benachrichtigungen | ✅ Fertig | `AchtsameMessagingService.kt`, `NotificationRepository.kt`, `NotificationSettingsScreen.kt` |
 | Phase 8: Rotierende Fragen & Rückblicke | ✅ Fertig | `ReviewRepository.kt`, `WeeklyReviewScreen.kt`, `MonthlyReviewScreen.kt` |
-| Phase 9–13 | ❌ Offen | — |
+| Phase 9: Tagebuch-Historie & Suche | ✅ Fertig | `HistoryRepository.kt`, `HistoryViewModel.kt`, `TagebuchScreen.kt`, `EntryDetailScreen.kt`, `EntryListItem.kt`, `TagFilterChips.kt` |
+| Phase 10–13 | ❌ Offen | — |
 
 ---
 
