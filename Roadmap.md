@@ -16,7 +16,8 @@
 | Design-System Handoff | ✅ Fertig | `handoff/` komplett mit allen Kotlin-Theme-Dateien |
 | Phase 1: Projekt-Setup | ✅ Fertig | Projekt ✅, Package ✅, Dependencies ✅, Permissions ✅, Firebase ✅, RevenueCat ✅ |
 | Phase 2: Design-System einbinden | ✅ Fertig | Alle Theme-Dateien eingebunden, `MainActivity.kt` verdrahtet, RevenueCat-Key in BuildConfig |
-| Phase 3–13 | ❌ Offen | — |
+| Phase 3: Authentication & Onboarding | ✅ Fertig | `model/User.kt`, `AuthRepository.kt`, `AuthViewModel.kt`, `LoginScreen.kt`, `RegisterScreen.kt`, `OnboardingScreen.kt` |
+| Phase 4–13 | ❌ Offen | — |
 
 ---
 
@@ -364,9 +365,9 @@ Client-seitige Validierung vor dem API-Aufruf (Passwörter identisch? E-Mail-For
 
 Erscheint beim ersten App-Start (wenn `onboarding_complete == false` in Firestore).
 Enthält:
-- [ ] 2–3 Intro-Screens (HorizontalPager) mit App-Erklärung
-- [ ] Datenschutzeinwilligung mit klickbarem Link zur Datenschutzerklärung
-- [ ] "Ich stimme zu und möchte loslegen"-Button → setzt `onboarding_complete: true` in Firestore → navigiert zu `HeuteScreen`
+- [x] 2–3 Intro-Screens (HorizontalPager) mit App-Erklärung
+- [x] Datenschutzeinwilligung mit klickbarem Link zur Datenschutzerklärung
+- [x] "Ich stimme zu und möchte loslegen"-Button → setzt `onboarding_complete: true` in Firestore → navigiert zu `HeuteScreen`
 
 ### Verifizierung Phase 3
 Login mit Test-Account → Firebase Console → Authentication zeigt neuen User. Firestore zeigt `users/{uid}`-Dokument mit korrekten Feldern.
