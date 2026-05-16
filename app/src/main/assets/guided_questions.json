@@ -1,0 +1,16 @@
+{
+  "morning": [
+    "Wie möchte ich mich heute fühlen?",
+    "Was ist meine wichtigste Absicht für heute?",
+    "Was freut mich heute ganz besonders?",
+    "Welche Herausforderung könnte heute auf mich warten — und wie gehe ich damit um?",
+    "Was wäre ein kleines Zeichen, dass dieser Tag gut war?"
+  ],
+  "evening": [
+    "Was war der schönste Moment heute?",
+    "Was habe ich heute gelernt?",
+    "Wofür bin ich heute besonders dankbar?",
+    "Was hätte ich heute anders machen können?",
+    "Was nehme ich aus dem heutigen Tag mit?"
+  ]
+}

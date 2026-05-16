@@ -17,7 +17,9 @@
 | Phase 1: Projekt-Setup | ✅ Fertig | Projekt ✅, Package ✅, Dependencies ✅, Permissions ✅, Firebase ✅, RevenueCat ✅ |
 | Phase 2: Design-System einbinden | ✅ Fertig | Alle Theme-Dateien eingebunden, `MainActivity.kt` verdrahtet, RevenueCat-Key in BuildConfig |
 | Phase 3: Authentication & Onboarding | ✅ Fertig | `model/User.kt`, `AuthRepository.kt`, `AuthViewModel.kt`, `LoginScreen.kt`, `RegisterScreen.kt`, `OnboardingScreen.kt` |
-| Phase 4–13 | ❌ Offen | — |
+| Phase 4: Navigation & App Shell | ✅ Fertig | `Screen.kt`, `NavGraph.kt`, `BottomNavBar.kt`, `AppScaffold.kt` |
+| Phase 5: Kern-Feature — Tageseintrag | ✅ Fertig | `Entry.kt`, `EntryRepository.kt`, `EntryViewModel.kt`, `HeuteViewModel.kt`, alle Section-Komponenten, `EntryScreen.kt`, `HeuteScreen.kt`, `guided_questions.json` |
+| Phase 6–13 | ❌ Offen | — |
 
 ---
 
