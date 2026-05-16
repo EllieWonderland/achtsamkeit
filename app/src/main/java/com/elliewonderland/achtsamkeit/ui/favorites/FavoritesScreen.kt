@@ -2,6 +2,7 @@ package com.elliewonderland.achtsamkeit.ui.favorites
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -82,7 +83,7 @@ fun FavoritesScreen(navController: NavController) {
                     repeat(5) { ShimmerListItem() }
                 }
                 favorites.isEmpty() -> {
-                    androidx.compose.foundation.layout.Column(
+                    Column(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(horizontal = 32.dp),

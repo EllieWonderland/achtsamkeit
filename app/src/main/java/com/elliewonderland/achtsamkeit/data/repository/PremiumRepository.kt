@@ -4,7 +4,7 @@ import android.app.Activity
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.awaitCustomerInfo
-import com.revenuecat.purchases.awaitGetOfferings
+import com.revenuecat.purchases.awaitOfferings
 import com.revenuecat.purchases.awaitPurchase
 
 object PremiumRepository {
@@ -17,7 +17,7 @@ object PremiumRepository {
     }.getOrDefault(false)
 
     suspend fun purchase(activity: Activity): Boolean = runCatching {
-        val offerings = Purchases.sharedInstance.awaitGetOfferings()
+        val offerings = Purchases.sharedInstance.awaitOfferings()
         val pkg = offerings.current?.monthly ?: return@runCatching false
         val result = Purchases.sharedInstance.awaitPurchase(
             PurchaseParams.Builder(activity, pkg).build()
