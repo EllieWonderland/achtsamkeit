@@ -20,7 +20,8 @@
 | Phase 4: Navigation & App Shell | ✅ Fertig | `Screen.kt`, `NavGraph.kt`, `BottomNavBar.kt`, `AppScaffold.kt` |
 | Phase 5: Kern-Feature — Tageseintrag | ✅ Fertig | `Entry.kt`, `EntryRepository.kt`, `EntryViewModel.kt`, `HeuteViewModel.kt`, alle Section-Komponenten, `EntryScreen.kt`, `HeuteScreen.kt`, `guided_questions.json` |
 | Phase 6: Spruch-Logik & Favoriten | ✅ Fertig | `Quote.kt`, `QuoteLoader.kt`, `QuoteRepository.kt`, `QuoteViewModel.kt`, `QuoteScreen.kt` |
-| Phase 7–13 | ❌ Offen | — |
+| Phase 7: Push-Benachrichtigungen | ✅ Fertig | `AchtsameMessagingService.kt`, `NotificationRepository.kt`, `NotificationSettingsScreen.kt` |
+| Phase 8–13 | ❌ Offen | — |
 
 ---
 
@@ -790,9 +791,9 @@ NotificationManagerCompat.from(this).createNotificationChannel(
 
 ### `ui/settings/NotificationSettingsScreen.kt`
 
-- [ ] Permission-Check: `rememberPermissionState(POST_NOTIFICATIONS)` → Permission-Dialog auslösen, bevor Erinnerungen aktiviert werden
-- [ ] Zeitwähler für Morgen + Abend (Android `TimePickerDialog`)
-- [ ] Gewählte Zeiten in Firestore speichern (`notification_morning`, `notification_evening`)
+- [x] Permission-Check: `rememberPermissionState(POST_NOTIFICATIONS)` → Permission-Dialog auslösen, bevor Erinnerungen aktiviert werden
+- [x] Zeitwähler für Morgen + Abend (Android `TimePickerDialog`)
+- [x] Gewählte Zeiten in Firestore speichern (`notification_morning`, `notification_evening`)
 
 > **Hinweis Versand-Logik:** Für zeitgesteuertes Versenden gibt es zwei Wege:
 > - **MVP (lokal):** `WorkManager` + `AlarmManager` direkt auf dem Gerät — kein Server nötig, aber Benachrichtigung bleibt aus wenn App zu lange nicht geöffnet wurde.
