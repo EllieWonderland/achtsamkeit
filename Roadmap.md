@@ -112,11 +112,11 @@ plugins {
 
 ### Firebase einrichten (Schritt für Schritt)
 
-1. [ ] `console.firebase.google.com` → **Neues Projekt** → Name: "Achtsamkeit in 3 Minuten"
-2. [ ] Google Analytics: bewusste DSGVO-Entscheidung treffen (kann später aktiviert werden)
-3. [ ] **Android-App hinzufügen** → Package Name eintragen → `google-services.json` herunterladen → in `app/` Ordner legen
-4. [ ] **Firestore Database** → "Datenbank erstellen" → Produktionsmodus → Region: **`europe-west3` (Frankfurt)** — Pflicht für DSGVO-konformen EU-Speicherort
-5. [ ] **Authentication** → "Jetzt starten" → Sign-in-Methoden aktivieren: **E-Mail/Passwort** + **Google**
+1. [x] `console.firebase.google.com` → **Neues Projekt** → Name: "Achtsamkeit in 3 Minuten"
+2. [x] Google Analytics: bewusste DSGVO-Entscheidung treffen (kann später aktiviert werden)
+3. [x] **Android-App hinzufügen** → Package Name eintragen → `google-services.json` herunterladen → in `app/` Ordner legen
+4. [x] **Firestore Database** → "Datenbank erstellen" → Produktionsmodus → Region: **`europe-west3` (Frankfurt)** — Pflicht für DSGVO-konformen EU-Speicherort
+5. [x] **Authentication** → "Jetzt starten" → Sign-in-Methoden aktivieren: **E-Mail/Passwort** + **Google**
 
 ### Firestore Security Rules (Firebase Console → Firestore → Regeln)
 
@@ -171,9 +171,9 @@ users/{userId}
 
 ### RevenueCat einrichten
 
-1. [ ] Account anlegen: `app.revenuecat.com` → New Project → Android
-2. [ ] In Google Play Console: Abonnement anlegen (`premium_monthly`, z.B. 2,99 €/Monat)
-3. [ ] RevenueCat Public SDK Key notieren (wird in Phase 12 gebraucht)
+1. [x] Account anlegen: `app.revenuecat.com` → New Project → Android
+2. [x] In Google Play Console: Abonnement anlegen (`premium_monthly`, z.B. 2,99 €/Monat)
+3. [x] RevenueCat Public SDK Key notieren (wird in Phase 12 gebraucht)
 
 ### Verifizierung Phase 1
 `./gradlew assembleDebug` läuft fehlerfrei. App startet auf Emulator. In Logcat erscheint keine Firebase-Fehlermeldung.
@@ -215,8 +215,8 @@ Googles offiziellen Guide *"Use downloadable fonts in Compose"* folgen. Eine Dat
 
 **Variante B — Statisch ausliefern (einfacher für den Start):**
 Schriftdateien von fonts.google.com herunterladen:
-- [ ] Instrument Serif: Regular + Italic
-- [ ] Geist: Light, Regular, Medium, SemiBold, Bold
+- [x] Instrument Serif: Regular + Italic
+- [x] Geist: Light, Regular, Medium, SemiBold, Bold
 
 In `app/src/main/res/font/` ablegen (Dateinamen: nur Kleinbuchstaben + Unterstrich, z.B. `geist_medium.ttf`). In `Type.kt` alle `GoogleFont("…")`-Aufrufe durch `Font(R.font.geist_medium, FontWeight.Medium)` etc. ersetzen.
 
