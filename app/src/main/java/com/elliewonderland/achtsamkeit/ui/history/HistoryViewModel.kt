@@ -1,5 +1,6 @@
 package com.elliewonderland.achtsamkeit.ui.history
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elliewonderland.achtsamkeit.data.repository.HistoryRepository
@@ -26,7 +27,7 @@ class HistoryViewModel : ViewModel() {
     fun load(userId: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            val entries = runCatching { repo.getEntries(userId) }.getOrDefault(emptyList())
+            val entries = runCatching { repo.getEntries(userId) }.onFailure { Log.e("HistoryViewModel", "getEntries failed", it) }.getOrDefault(emptyList())
             _uiState.update { it.copy(entries = entries, isLoading = false) }
         }
     }
@@ -36,7 +37,7 @@ class HistoryViewModel : ViewModel() {
             _uiState.update { it.copy(selectedTag = tag, isLoading = true) }
             val entries = runCatching {
                 if (tag == null) repo.getEntries(userId) else repo.getEntriesByTag(userId, tag)
-            }.getOrDefault(emptyList())
+            }.onFailure { Log.e("HistoryViewModel", "getEntriesByTag failed (tag=$tag)", it) }.getOrDefault(emptyList())
             _uiState.update { it.copy(entries = entries, isLoading = false) }
         }
     }

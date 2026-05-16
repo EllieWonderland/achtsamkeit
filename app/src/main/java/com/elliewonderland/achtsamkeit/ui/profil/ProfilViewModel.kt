@@ -3,6 +3,7 @@ package com.elliewonderland.achtsamkeit.ui.profil
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -42,7 +43,7 @@ class ProfilViewModel(app: Application) : AndroidViewModel(app) {
 
     fun loadProfile(userId: String) {
         viewModelScope.launch {
-            val name = runCatching { authRepo.getUserDisplayName(userId) }.getOrDefault("")
+            val name = runCatching { authRepo.getUserDisplayName(userId) }.onFailure { Log.e("ProfilViewModel", "getUserDisplayName failed", it) }.getOrDefault("")
             _uiState.value = _uiState.value.copy(
                 displayName = name,
                 email       = authRepo.getUserEmail(),

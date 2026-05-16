@@ -1,5 +1,6 @@
 package com.elliewonderland.achtsamkeit.ui.heute
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elliewonderland.achtsamkeit.data.repository.EntryRepository
@@ -27,9 +28,9 @@ class HeuteViewModel : ViewModel() {
 
     fun loadTodayStatus(userId: String) {
         viewModelScope.launch {
-            val hasMorning      = runCatching { repo.hasEntryToday(userId, "morning") }.getOrDefault(false)
-            val hasEvening      = runCatching { repo.hasEntryToday(userId, "evening") }.getOrDefault(false)
-            val weeklyUnlocked  = runCatching { reviewRepo.isWeeklyReviewUnlocked(userId) }.getOrDefault(false)
+            val hasMorning      = runCatching { repo.hasEntryToday(userId, "morning") }.onFailure { Log.e("HeuteViewModel", "hasEntryToday morning failed", it) }.getOrDefault(false)
+            val hasEvening      = runCatching { repo.hasEntryToday(userId, "evening") }.onFailure { Log.e("HeuteViewModel", "hasEntryToday evening failed", it) }.getOrDefault(false)
+            val weeklyUnlocked  = runCatching { reviewRepo.isWeeklyReviewUnlocked(userId) }.onFailure { Log.e("HeuteViewModel", "isWeeklyReviewUnlocked failed", it) }.getOrDefault(false)
             val monthlyUnlocked = reviewRepo.isMonthlyReviewUnlocked()
             _uiState.value = HeuteUiState(
                 hasMorningEntry = hasMorning,

@@ -1149,7 +1149,7 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 ### Verbesserungen & Hinweise
 
 - [ ] **Firestore Composite Indexes** — In der Firebase Console Composite Indexes anlegen für alle Compound-Queries (z.B. `type + created_at`, `tags + created_at`). Aktuell werden Fehler stumm via `runCatching` abgefangen.
-- [ ] **Fehlerlogging verbessern** — `getOrDefault(false)` in `runCatching`-Blöcken durch explizites Logging ersetzen, damit Firestore-Fehler im Logcat sichtbar sind.
+- [x] **Fehlerlogging verbessern** — `onFailure { Log.e(...) }` vor allen `getOrDefault`-Aufrufen in ViewModels ergänzt (HeuteViewModel, HistoryViewModel, FavoritesViewModel, ProfilViewModel).
 - [ ] **Zeitzonen-Absicherung** — Timestamps immer in UTC speichern, `date_str` nur für die lokale Zeitzone der Nutzerin berechnen. Relevant für Nutzerinnen, die reisen.
 - [ ] **Paywall-Timing optimieren** — `PaywallCard` erst beim Klick auf Premium-Features (Monatsrückblick, 90-Tage-Statistik) zeigen, nicht beim App-Start. Verbessert die Konversionsrate.
 - [ ] **Datenmigration-Fallbacks sicherstellen** — Alle Felder in `Entry.kt` und User-Dokument haben immer Default-Werte, damit alte Einträge die App nicht zum Absturz bringen (bereits teils via Kotlin `= ""` Defaults gelöst — im Blick behalten).

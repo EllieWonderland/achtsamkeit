@@ -1,6 +1,7 @@
 package com.elliewonderland.achtsamkeit.ui.favorites
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.elliewonderland.achtsamkeit.data.local.QuoteLoader
@@ -25,7 +26,7 @@ class FavoritesViewModel(app: Application) : AndroidViewModel(app) {
     fun load(userId: String) {
         viewModelScope.launch {
             _isLoading.value = true
-            _favorites.value = runCatching { repo.getFavorites(userId) }.getOrDefault(emptyList())
+            _favorites.value = runCatching { repo.getFavorites(userId) }.onFailure { Log.e("FavoritesViewModel", "getFavorites failed", it) }.getOrDefault(emptyList())
             _isLoading.value = false
         }
     }
