@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -29,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.elliewonderland.achtsamkeit.ui.components.ShimmerListItem
 import com.elliewonderland.achtsamkeit.ui.history.components.EntryListItem
 import com.elliewonderland.achtsamkeit.ui.history.components.TagFilterChips
 import com.elliewonderland.achtsamkeit.ui.navigation.Screen
@@ -100,8 +100,8 @@ fun TagebuchScreen(navController: NavController) {
 
         when {
             uiState.isLoading -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = AppTheme.colors.accent)
+                Column(modifier = Modifier.fillMaxSize()) {
+                    repeat(6) { ShimmerListItem() }
                 }
             }
             visibleEntries.isEmpty() -> {

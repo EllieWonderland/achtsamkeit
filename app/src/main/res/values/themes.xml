@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.AchtsamkeitIn3Minuten" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Applied to MainActivity via android:theme in AndroidManifest -->
+    <style name="Theme.AchtsamkeitIn3Minuten" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="postSplashScreenTheme">@style/Theme.AchtsamkeitIn3Minuten.App</item>
+    </style>
+
+    <!-- Actual app theme used after the splash -->
+    <style name="Theme.AchtsamkeitIn3Minuten.App" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

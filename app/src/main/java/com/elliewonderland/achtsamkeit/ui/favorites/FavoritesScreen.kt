@@ -18,7 +18,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.elliewonderland.achtsamkeit.model.FavoriteQuote
+import com.elliewonderland.achtsamkeit.ui.components.ShimmerListItem
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -78,10 +78,9 @@ fun FavoritesScreen(navController: NavController) {
                 .padding(innerPadding),
         ) {
             when {
-                isLoading -> CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center),
-                    color = AppTheme.colors.accent,
-                )
+                isLoading -> Column(modifier = Modifier.fillMaxSize()) {
+                    repeat(5) { ShimmerListItem() }
+                }
                 favorites.isEmpty() -> {
                     androidx.compose.foundation.layout.Column(
                         modifier = Modifier

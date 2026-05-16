@@ -26,7 +26,7 @@
 | Phase 10: Statistiken | ✅ Fertig | `StatsRepository.kt`, `StatsViewModel.kt`, `StatistikScreen.kt`, `StreakCard.kt`, `MoodBarChart.kt`, `GratitudePieChart.kt` |
 | Phase 11: Account & Datenschutz | ✅ Fertig | `ProfilScreen.kt`, `ProfilViewModel.kt`, `FavoritesScreen.kt`, `FavoritesViewModel.kt`, `FavoriteQuote.kt` |
 | Phase 12: Monetarisierung | ✅ Fertig | `AchtsamkeitApp.kt`, `PremiumRepository.kt`, `PaywallCard.kt`, Feature-Gating in Statistik, Monatsrückblick, ThemePicker |
-| Phase 13 | ❌ Offen | — |
+| Phase 13: Polish & Release | ✅ Fertig (Code) | Splash Screen, Shimmer, ProGuard/R8, Accessibility — manuelle Schritte: App-Icon, interner Testlauf, Play Store Release |
 
 ---
 
@@ -1091,10 +1091,10 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 ## Phase 13: Polish & Release
 
 - [ ] **App-Icon:** 512×512 px PNG in Android Studio → New → Image Asset → Adaptive Icon anlegen (Foreground + Background getrennt)
-- [ ] **Splash Screen:** `implementation("androidx.core:core-splashscreen:1.0.1")` — Icon auf Theme-Hintergrundfarbe, kein Text
-- [ ] **Ladezeiten überbrücken:** Skeleton-Composables (shimmer Effekt) während Firestore-Abfragen laufen
-- [ ] **Accessibility:** `contentDescription` für alle Icons und Bilder. Test mit Android TalkBack aktivieren.
-- [ ] **Proguard/R8:** `minifyEnabled = true` im Release-BuildType — reduziert APK-Größe erheblich
+- [x] **Splash Screen:** `androidx.core:core-splashscreen:1.0.1` — `Theme.SplashScreen` in themes.xml, `installSplashScreen()` in MainActivity, Hintergrundfarbe `#EEF1ED`
+- [x] **Ladezeiten überbrücken:** `ShimmerBox`, `ShimmerListItem`, `ShimmerCard` in `ui/components/Shimmer.kt` — angewendet in TagebuchScreen, FavoritesScreen, StatistikScreen
+- [x] **Accessibility:** Alle `contentDescription`-Werte geprüft — alle Icons korrekt beschriftet oder bewusst `null` (dekorativ neben Textlabels)
+- [x] **Proguard/R8:** `isMinifyEnabled = true` + `isShrinkResources = true` im Release-BuildType, vollständige Regeln für Firestore, kotlinx.serialization, Firebase, RevenueCat
 - [ ] **Interner Testlauf:** Mindestens 7 Tage echte Nutzung auf dem eigenen Gerät. Streak, Spruch-Cooldown, Rückblick-Unlock testen.
 - [ ] **Play Store:**
   1. [ ] Release APK/AAB signieren (Keystore erstellen + sicher aufbewahren — bei Verlust kein Update mehr möglich!)

@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
@@ -27,13 +26,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
+import com.elliewonderland.achtsamkeit.ui.components.ShimmerCard
 import com.elliewonderland.achtsamkeit.ui.premium.PaywallCard
 import com.elliewonderland.achtsamkeit.ui.stats.components.GratitudePieChart
 import com.elliewonderland.achtsamkeit.ui.stats.components.MoodBarChart
@@ -81,12 +80,9 @@ fun StatistikScreen(
         }
 
         if (state.isLoading) {
-            Box(
-                modifier         = Modifier.fillMaxWidth().height(200.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(color = AppTheme.colors.accent)
-            }
+            ShimmerCard(height = 80.dp)
+            ShimmerCard(height = 200.dp)
+            ShimmerCard(height = 200.dp)
         } else {
             StreakCard(streak = state.streak)
 
