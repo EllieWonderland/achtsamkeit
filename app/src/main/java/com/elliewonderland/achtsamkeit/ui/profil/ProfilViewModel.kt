@@ -3,18 +3,22 @@ package com.elliewonderland.achtsamkeit.ui.profil
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.elliewonderland.achtsamkeit.data.local.QuoteLoader
 import com.elliewonderland.achtsamkeit.data.repository.AuthRepository
 import com.elliewonderland.achtsamkeit.data.repository.HistoryRepository
 import com.elliewonderland.achtsamkeit.data.repository.QuoteRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.io.File
 
 data class ProfilUiState(
     val displayName: String = "",
@@ -86,7 +90,7 @@ class ProfilViewModel(app: Application) : AndroidViewModel(app) {
                 val entries   = historyRepo.getEntries(userId, limit = 10_000)
                 val favorites = quoteRepo.getFavorites(userId)
                 val json = Json { prettyPrint = true }
-                buildString {
+                val jsonString = buildString {
                     append("{")
                     append("\"entries\":")
                     append(json.encodeToString(entries))
@@ -94,13 +98,20 @@ class ProfilViewModel(app: Application) : AndroidViewModel(app) {
                     append(json.encodeToString(favorites))
                     append("}")
                 }
+                withContext(Dispatchers.IO) {
+                    val exportDir = File(context.cacheDir, "export").also { it.mkdirs() }
+                    val file = File(exportDir, "achtsamkeit_daten.json")
+                    file.writeText(jsonString)
+                    FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+                }
             }.fold(
-                onSuccess = { jsonString ->
+                onSuccess = { uri ->
                     _uiState.value = _uiState.value.copy(isLoading = false)
                     val intent = Intent(Intent.ACTION_SEND).apply {
-                        type = "text/plain"
+                        type = "application/json"
                         putExtra(Intent.EXTRA_SUBJECT, "Meine Achtsamkeit-Daten")
-                        putExtra(Intent.EXTRA_TEXT, jsonString)
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     }
                     context.startActivity(Intent.createChooser(intent, "Daten exportieren"))
                 },

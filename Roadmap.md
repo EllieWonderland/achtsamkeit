@@ -1144,7 +1144,7 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 
 - [x] **Benachrichtigungen smart stummschalten** — Nach erfolgreichem Speichern setzt `EntryViewModel` einen SharedPreferences-Flag. `NotificationReceiver` überspringt die Anzeige wenn der Flag für heute gesetzt ist.
 - [x] **FCM → lokale Notifications migrieren** — `NotificationReceiver`, `BootReceiver` und `NotificationScheduler` implementiert. `AlarmManager.setAndAllowWhileIdle()` plant Alarms lokal und täglich neu. FCM-Service bleibt als toter Fallback erhalten.
-- [ ] **Datenexport (DSGVO)** — "Meine Daten exportieren"-Button in `ProfilScreen` vollständig implementieren: Alle Einträge als CSV oder Text via Android Share-Intent.
+- [x] **Datenexport (DSGVO)** — "Meine Daten exportieren"-Button in `ProfilScreen` vollständig implementiert: JSON-Datei via FileProvider + Android Share-Intent.
 
 ### Verbesserungen & Hinweise
 
