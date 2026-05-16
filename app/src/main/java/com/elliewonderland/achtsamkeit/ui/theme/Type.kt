@@ -2,17 +2,18 @@ package com.elliewonderland.achtsamkeit.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
+import com.elliewonderland.achtsamkeit.R
 
 private val GoogleProvider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
     providerPackage   = "com.google.android.gms",
-    certificates      = androidx.compose.ui.text.googlefonts.R.array.com_google_android_gms_fonts_certs,
+    certificates      = R.array.com_google_android_gms_fonts_certs,
 )
 
 private val InstrumentSerif = FontFamily(
