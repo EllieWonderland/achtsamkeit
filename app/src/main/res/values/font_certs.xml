@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Google Fonts Provider Certificates
+    ===================================
+    TODO: Replace placeholder strings with real certificate data.
+    Easiest way: In Android Studio right-click res/font → New → Font resource file
+    and use the "Downloadable Font" wizard — it generates the correct file automatically.
+    Reference: https://developer.android.com/develop/ui/views/text-and-emoji/downloadable-fonts
+-->
+<resources>
+    <string-array name="com_google_android_gms_fonts_certs_dev">
+        <item>placeholder_dev</item>
+    </string-array>
+    <string-array name="com_google_android_gms_fonts_certs_prod">
+        <item>placeholder_prod</item>
+    </string-array>
+    <array name="com_google_android_gms_fonts_certs">
+        <item>@array/com_google_android_gms_fonts_certs_dev</item>
+        <item>@array/com_google_android_gms_fonts_certs_prod</item>
+    </array>
+</resources>
