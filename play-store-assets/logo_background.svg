@@ -7,11 +7,10 @@
    width="1254"
    height="1254"
    viewBox="0 0 1254 1254"
-   sodipodi:docname="logo_foreground.svg"
-   inkscape:export-filename="logo_background.svg"
+   sodipodi:docname="Logo_AchtsamkeitIn3Minuten.png"
+   inkscape:export-filename="logo_foreground.svg"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
-   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -42,13 +41,6 @@
          style="stop-color:#000000;stop-opacity:0;"
          offset="1"
          id="stop16" />
-    </linearGradient>
-    <linearGradient
-       id="swatch12">
-      <stop
-         style="stop-color:#00ffff;stop-opacity:1;"
-         offset="0"
-         id="stop12" />
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
@@ -86,8 +78,17 @@
      inkscape:window-x="-11"
      inkscape:window-y="-11"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer3"
-     inkscape:export-bgcolor="#ffffff00" />
+     inkscape:current-layer="g1"
+     inkscape:export-bgcolor="#ffffff00">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="1254"
+       height="1254"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
   <g
      inkscape:groupmode="layer"
      inkscape:label="Image"
@@ -97,7 +98,7 @@
        inkscape:groupmode="layer"
        id="layer3"
        inkscape:label="logo_background"
-       style="display:none">
+       style="display:inline">
       <rect
          style="fill:url(#linearGradient19);stroke:url(#linearGradient16)"
          id="rect7"
@@ -108,7 +109,7 @@
     </g>
     <g
        id="logo_foreground"
-       style="display:inline;fill:#ffffff">
+       style="display:none;fill:#ffffff">
       <path
          style="fill:#ffffff;stroke-width:2.18133"
          d="m 603.78798,519.43522 c -34.34328,-11.33154 -54.95248,-36.08693 -59.67397,-71.67925 -2.91547,-21.97789 10.49542,-54.51723 28.63833,-69.48625 16.07966,-13.26671 32.40193,-19.3144 52.19959,-19.34089 15.06974,-0.0202 19.4449,0.91621 32.06715,6.86298 50.42061,23.75484 64.29706,83.67864 29.59017,127.78165 -18.82527,23.92179 -54.72543,35.13197 -82.82127,25.86176 z"
