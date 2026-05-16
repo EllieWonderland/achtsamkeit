@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -41,12 +44,15 @@ fun HeuteScreen(navController: NavController) {
     }
 
     Column(
-        modifier            = Modifier
+        modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(Modifier.height(40.dp))
+
         Text(
             "Heute",
             style = MaterialTheme.typography.displaySmall,
@@ -111,5 +117,41 @@ fun HeuteScreen(navController: NavController) {
                 }
             }
         }
+
+        if (!uiState.isLoading && (uiState.weeklyUnlocked || uiState.monthlyUnlocked)) {
+            Spacer(Modifier.height(32.dp))
+            Divider(color = AppTheme.colors.hair)
+            Spacer(Modifier.height(24.dp))
+
+            Text(
+                "Rückblicke",
+                style = MaterialTheme.typography.titleSmall,
+                color = AppTheme.colors.inkSoft,
+            )
+            Spacer(Modifier.height(12.dp))
+
+            if (uiState.weeklyUnlocked) {
+                OutlinedButton(
+                    onClick  = { navController.navigate(Screen.WeeklyReview.route) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors   = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.accent),
+                ) {
+                    Text("Wochenrückblick", style = MaterialTheme.typography.labelLarge)
+                }
+                Spacer(Modifier.height(8.dp))
+            }
+
+            if (uiState.monthlyUnlocked) {
+                OutlinedButton(
+                    onClick  = { navController.navigate(Screen.MonthlyReview.route) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors   = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.accent),
+                ) {
+                    Text("MonatsRückblick", style = MaterialTheme.typography.labelLarge)
+                }
+            }
+        }
+
+        Spacer(Modifier.height(40.dp))
     }
 }

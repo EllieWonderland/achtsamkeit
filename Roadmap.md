@@ -21,7 +21,8 @@
 | Phase 5: Kern-Feature — Tageseintrag | ✅ Fertig | `Entry.kt`, `EntryRepository.kt`, `EntryViewModel.kt`, `HeuteViewModel.kt`, alle Section-Komponenten, `EntryScreen.kt`, `HeuteScreen.kt`, `guided_questions.json` |
 | Phase 6: Spruch-Logik & Favoriten | ✅ Fertig | `Quote.kt`, `QuoteLoader.kt`, `QuoteRepository.kt`, `QuoteViewModel.kt`, `QuoteScreen.kt` |
 | Phase 7: Push-Benachrichtigungen | ✅ Fertig | `AchtsameMessagingService.kt`, `NotificationRepository.kt`, `NotificationSettingsScreen.kt` |
-| Phase 8–13 | ❌ Offen | — |
+| Phase 8: Rotierende Fragen & Rückblicke | ✅ Fertig | `ReviewRepository.kt`, `WeeklyReviewScreen.kt`, `MonthlyReviewScreen.kt` |
+| Phase 9–13 | ❌ Offen | — |
 
 ---
 
@@ -841,15 +842,15 @@ suspend fun isMonthlyReviewUnlocked(userId: String): Boolean {
 
 ### `ui/weekly/WeeklyReviewScreen.kt`
 
-- [ ] Sichtbar auf `HeuteScreen` wenn `isWeeklyReviewUnlocked() == true`
-- [ ] 5–7 offene Freitextfragen (aus `App_Inhalte.md` übernehmen)
-- [ ] Wird als `type: "weekly_review"` in Firestore gespeichert
+- [x] Sichtbar auf `HeuteScreen` wenn `isWeeklyReviewUnlocked() == true`
+- [x] 5–7 offene Freitextfragen (aus `App_Inhalte.md` übernehmen)
+- [x] Wird als `type: "weekly_review"` in Firestore gespeichert
 
 ### `ui/monthly/MonthlyReviewScreen.kt`
 
-- [ ] Sichtbar in der letzten Woche des Monats
-- [ ] Tiefere Reflexionsfragen für den Monatsrückblick
-- [ ] Wird als `type: "monthly_review"` in Firestore gespeichert
+- [x] Sichtbar in der letzten Woche des Monats
+- [x] Tiefere Reflexionsfragen für den Monatsrückblick
+- [x] Wird als `type: "monthly_review"` in Firestore gespeichert
 
 ### Verifizierung Phase 8
 Wochenrückblick-Button erscheint auf HeuteScreen nach ≥ 3 Einträgen in dieser Woche. Rückblick speichern → Firestore zeigt Dokument mit `type: "weekly_review"`.
