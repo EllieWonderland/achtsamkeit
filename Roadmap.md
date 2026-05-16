@@ -1150,9 +1150,9 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 
 - [ ] **Firestore Composite Indexes** — In der Firebase Console Composite Indexes anlegen für alle Compound-Queries (z.B. `type + created_at`, `tags + created_at`). Aktuell werden Fehler stumm via `runCatching` abgefangen.
 - [x] **Fehlerlogging verbessern** — `onFailure { Log.e(...) }` vor allen `getOrDefault`-Aufrufen in ViewModels ergänzt (HeuteViewModel, HistoryViewModel, FavoritesViewModel, ProfilViewModel).
-- [ ] **Zeitzonen-Absicherung** — Timestamps immer in UTC speichern, `date_str` nur für die lokale Zeitzone der Nutzerin berechnen. Relevant für Nutzerinnen, die reisen.
-- [ ] **Paywall-Timing optimieren** — `PaywallCard` erst beim Klick auf Premium-Features (Monatsrückblick, 90-Tage-Statistik) zeigen, nicht beim App-Start. Verbessert die Konversionsrate.
-- [ ] **Datenmigration-Fallbacks sicherstellen** — Alle Felder in `Entry.kt` und User-Dokument haben immer Default-Werte, damit alte Einträge die App nicht zum Absturz bringen (bereits teils via Kotlin `= ""` Defaults gelöst — im Blick behalten).
+- [x] **Zeitzonen-Absicherung** — Verifiziert: `System.currentTimeMillis()` ist UTC-Epoch (immer korrekt), `date_str` = `LocalDate.now()` (lokale Zeitzone), alle Boundary-Checks mit `ZoneId.systemDefault()`. Kein Handlungsbedarf.
+- [x] **Paywall-Timing optimieren** — Verifiziert: StatistikScreen zeigt PaywallCard erst wenn 90-Tage-Chip geklickt, MonthlyReviewScreen nur nach Navigation via HeuteScreen-Button, ThemePicker zeigt AlertDialog nur bei Klick auf gesperrten Stil. Kein App-Start-Paywall.
+- [x] **Datenmigration-Fallbacks sicherstellen** — `Entry.kt` hat Kotlin-Defaults für alle Felder, `toEntry()` nutzt `?: ""` / `?: emptyList()` überall. `ensureUserDocument()` initialisiert jetzt auch `current_streak`, `last_entry_date`, `streak_freeze_used_month` mit sicheren Defaults.
 
 ## Endphase: Test & Release
 - [ ] **Interner Testlauf:** Mindestens 7 Tage echte Nutzung auf dem eigenen Gerät. Streak, Spruch-Cooldown, Rückblick-Unlock testen.

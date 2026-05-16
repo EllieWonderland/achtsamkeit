@@ -67,12 +67,15 @@ class AuthRepository {
         val snap = doc.get().await()
         if (!snap.exists()) {
             doc.set(mapOf(
-                "email"                to user.email,
-                "display_name"         to (name.ifBlank { user.displayName ?: "" }),
-                "created_at"           to FieldValue.serverTimestamp(),
-                "onboarding_complete"  to false,
-                "notification_morning" to "08:00",
-                "notification_evening" to "21:00",
+                "email"                     to user.email,
+                "display_name"              to (name.ifBlank { user.displayName ?: "" }),
+                "created_at"                to FieldValue.serverTimestamp(),
+                "onboarding_complete"       to false,
+                "notification_morning"      to "08:00",
+                "notification_evening"      to "21:00",
+                "current_streak"            to 0,
+                "last_entry_date"           to "",
+                "streak_freeze_used_month"  to "",
             )).await()
         }
     }
