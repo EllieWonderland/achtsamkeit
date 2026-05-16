@@ -178,5 +178,725 @@
     "text": "Ich kümmere mich liebevoll um mich selbst – das ist keine Schwäche, sondern Stärke.",
     "author": "Eigene Affirmation",
     "tags": ["Selbstfürsorge", "Ausgeglichenheit"]
+  },
+  {
+    "id": "S031",
+    "text": "Ich betrachte meine Angst wie ein vorbeiziehendes Blatt auf einem Fluss – sie ist da, aber sie treibt langsam weiter.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S032",
+    "text": "In diesem genauen Moment bin ich vollkommen sicher. Ich ruhe im Hier und Jetzt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S033",
+    "text": "Ich spüre den festen Boden unter meinen Füßen. Er trägt mich, auch wenn mein Geist unruhig ist.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S034",
+    "text": "Angst ist nur ein Gefühl. Ich atme tief ein und schaffe in mir Raum für Ruhe.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S035",
+    "text": "Ich lade meine Unruhe ein, da zu sein, ohne sie bewerten oder bekämpfen zu müssen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S036",
+    "text": "Mein Atem ist mein sicherer Hafen, wenn die Gedanken stürmisch werden.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S037",
+    "text": "Ich muss nicht jeden furchtsamen Gedanken glauben. Ich beobachte ihn und lasse ihn weiterziehen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S038",
+    "text": "Mit jedem bewussten Ausatmen lasse ich ein kleines Stück Anspannung und Sorge los.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S039",
+    "text": "Ich verbinde mich mit meinen Sinnen und kehre aus der Zukunft zurück in den jetzigen Augenblick.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S040",
+    "text": "Die Angst darf da sein, aber sie übernimmt nicht das Steuer. Ich bleibe der stille Beobachter.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S041",
+    "text": "Wie Wolken am Himmel ziehen auch meine Sorgen vorüber. Mein innerer Himmel bleibt weit und klar.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S042",
+    "text": "Ich schenke mir selbst Mitgefühl in Momenten der Panik. Ich bin hier und ich bin sicher.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S043",
+    "text": "Anstatt gegen die Angst anzukämpfen, umarme ich sie mit sanfter Achtsamkeit.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S044",
+    "text": "Jeder Herzschlag erinnert mich daran, dass ich lebe und fest im Jetzt verankert bin.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S045",
+    "text": "Ich konzentriere mich achtsam auf das, was ich jetzt gerade sehen, hören und fühlen kann.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S046",
+    "text": "Die Zukunft ist noch nicht geschrieben. Ich kümmere mich liebevoll nur um diesen einen Moment.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S047",
+    "text": "Ich erlaube meinem Körper, die Anspannung zu fühlen und sie sanft an den Boden abzugeben.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S048",
+    "text": "Mein Geist ist wie ein ruhiger See. Die Angst ist nur ein Kieselstein, der kleine, vergehende Wellen schlägt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S049",
+    "text": "Ich atme bewusst Ruhe ein und atme die Enge in meiner Brust sanft aus.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S050",
+    "text": "Wenn die Angst laut wird, werde ich ganz leise und lausche einfach meinem gleichmäßigen Atem.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S051",
+    "text": "Ich trete mental einen Schritt zurück und beobachte meine rasenden Gedanken mit liebevoller Distanz.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S052",
+    "text": "Dieser Moment ist alles, was existiert. In diesem Raum bin ich vollkommen geborgen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S053",
+    "text": "Ich spüre die Luft, die durch meine Nase strömt. Sie bringt frische Energie und nimmt alte Ängste mit.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S054",
+    "text": "Es ist okay, Angst zu haben. Ich halte sie sanft in meinem Bewusstsein, bis sie sich von selbst löst.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S055",
+    "text": "Ich lenke meine Aufmerksamkeit bewusst weg vom 'Was wäre wenn' hin zum 'Was ist jetzt'.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S056",
+    "text": "Meine Hände ruhen entspannt. Ich muss in diesem Augenblick nichts festhalten oder kontrollieren.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S057",
+    "text": "Jeder bewusste Atemzug ist ein kleiner, sicherer Schritt heraus aus der Panik und hinein in den Frieden.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S058",
+    "text": "Ich begegne meiner Angst nicht mit Widerstand, sondern mit offener Neugier und Akzeptanz.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S059",
+    "text": "Die Welt um mich herum ist im Hier und Jetzt still. Ich erlaube auch meinem Inneren, diese Stille zu finden.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S060",
+    "text": "Ich bin größer als meine Angst. Ich bin der weite Raum der Achtsamkeit, in dem sie erscheint und wieder vergeht.",
+    "author": "Eigene Affirmation",
+    "tags": ["Angst", "Achtsamkeit"]
+  },
+  {
+    "id": "S061",
+    "text": "Auch wenn die Angst da ist, bin ich dankbar für die innere Stärke, mit der ich sie jeden Tag trage.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S062",
+    "text": "Ich lenke meinen Blick von der Panik auf die kleinen Dinge, für die ich genau in diesem Moment dankbar bin.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S063",
+    "text": "Dankbarkeit ist das sanfte Licht, das die dunklen Schatten meiner Sorgen erhellt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S064",
+    "text": "Ich danke meinem Körper, dass er mich beschützen will, auch wenn es manchmal ein Fehlalarm der Angst ist.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S065",
+    "text": "Selbst in Momenten großer Unruhe finde ich einen kleinen Gedanken der Dankbarkeit, der mich erdet.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S066",
+    "text": "Ich bin dankbar für jeden ruhigen Atemzug, der mir beweist, dass die Angst nicht alles kontrolliert.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S067",
+    "text": "Meine Angst zeigt mir oft, was mir im Leben wirklich wichtig ist. Dafür bin ich heute dankbar.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S068",
+    "text": "Inmitten der Unsicherheit danke ich für das feste Fundament im Hier und Jetzt, das mich sicher trägt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S069",
+    "text": "Ich begegne meinen Ängsten wohlwollend und danke ihnen, dass sie mich letztendlich lehren, mutig zu sein.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S070",
+    "text": "Wenn die Sorgen in meinem Kopf zu laut werden, zähle ich leise die Dinge auf, die mein Herz mit Dankbarkeit füllen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S071",
+    "text": "Ich bin tief dankbar für die friedlichen Pausen zwischen der Angst – in ihnen sammle ich neue Kraft.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S072",
+    "text": "Dankbarkeit ist der sichere Anker, der mein inneres Boot hält, wenn der Sturm der Angst tobt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S073",
+    "text": "Auch mit einem unruhigen, ängstlichen Herzen erlaube ich mir, dankbar für das Gute in meinem Leben zu sein.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S074",
+    "text": "Ich danke mir selbst für meinen unermüdlichen Mut, der Angst jeden Tag aufs Neue zu begegnen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S075",
+    "text": "Ich richte meine Aufmerksamkeit auf das, was ich habe, und nehme der Angst die Macht über das, was passieren könnte.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S076",
+    "text": "Jeder überwundene Moment der Panik ist ein kostbarer Grund tiefer, ehrlicher Dankbarkeit.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S077",
+    "text": "Ich bin dankbar für das Gefühl von Sicherheit, das ich mir selbst schenken kann, wenn die Angst mich erstarren lässt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S078",
+    "text": "Ich entscheide mich dafür, meine Dankbarkeit lauter sprechen zu lassen als die flüsternden Zweifel meiner Angst.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S079",
+    "text": "Ich schätze die sensiblen und wachsamen Seiten meiner Seele, auch wenn sie manchmal Angst hervorrufen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S080",
+    "text": "Ein einziger dankbarer Gedanke wirkt in mir wie ein wärmender Schutzschild gegen aufsteigende Sorgen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S081",
+    "text": "Ich bin dankbar für den heutigen Tag, mit all seinen Herausforderungen und erfolgreich überstandenen Ängsten.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S082",
+    "text": "Wenn die Angst mir die klare Sicht raubt, öffnet die Dankbarkeit meine Augen wieder für das Schöne um mich herum.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S083",
+    "text": "Ich danke meiner Angst dafür, dass sie mir schonungslos zeigt, wie sehr ich das Leben und die Geborgenheit liebe.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S084",
+    "text": "Ich fülle den weiten Raum, den eine vergehende Angst in mir hinterlässt, bewusst mit einem Gefühl der Dankbarkeit.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S085",
+    "text": "Selbst wenn ich innerlich zittere, kann ich in diesem Moment dankbar für die Wärme der Sonne auf meiner Haut sein.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S086",
+    "text": "Achtsame Dankbarkeit verwandelt mein Gefühl der Bedrohung sanft in ein beruhigendes Bewusstsein der Fülle.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S087",
+    "text": "Ich bin stolz und unendlich dankbar für jeden kleinen Schritt vorwärts, den ich trotz meiner Ängste gehe.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S088",
+    "text": "Wenn furchtvolle Sorgen mich in die Zukunft ziehen wollen, bringt mich meine Dankbarkeit sanft zurück ins sichere Jetzt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S089",
+    "text": "Ich bedanke mich bei meinem Verstand, der stets Gefahren sucht, um mich zu schützen, und zeige ihm nun, dass alles gut ist.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S090",
+    "text": "Das Schöne und die Angst dürfen gleichzeitig in mir existieren. Ich wähle aber, der Dankbarkeit den Fokus zu geben.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Angst"]
+  },
+  {
+    "id": "S091",
+    "text": "Mit jedem wachen Atemzug lade ich die pure Freude in meinen gegenwärtigen Moment ein.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S092",
+    "text": "Ich richte meine Aufmerksamkeit auf die kleinen Wunder um mich herum und spüre tiefe Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S093",
+    "text": "Die Freude blüht dort auf, wo ich mit meiner vollen Aufmerksamkeit im Hier und Jetzt verweile.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S094",
+    "text": "Ich genieße ganz achtsam das Gefühl von Leichtigkeit und Freude in meinem Körper.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S095",
+    "text": "Wahre Freude finde ich nicht in der Zukunft, sondern in der bewussten Wahrnehmung dieses Augenblicks.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S096",
+    "text": "Ein bewusstes Lächeln ist mein Schlüssel zu tiefer, innerer Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S097",
+    "text": "Ich feiere jeden achtsamen Moment, denn er ist ein kostbares Geschenk voller Lebensfreude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S098",
+    "text": "Mit wachen Sinnen koste ich die süße Freude des jetzigen Augenblicks voll aus.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S099",
+    "text": "Ich erlaube der Freude, in der Stille meines achtsamen Geistes sanft zu erwachen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S100",
+    "text": "Jeder achtsame Schritt auf meinem Weg ist getragen von einer stillen, tiefen Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S101",
+    "text": "Ich öffne meine Augen für die Schönheit des Moments und spüre, wie mein Herz vor Freude tanzt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S102",
+    "text": "Die Gegenwart ist mein Spielplatz, auf dem ich mit achtsamer Freude jeden Tag neu entdecke.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S103",
+    "text": "Ich atme bewusst die strahlende Freude des Lebens ein und lasse sie durch mich hindurchfließen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S104",
+    "text": "In der bewussten Verbindung mit mir selbst entdecke ich die unerschöpfliche Quelle meiner Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S105",
+    "text": "Ich nehme den gegenwärtigen Moment genau so an, wie er ist, und finde darin unerwartete Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S106",
+    "text": "Achtsamkeit ist der fruchtbare Boden, auf dem meine tägliche Freude wachsen kann.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S107",
+    "text": "Ich halte kurz inne, spüre in mich hinein und begrüße die Freude, die dort wohnt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S108",
+    "text": "Mit jedem Detail, das ich achtsam wahrnehme, wächst meine Begeisterung und Freude am Leben.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S109",
+    "text": "Die Freude liegt im bewussten Erleben des Alltäglichen, das plötzlich so besonders wird.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S110",
+    "text": "Ich schenke dem jetzigen Moment meine volle Präsenz und erhalte als Antwort reine Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S111",
+    "text": "Achtsam lasse ich die Hektik los und mache Platz für die unbeschwerte Freude des Seins.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S112",
+    "text": "Mein Geist ist ruhig, mein Herz ist weit – ich bin bereit, jede Freude dieses Tages zu empfangen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S113",
+    "text": "Das achtsame Wahrnehmen eines einzigen Sonnenstrahls erfüllt mich bereits mit tiefer Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S114",
+    "text": "Ich kultiviere die Freude in mir, indem ich ganz bewusst im Hier und Jetzt bleibe.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S115",
+    "text": "Freude ist das Echo meiner achtsamen Präsenz im Spiegel des gegenwärtigen Augenblicks.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S116",
+    "text": "Ich spüre den Rhythmus meines Atems und erfreue mich an dem Wunder, am Leben zu sein.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S117",
+    "text": "Indem ich meine Gedanken beruhige, mache ich den Weg frei für ein freudvolles Erleben.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S118",
+    "text": "Ich bin achtsam mit mir selbst und feiere jeden kleinen, freudigen Funken in meinem Herzen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S119",
+    "text": "Die Magie der Freude entfaltet sich immer genau dann, wenn ich völlig präsent bin.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S120",
+    "text": "Ich wähle bewusst die Achtsamkeit und öffne damit die Tür zu einem erfüllten, freudvollen Tag.",
+    "author": "Eigene Affirmation",
+    "tags": ["Achtsamkeit", "Freude"]
+  },
+  {
+    "id": "S121",
+    "text": "Dankbarkeit ist der Schlüssel, der die Tür zu unbändiger Freude öffnet.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S122",
+    "text": "Wenn ich meine Segnungen zähle, füllt sich mein Herz ganz von selbst mit tiefer Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S123",
+    "text": "Ich danke für das Gute in meinem Leben und spüre, wie diese Dankbarkeit zur reinen Freude wird.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S124",
+    "text": "Ein dankbares Herz ist ein kraftvoller Magnet für freudige Momente.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S125",
+    "text": "Ich feiere die kleinen Dinge mit Dankbarkeit und entdecke in ihnen die größte Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S126",
+    "text": "Meine Freude wächst mit jedem 'Danke', das ich ehrlich und von Herzen ausspreche.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S127",
+    "text": "Ich bin dankbar für das Geschenk dieses Tages und begrüße ihn mit offener, strahlender Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S128",
+    "text": "Dankbarkeit ist der Tanzboden, auf dem meine Lebensfreude ihr schönstes Fest feiert.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S129",
+    "text": "Die Freude, die ich ausstrahle, ist das harmonische Echo meiner inneren, tief empfundenen Dankbarkeit.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S130",
+    "text": "Ich richte meinen Blick auf die Fülle um mich herum und mein Herz tanzt vor Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S131",
+    "text": "Wahre Freude entsteht in dem Moment, in dem ich das, was ich habe, mit vollkommener Dankbarkeit annehme.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S132",
+    "text": "Aus jedem gesäten Samen der Dankbarkeit wächst eine wunderschöne Blume der Freude heran.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S133",
+    "text": "Ich danke dem Leben für seine bunten Farben und genieße jeden neuen Moment mit freudiger Leichtigkeit.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S134",
+    "text": "Dankbarkeit lenkt meinen Blick auf das Schöne und lässt mich so an jedem Tag neue Freude finden.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S135",
+    "text": "Ich bin dankbar für die lieben Menschen um mich herum, die mein Herz mit Wärme und ehrlicher Freude füllen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S136",
+    "text": "Mit einem einfachen 'Danke' verwandle ich gewöhnliche Augenblicke in unvergessliche, freudige Erinnerungen.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S137",
+    "text": "Die tiefe Dankbarkeit in meiner Seele ist die sprudelnde und unversiegbare Quelle meiner Lebensfreude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S138",
+    "text": "Ich danke für die Lektionen des Lebens und freue mich über die innere Stärke, die ich dadurch gewinne.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S139",
+    "text": "Wenn Dankbarkeit meinen Tag wie ein helles Licht leitet, folgt die Freude ganz von allein.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S140",
+    "text": "Ich lache aus vollem Herzen und bin unendlich dankbar für jeden guten Grund, der mir dieses Lachen schenkt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S141",
+    "text": "Dankbar blicke ich auf das zurück, was mir geschenkt wurde, und freue mich auf das, was noch kommen mag.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S142",
+    "text": "In der stillen Dankbarkeit finde ich genau die innere Ruhe, aus der heraus meine wahre Freude entspringt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S143",
+    "text": "Mein tiefes 'Danke' an das Leben ist der Funke, der mein wärmendes, inneres Freudenfeuer hell entzündet.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S144",
+    "text": "Ich bin dankbar für meine Gesundheit und erfreue mich jeden Tag an der Energie, die durch meinen Körper fließt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S145",
+    "text": "Es ist die achtsame Dankbarkeit, die mein Leben reich macht und mein Herz immer wieder vor Freude überfließen lässt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S146",
+    "text": "Ich danke mir selbst für meinen einzigartigen Weg und genieße jeden freudigen Moment, den ich mir aktiv erschaffe.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S147",
+    "text": "Die Dankbarkeit macht mein Herz weit, vertrauensvoll und weich, sodass die Lebensfreude darin einen festen Platz findet.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S148",
+    "text": "Ich nehme die kleinen, scheinbar unsichtbaren Geschenke des Alltags dankbar an und verwandle sie in pure Freude.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S149",
+    "text": "Dankbarkeit ist die wunderschöne Melodie, zu der meine Seele jeden Morgen voller Freude zu singen beginnt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
+  },
+  {
+    "id": "S150",
+    "text": "Ich spüre ein tiefes Gefühl von Dankbarkeit in mir und lasse zu, dass es sich als helles Lächeln und wahre Freude zeigt.",
+    "author": "Eigene Affirmation",
+    "tags": ["Dankbarkeit", "Freude"]
   }
 ]

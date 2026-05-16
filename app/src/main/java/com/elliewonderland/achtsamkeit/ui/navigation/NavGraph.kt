@@ -1,0 +1,92 @@
+package com.elliewonderland.achtsamkeit.ui.navigation
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.elliewonderland.achtsamkeit.data.repository.AuthRepository
+import com.elliewonderland.achtsamkeit.ui.auth.LoginScreen
+import com.elliewonderland.achtsamkeit.ui.auth.RegisterScreen
+import com.elliewonderland.achtsamkeit.ui.entry.EntryScreen
+import com.elliewonderland.achtsamkeit.ui.heute.HeuteScreen
+import com.elliewonderland.achtsamkeit.ui.history.EntryDetailScreen
+import com.elliewonderland.achtsamkeit.ui.history.TagebuchScreen
+import com.elliewonderland.achtsamkeit.ui.monthly.MonthlyReviewScreen
+import com.elliewonderland.achtsamkeit.ui.onboarding.OnboardingScreen
+import com.elliewonderland.achtsamkeit.ui.profil.ProfilScreen
+import com.elliewonderland.achtsamkeit.ui.quote.QuoteScreen
+import com.elliewonderland.achtsamkeit.ui.screens.ThemePickerScreen
+import com.elliewonderland.achtsamkeit.ui.settings.NotificationSettingsScreen
+import com.elliewonderland.achtsamkeit.ui.stats.StatistikScreen
+import com.elliewonderland.achtsamkeit.ui.theme.ThemeChoice
+import com.elliewonderland.achtsamkeit.ui.weekly.WeeklyReviewScreen
+
+private val bottomNavRoutes = setOf(
+    Screen.Heute.route,
+    Screen.Tagebuch.route,
+    Screen.Statistik.route,
+    Screen.Profil.route,
+)
+
+@Composable
+fun AppNavHost(choice: ThemeChoice) {
+    val navController = rememberNavController()
+    val authRepo      = remember { AuthRepository() }
+    val startDest     = if (authRepo.getCurrentUser() != null) Screen.Heute.route
+                        else Screen.Login.route
+
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute   = backStackEntry?.destination?.route
+
+    Scaffold(
+        bottomBar = {
+            if (currentRoute in bottomNavRoutes) {
+                BottomNavBar(navController = navController, currentRoute = currentRoute)
+            }
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController    = navController,
+            startDestination = startDest,
+            modifier         = Modifier.padding(innerPadding),
+        ) {
+            composable(Screen.Login.route)         { LoginScreen(navController) }
+            composable(Screen.Register.route)      { RegisterScreen(navController) }
+            composable(Screen.Onboarding.route)    { OnboardingScreen(navController) }
+            composable(Screen.Heute.route)         { HeuteScreen(navController) }
+            composable(Screen.Tagebuch.route)      { TagebuchScreen(navController) }
+            composable(Screen.Statistik.route)     { StatistikScreen(navController) }
+            composable(Screen.Profil.route)        { ProfilScreen(navController, choice) }
+            composable(Screen.ThemePicker.route)   { ThemePickerScreen(choice) }
+            composable(Screen.NotifSettings.route) { NotificationSettingsScreen(navController) }
+            composable(Screen.WeeklyReview.route)  { WeeklyReviewScreen(navController) }
+            composable(Screen.MonthlyReview.route) { MonthlyReviewScreen(navController) }
+            composable(
+                route     = Screen.Entry.route,
+                arguments = listOf(navArgument("type") { type = NavType.StringType }),
+            ) { back ->
+                EntryScreen(navController, back.arguments?.getString("type") ?: "morning")
+            }
+            composable(
+                route     = Screen.Quote.route,
+                arguments = listOf(navArgument("entryId") { type = NavType.StringType }),
+            ) { back ->
+                QuoteScreen(navController, back.arguments?.getString("entryId") ?: "")
+            }
+            composable(
+                route     = Screen.EntryDetail.route,
+                arguments = listOf(navArgument("entryId") { type = NavType.StringType }),
+            ) { back ->
+                EntryDetailScreen(navController, back.arguments?.getString("entryId") ?: "")
+            }
+        }
+    }
+}

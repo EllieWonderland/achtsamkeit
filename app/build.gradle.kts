@@ -72,6 +72,9 @@ dependencies {
     // Google Fonts (Instrument Serif + Geist)
     implementation(libs.androidx.compose.ui.text.google.fonts)
 
+    // Material Icons Extended (für BottomNavBar-Icons)
+    implementation(libs.androidx.compose.material.icons.extended)
+
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
