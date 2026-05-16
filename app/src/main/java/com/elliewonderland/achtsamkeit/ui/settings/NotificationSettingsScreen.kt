@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.elliewonderland.achtsamkeit.data.repository.AuthRepository
 import com.elliewonderland.achtsamkeit.data.repository.NotificationRepository
+import com.elliewonderland.achtsamkeit.service.NotificationScheduler
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import kotlinx.coroutines.launch
 
@@ -150,6 +151,7 @@ fun NotificationSettingsScreen(navController: NavController) {
                     isSaving = true
                     scope.launch {
                         notifRepo.saveNotificationTimes(uid, morningTime, eveningTime)
+                        NotificationScheduler.scheduleAlarms(context, morningTime, eveningTime)
                         isSaving = false
                         snackbar.showSnackbar("Erinnerungszeiten gespeichert!")
                     }

@@ -1,11 +1,13 @@
 package com.elliewonderland.achtsamkeit.ui.entry
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.elliewonderland.achtsamkeit.data.repository.EntryRepository
 import com.elliewonderland.achtsamkeit.model.Entry
 import com.elliewonderland.achtsamkeit.model.GuidedQuestions
+import com.elliewonderland.achtsamkeit.service.NotificationScheduler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -121,9 +123,19 @@ class EntryViewModel(application: Application) : AndroidViewModel(application) {
                     )
                 )
             }.fold(
-                onSuccess = { id -> _saveState.value = EntrySaveState.Saved(id) },
+                onSuccess = { id ->
+                    _saveState.value = EntrySaveState.Saved(id)
+                    markNotificationDoneToday(type)
+                },
                 onFailure = { e  -> _saveState.value = EntrySaveState.Error(e.message ?: "Fehler beim Speichern") },
             )
         }
+    }
+
+    private fun markNotificationDoneToday(type: String) {
+        val today = LocalDate.now().toString()
+        getApplication<Application>()
+            .getSharedPreferences(NotificationScheduler.PREFS_NAME, Context.MODE_PRIVATE)
+            .edit().putString("${type}_done_date", today).apply()
     }
 }

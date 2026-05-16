@@ -1142,8 +1142,8 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 
 ### Fehlende Features
 
-- [ ] **Benachrichtigungen smart stummschalten** — Nach erfolgreichem Speichern eines Morgen- oder Abendeintrags die Erinnerung für diesen Tag canceln (`AlarmManager` / `WorkManager`).
-- [ ] **FCM → lokale Notifications migrieren** — `AchtsameMessagingService.kt` und FCM-Push durch `AlarmManager` + lokale `NotificationCompat`-Notifications ersetzen. Funktioniert offline und exakt zur eingestellten Zeit.
+- [x] **Benachrichtigungen smart stummschalten** — Nach erfolgreichem Speichern setzt `EntryViewModel` einen SharedPreferences-Flag. `NotificationReceiver` überspringt die Anzeige wenn der Flag für heute gesetzt ist.
+- [x] **FCM → lokale Notifications migrieren** — `NotificationReceiver`, `BootReceiver` und `NotificationScheduler` implementiert. `AlarmManager.setAndAllowWhileIdle()` plant Alarms lokal und täglich neu. FCM-Service bleibt als toter Fallback erhalten.
 - [ ] **Datenexport (DSGVO)** — "Meine Daten exportieren"-Button in `ProfilScreen` vollständig implementieren: Alle Einträge als CSV oder Text via Android Share-Intent.
 
 ### Verbesserungen & Hinweise
@@ -1272,11 +1272,8 @@ Alle sichtbaren UI-Texte umstellen. **Technische Werte** (`type = "morning"` / `
 
 ### Priorität 3 — Benachrichtigung nach Eintrag canceln
 
-- [ ] Nach erfolgreichem Speichern eines Morgen- oder Abendeintrags die Erinnerung für diesen Tag stornieren
-- [ ] Erfordert zuerst Migration zu lokalen Notifications (Phase 14 Task)
+- [x] Nach erfolgreichem Speichern setzt `EntryViewModel.markNotificationDoneToday()` einen SharedPreferences-Flag. `NotificationReceiver` zeigt die Notification nicht an wenn der Flag für heute gesetzt ist — kein AlarmManager-Cancel nötig.
 
 ### Priorität 3 — Lokale Notifications statt FCM
 
-- [ ] `AchtsameMessagingService.kt` durch `AlarmManager`/`WorkManager` ersetzen
-- [ ] Vorteil: Offline-fähig, exakt zur eingestellten Zeit, kein Firebase-Backend nötig
-- [ ] Detaillierter Plan in Phase 14 (fehlende Features)
+- [x] `NotificationScheduler`, `NotificationReceiver`, `BootReceiver` implementiert. `AlarmManager.setAndAllowWhileIdle()` plant täglich neu. FCM-Service bleibt als toter Fallback.

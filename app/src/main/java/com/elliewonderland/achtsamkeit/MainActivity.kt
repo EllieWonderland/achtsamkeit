@@ -10,6 +10,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.elliewonderland.achtsamkeit.service.AchtsameMessagingService
+import com.elliewonderland.achtsamkeit.service.NotificationScheduler
 import com.elliewonderland.achtsamkeit.ui.navigation.AppNavHost
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.elliewonderland.achtsamkeit.ui.theme.Palette
@@ -23,6 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         createNotificationChannel()
+        rescheduleAlarmsIfNeeded()
         val initial = ThemeChoice(Variant.HAIN, Palette.SALBEI)
         setContent {
             val choice by ThemePreferences.flow(this).collectAsStateWithLifecycle(initial)
@@ -30,6 +32,13 @@ class MainActivity : ComponentActivity() {
                 AppNavHost(choice)
             }
         }
+    }
+
+    private fun rescheduleAlarmsIfNeeded() {
+        val prefs   = getSharedPreferences(NotificationScheduler.PREFS_NAME, MODE_PRIVATE)
+        val morning = prefs.getString("morning_time", null) ?: return
+        val evening = prefs.getString("evening_time", null) ?: return
+        NotificationScheduler.scheduleAlarms(this, morning, evening)
     }
 
     private fun createNotificationChannel() {
