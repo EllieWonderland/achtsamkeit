@@ -6,11 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.elliewonderland.achtsamkeit.data.repository.EntryRepository
 import com.elliewonderland.achtsamkeit.model.Entry
 import com.elliewonderland.achtsamkeit.model.GuidedQuestions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.time.LocalDate
 
@@ -46,8 +48,10 @@ class EntryViewModel(application: Application) : AndroidViewModel(application) {
 
     fun initType(type: String) {
         viewModelScope.launch {
-            val raw       = getApplication<Application>().assets.open("guided_questions.json")
-                .bufferedReader().readText()
+            val raw = withContext(Dispatchers.IO) {
+                getApplication<Application>().assets.open("guided_questions.json")
+                    .bufferedReader().readText()
+            }
             val questions = Json.decodeFromString<GuidedQuestions>(raw)
             val list      = if (type == "morning") questions.morning else questions.evening
             val index     = LocalDate.now().dayOfYear % list.size

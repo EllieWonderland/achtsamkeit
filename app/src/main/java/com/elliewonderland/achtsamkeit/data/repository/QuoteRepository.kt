@@ -7,21 +7,24 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class QuoteRepository(private val loader: QuoteLoader) {
     private val db = Firebase.firestore
 
     suspend fun pickQuote(userId: String, tags: List<String>): Quote {
+        val allQuotes  = withContext(Dispatchers.IO) { loader.quotes }
         val cooldowns  = loadCooldowns(userId)
         val cooldownMs = 90L * 24 * 60 * 60 * 1000
         val now        = System.currentTimeMillis()
 
-        val eligible = loader.quotes.filter { q ->
+        val eligible = allQuotes.filter { q ->
             (now - (cooldowns[q.id] ?: 0L)) > cooldownMs
         }
         val matching = eligible.filter { q -> q.tags.any { it in tags } }
-        val pool     = matching.ifEmpty { eligible }.ifEmpty { loader.quotes }
+        val pool     = matching.ifEmpty { eligible }.ifEmpty { allQuotes }
 
         val picked = pool.random()
         saveCooldown(userId, picked.id)

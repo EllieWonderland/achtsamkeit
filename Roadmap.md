@@ -1095,6 +1095,32 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 - [x] **Ladezeiten überbrücken:** `ShimmerBox`, `ShimmerListItem`, `ShimmerCard` in `ui/components/Shimmer.kt` — angewendet in TagebuchScreen, FavoritesScreen, StatistikScreen
 - [x] **Accessibility:** Alle `contentDescription`-Werte geprüft — alle Icons korrekt beschriftet oder bewusst `null` (dekorativ neben Textlabels)
 - [x] **Proguard/R8:** `isMinifyEnabled = true` + `isShrinkResources = true` im Release-BuildType, vollständige Regeln für Firestore, kotlinx.serialization, Firebase, RevenueCat
+
+
+## Phase 14: Verbesserungen & Bugfixes basierend auf Code-Review
+
+### Kritische Bugs
+
+- [x] **Offline-Bug: Blockierendes Speichern beheben** — `ref.set(map)` in `EntryRepository.saveEntry` ohne `.await()` aufrufen. Firestore generiert die Dokument-ID lokal (`document()` ohne Warten), die UI geht sofort weiter. Netzwerksynchronisation läuft im Hintergrund.
+- [x] **Streak-Abfrage optimieren** — `StatsRepository.getCurrentStreak` führte bis zu 365 sequentielle Firestore-Abfragen aus. Fix: `current_streak` und `last_entry_date` als Felder im User-Dokument, werden beim Speichern eines Eintrags in `EntryRepository.saveEntry` aktualisiert. `getCurrentStreak` liest nur noch ein Dokument.
+- [x] **JSON-Dateien asynchron laden** — `QuoteLoader.quotes` und die `guided_questions.json`-Leselogik in `EntryViewModel.initType` blockierten den Main-Thread. Fix: `withContext(Dispatchers.IO)` beim Dateizugriff.
+- [x] **Eintrag löschen** — Lösch-Button mit Bestätigungsdialog in `EntryDetailScreen`. Löscht das Firestore-Dokument und navigiert zurück. `HistoryRepository.deleteEntry()` ergänzt.
+
+### Fehlende Features
+
+- [ ] **Benachrichtigungen smart stummschalten** — Nach erfolgreichem Speichern eines Morgen- oder Abendeintrags die Erinnerung für diesen Tag canceln (`AlarmManager` / `WorkManager`).
+- [ ] **FCM → lokale Notifications migrieren** — `AchtsameMessagingService.kt` und FCM-Push durch `AlarmManager` + lokale `NotificationCompat`-Notifications ersetzen. Funktioniert offline und exakt zur eingestellten Zeit.
+- [ ] **Datenexport (DSGVO)** — "Meine Daten exportieren"-Button in `ProfilScreen` vollständig implementieren: Alle Einträge als CSV oder Text via Android Share-Intent.
+
+### Verbesserungen & Hinweise
+
+- [ ] **Firestore Composite Indexes** — In der Firebase Console Composite Indexes anlegen für alle Compound-Queries (z.B. `type + created_at`, `tags + created_at`). Aktuell werden Fehler stumm via `runCatching` abgefangen.
+- [ ] **Fehlerlogging verbessern** — `getOrDefault(false)` in `runCatching`-Blöcken durch explizites Logging ersetzen, damit Firestore-Fehler im Logcat sichtbar sind.
+- [ ] **Zeitzonen-Absicherung** — Timestamps immer in UTC speichern, `date_str` nur für die lokale Zeitzone der Nutzerin berechnen. Relevant für Nutzerinnen, die reisen.
+- [ ] **Paywall-Timing optimieren** — `PaywallCard` erst beim Klick auf Premium-Features (Monatsrückblick, 90-Tage-Statistik) zeigen, nicht beim App-Start. Verbessert die Konversionsrate.
+- [ ] **Datenmigration-Fallbacks sicherstellen** — Alle Felder in `Entry.kt` und User-Dokument haben immer Default-Werte, damit alte Einträge die App nicht zum Absturz bringen (bereits teils via Kotlin `= ""` Defaults gelöst — im Blick behalten).
+
+## Endphase: Test & Release
 - [ ] **Interner Testlauf:** Mindestens 7 Tage echte Nutzung auf dem eigenen Gerät. Streak, Spruch-Cooldown, Rückblick-Unlock testen.
 - [ ] **Play Store:**
   1. [ ] Release APK/AAB signieren (Keystore erstellen + sicher aufbewahren — bei Verlust kein Update mehr möglich!)

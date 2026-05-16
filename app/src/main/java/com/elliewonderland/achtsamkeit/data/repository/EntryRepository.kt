@@ -50,8 +50,27 @@ class EntryRepository {
         )
         val ref = db.collection("users").document(userId)
             .collection("entries").document()
-        ref.set(map).await()
+        ref.set(map)  // fire-and-forget: ID wird lokal generiert, Firestore synct im Hintergrund
+        updateStreak(userId)
         return ref.id
+    }
+
+    private suspend fun updateStreak(userId: String) {
+        val today = LocalDate.now().toString()
+        val yesterday = LocalDate.now().minusDays(1).toString()
+        val userRef = db.collection("users").document(userId)
+        val snap = userRef.get().await()
+        val lastDate = snap.getString("last_entry_date") ?: ""
+        val currentStreak = (snap.getLong("current_streak") ?: 0L).toInt()
+        val newStreak = when (lastDate) {
+            today     -> currentStreak
+            yesterday -> currentStreak + 1
+            else      -> 1
+        }
+        userRef.update(mapOf(
+            "last_entry_date" to today,
+            "current_streak"  to newStreak,
+        )).await()
     }
 
     suspend fun hasEntryToday(userId: String, type: String): Boolean {

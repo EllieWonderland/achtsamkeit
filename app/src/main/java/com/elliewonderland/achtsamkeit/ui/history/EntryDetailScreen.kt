@@ -14,6 +14,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -25,12 +27,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -40,6 +46,7 @@ import com.elliewonderland.achtsamkeit.model.Entry
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -49,6 +56,8 @@ import java.util.Locale
 fun EntryDetailScreen(navController: NavController, entryId: String) {
     val userId = Firebase.auth.currentUser?.uid ?: ""
     val repo = remember { HistoryRepository() }
+    val scope = rememberCoroutineScope()
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     val entry by produceState<Entry?>(initialValue = null, entryId, userId) {
         if (userId.isNotBlank() && entryId.isNotBlank()) {
@@ -62,6 +71,30 @@ fun EntryDetailScreen(navController: NavController, entryId: String) {
             if (e.dateStr.isNotBlank()) append("  ·  ${formatDate(e.dateStr)}")
         }
     } ?: "Eintrag"
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Eintrag löschen?") },
+            text = { Text("Dieser Eintrag wird unwiderruflich gelöscht.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                    scope.launch {
+                        runCatching { repo.deleteEntry(userId, entryId) }
+                        navController.popBackStack()
+                    }
+                }) {
+                    Text("Löschen", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Abbrechen")
+                }
+            },
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -80,6 +113,17 @@ fun EntryDetailScreen(navController: NavController, entryId: String) {
                             contentDescription = "Zurück",
                             tint = AppTheme.colors.ink,
                         )
+                    }
+                },
+                actions = {
+                    if (entry != null) {
+                        IconButton(onClick = { showDeleteDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Delete,
+                                contentDescription = "Eintrag löschen",
+                                tint = AppTheme.colors.inkSoft,
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

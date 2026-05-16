@@ -36,6 +36,12 @@ class HistoryRepository {
         return doc.toEntry()
     }
 
+    suspend fun deleteEntry(userId: String, entryId: String) {
+        db.collection("users").document(userId)
+            .collection("entries").document(entryId)
+            .delete().await()
+    }
+
     private fun DocumentSnapshot.toEntry(): Entry? = runCatching {
         Entry(
             id               = id,

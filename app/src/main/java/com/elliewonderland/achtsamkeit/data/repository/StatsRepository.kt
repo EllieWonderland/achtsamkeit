@@ -3,8 +3,6 @@ package com.elliewonderland.achtsamkeit.data.repository
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class StatsRepository {
 
@@ -38,20 +36,7 @@ class StatsRepository {
     }
 
     suspend fun getCurrentStreak(userId: String): Int {
-        val formatter = DateTimeFormatter.ISO_LOCAL_DATE
-        var streak = 0
-        var date = LocalDate.now()
-        repeat(365) {
-            val dateStr = date.format(formatter)
-            val snap = db.collection("users").document(userId)
-                .collection("entries")
-                .whereEqualTo("date_str", dateStr)
-                .limit(1)
-                .get().await()
-            if (snap.isEmpty) return streak
-            streak++
-            date = date.minusDays(1)
-        }
-        return streak
+        val snap = db.collection("users").document(userId).get().await()
+        return (snap.getLong("current_streak") ?: 0L).toInt()
     }
 }
