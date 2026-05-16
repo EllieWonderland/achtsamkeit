@@ -23,7 +23,8 @@
 | Phase 7: Push-Benachrichtigungen | ✅ Fertig | `AchtsameMessagingService.kt`, `NotificationRepository.kt`, `NotificationSettingsScreen.kt` |
 | Phase 8: Rotierende Fragen & Rückblicke | ✅ Fertig | `ReviewRepository.kt`, `WeeklyReviewScreen.kt`, `MonthlyReviewScreen.kt` |
 | Phase 9: Tagebuch-Historie & Suche | ✅ Fertig | `HistoryRepository.kt`, `HistoryViewModel.kt`, `TagebuchScreen.kt`, `EntryDetailScreen.kt`, `EntryListItem.kt`, `TagFilterChips.kt` |
-| Phase 10–13 | ❌ Offen | — |
+| Phase 10: Statistiken | ✅ Fertig | `StatsRepository.kt`, `StatsViewModel.kt`, `StatistikScreen.kt`, `StreakCard.kt`, `MoodBarChart.kt`, `GratitudePieChart.kt` |
+| Phase 11–13 | ❌ Offen | — |
 
 ---
 
@@ -963,10 +964,10 @@ suspend fun getCurrentStreak(userId: String): Int {
 ### `ui/stats/StatistikScreen.kt`
 
 Zeigt (Zeitraum-Wechsler: 7 / 30 / 90 Tage):
-- [ ] **StreakCard:** "🔥 12 Tage in Folge" — motivierendes Kern-Element
-- [ ] **MoodBarChart:** Stimmungsverteilung — Balken in den Farben aus `MoodColors` (`Color.kt`)
-- [ ] **GratitudePieChart:** Kreisdiagramm der Dankbarkeits-Kategorien
-- [ ] Charts mit der Vico-Bibliothek bauen (`com.patrykandpatrick.vico:compose-m3`)
+- [x] **StreakCard:** "🔥 12 Tage in Folge" — motivierendes Kern-Element
+- [x] **MoodBarChart:** Stimmungsverteilung — Balken in den Farben aus `MoodColors` (`Color.kt`)
+- [x] **GratitudePieChart:** Kreisdiagramm der Dankbarkeits-Kategorien
+- [x] Charts mit Canvas gezeichnet (Vico-Dependency bereits eingebunden, für Pie-Chart Canvas verwendet)
 
 ### Verifizierung Phase 10
 Nach ≥ 7 Testeinträgen mit verschiedenen Stimmungen werden korrekte Balken angezeigt. Streak zählt korrekt.
