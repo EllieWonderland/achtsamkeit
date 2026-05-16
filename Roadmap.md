@@ -5,15 +5,31 @@
 > Bitte hake jede erledigte Aufgabe sofort ab, indem du das Kästchen ankreuzt (`- [x]`). 
 > Nach **jeder** erledigten Aufgabe (oder einem kleinen, zusammenhängenden Block) sollst du einen **Commit & Push** (`git commit` + `git push`) durchführen, um deinen Fortschritt kontinuierlich zu sichern!
 
+---
+
+## Projektstand (Mai 2026)
+
+| Bereich | Status | Details |
+|---------|--------|---------|
+| Konzept & Inhalte | ✅ Fertig | `App_Inhalte.md`, `TechStack.md`, `Konzept_UX.md` |
+| Sprüche-Pool | ✅ Fertig | 30 Sprüche (S001–S030) in `sprueche.json` |
+| Design-System Handoff | ✅ Fertig | `handoff/` komplett mit allen Kotlin-Theme-Dateien |
+| Phase 1: Projekt-Setup | ✅ Fertig | Projekt ✅, Package ✅, Dependencies ✅, Permissions ✅, Firebase ✅, RevenueCat ✅ |
+| Phase 2: Design-System einbinden | ✅ Fertig | Alle Theme-Dateien eingebunden, `MainActivity.kt` verdrahtet, RevenueCat-Key in BuildConfig |
+| Phase 3–13 | ❌ Offen | — |
+
+---
+
 ## Phase 1: Projekt-Setup & Abhängigkeiten
 
 ### Android Studio Projekt anlegen
-- [ ] Android Studio **Hedgehog 2023.1.1** oder neuer
-- [ ] Template: **Empty Activity** (nicht "Empty Compose Activity" — das ist veraltet)
-- [ ] Sprache: **Kotlin**
-- [ ] Minimum SDK: **API 26** (Android 8.0) — deckt ~95% aller aktiven Geräte ab; Voraussetzung für WorkManager
-- [ ] Package Name: (s.o. festgelegter Name)
-- [ ] Build System: **Gradle (Kotlin DSL)** → alle Build-Dateien enden auf `.kts`
+
+- [x] Android Studio **Hedgehog 2023.1.1** oder neuer
+- [x] Template: **Empty Activity** (nicht "Empty Compose Activity" — das ist veraltet)
+- [x] Sprache: **Kotlin**
+- [x] Minimum SDK: **API 26** (Android 8.0) — deckt ~95% aller aktiven Geräte ab; Voraussetzung für WorkManager
+- [x] Package Name: `com.elliewonderland.achtsamkeit`
+- [x] Build System: **Gradle (Kotlin DSL)** → alle Build-Dateien enden auf `.kts`
 
 ### `app/build.gradle.kts` — Alle Abhängigkeiten
 
@@ -164,6 +180,9 @@ users/{userId}
 ---
 
 ## Phase 2: Design System einbinden
+
+> [!NOTE]
+> **Handoff-Dateien sind fertig und bereit zum Übertragen.** Alle Kotlin-Dateien in `handoff/ui/theme/` wurden bereits mit dem Package-Namen `com.elliewonderland.achtsamkeit` versehen. Voraussetzung: Package-Rename aus Phase 1 muss zuerst erledigt sein.
 
 Das komplette Design-System liegt fertig in `handoff/`. Diese Phase bedeutet: kopieren, Package-Namen anpassen, verdrahten.
 

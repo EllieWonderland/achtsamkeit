@@ -1,4 +1,4 @@
-# Inhaltliche Struktur: Fragen & Checkboxen
+# App-Inhalte: Fragen & Checkboxen
 
 ## Ideen für Ankreuzfragen (Morgen & Abend)
 Kleine Ankreuzfragen (Multiple-Choice oder Checkboxen) senken die Hemmschwelle, das Tagebuch auch an stressigen Tagen auszufüllen, und bieten trotzdem einen Moment der Selbstreflexion.
@@ -54,14 +54,14 @@ Kleine Ankreuzfragen (Multiple-Choice oder Checkboxen) senken die Hemmschwelle, 
 
 ### Die tägliche Routine (Morgens und Abends)
 **Morgens (Fokus & Intention):**
-- Dankbarkeit: „Ich bin dankbar für...“
-- Tagesausblick: „Wie mache ich den heutigen Tag wundervoll?“ (Setzt den Fokus auf Dinge, die man selbst in der Hand hat)
-- Selbstaffirmation: „Ich bin...“ (Ein positiver Glaubenssatz für den Tag).
+- Dankbarkeit: „Ich bin dankbar für..."
+- Tagesausblick: „Wie mache ich den heutigen Tag wundervoll?" (Setzt den Fokus auf Dinge, die man selbst in der Hand hat)
+- Selbstaffirmation: „Ich bin..." (Ein positiver Glaubenssatz für den Tag).
 
 **Abends (Reflexion & Abschluss):**
-- Gute Taten: „Was habe ich heute Gutes für andere (oder mich) getan?“
-- Highlights: „Drei tolle Dinge, die ich heute erlebt habe.“
-- Lernkurve: „Was habe ich heute gelernt?“ oder „Was hätte ich heute besser machen können?“
+- Gute Taten: „Was habe ich heute Gutes für andere (oder mich) getan?"
+- Highlights: „Drei tolle Dinge, die ich heute erlebt habe."
+- Lernkurve: „Was habe ich heute gelernt?" oder „Was hätte ich heute besser machen können?"
 
 ### Wöchentliche oder monatliche "Deep Dives"
 - Wochenrückblicke: Längere Fragen zu Erfolgen, Sorgen oder Emotionen der vergangenen Woche.

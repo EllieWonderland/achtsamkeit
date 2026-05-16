@@ -1,0 +1,115 @@
+{
+  "$comment": "Single source of truth for the Achtsamkeit-in-3-Minuten design system. Generated from index.html. Re-run any token export to overwrite.",
+  "$version": "1.0.0",
+
+  "variants": {
+    "hain": {
+      "displayName": "Hain",
+      "isDark": false,
+      "tokens": {
+        "background": "#EEF1ED",
+        "surface":    "#F7F9F5",
+        "surfaceAlt": "#E4E9E2",
+        "ink":        "#2A322D",
+        "inkSoft":    "#6A7268",
+        "hair":       "rgba(42,50,45,0.10)",
+        "onAccent":   "#2A322D"
+      }
+    },
+    "velvet": {
+      "displayName": "Velvet",
+      "isDark": true,
+      "tokens": {
+        "background": "#1A1C22",
+        "surface":    "#23262E",
+        "surfaceAlt": "#2D3038",
+        "ink":        "#ECE5D6",
+        "inkSoft":    "rgba(236,229,214,0.62)",
+        "hair":       "rgba(236,229,214,0.10)",
+        "onAccent":   "#1A1C22"
+      }
+    },
+    "aura": {
+      "displayName": "Aura",
+      "isDark": false,
+      "tokens": {
+        "background": "#F6F3FB",
+        "surface":    "#FFFFFF",
+        "surfaceAlt": "#EEEBF5",
+        "ink":        "#2A2440",
+        "inkSoft":    "#6E6884",
+        "hair":       "rgba(42,36,64,0.08)",
+        "onAccent":   "#FFFFFF"
+      }
+    }
+  },
+
+  "palettes": {
+    "salbei": {
+      "displayName": "Salbei",
+      "light": { "accent": "#7C9180", "accent2": "#A8B5C9", "accent3": "#C4BED2" },
+      "dark":  { "accent": "#A8C0AC", "accent2": "#A8B5C9", "accent3": "#C4BED2" }
+    },
+    "lavendel": {
+      "displayName": "Lavendel",
+      "light": { "accent": "#9D8AC4", "accent2": "#C4BED2", "accent3": "#E7B5B5" },
+      "dark":  { "accent": "#C4B0E0", "accent2": "#C4BED2", "accent3": "#E7B5B5" }
+    },
+    "nebel": {
+      "displayName": "Nebel",
+      "light": { "accent": "#7AA8BD", "accent2": "#A8B5C9", "accent3": "#C4BED2" },
+      "dark":  { "accent": "#A5C5D6", "accent2": "#A8B5C9", "accent3": "#C4BED2" }
+    },
+    "pfirsich": {
+      "displayName": "Pfirsich",
+      "light": { "accent": "#D49A9A", "accent2": "#E7B5B5", "accent3": "#F2C57C" },
+      "dark":  { "accent": "#E7B5B5", "accent2": "#F2C57C", "accent3": "#C4A8DD" }
+    }
+  },
+
+  "mood": {
+    "joy":  "#F2C57C",
+    "calm": "#7C9180",
+    "mist": "#A8B5C9",
+    "soft": "#C4BED2"
+  },
+
+  "radius": {
+    "chip":   14,
+    "button": 16,
+    "card":   22,
+    "hero":   28
+  },
+
+  "spacing": {
+    "screenH": 24,
+    "screenV": 20,
+    "gapXs":   4,
+    "gapSm":   8,
+    "gapMd":   12,
+    "gapLg":   18,
+    "gapXl":   28
+  },
+
+  "typography": {
+    "displayFamily": "Instrument Serif",
+    "bodyFamily":    "Geist",
+    "scale": {
+      "displayLarge":  { "size": 40, "lineHeight": 44, "letterSpacing": -0.5 },
+      "displayMedium": { "size": 36, "lineHeight": 40, "letterSpacing": -0.5 },
+      "displaySmall":  { "size": 32, "lineHeight": 36, "letterSpacing": -0.4 },
+      "headlineLarge": { "size": 30, "lineHeight": 36 },
+      "headlineMedium":{ "size": 26, "lineHeight": 32 },
+      "headlineSmall": { "size": 22, "lineHeight": 28 },
+      "titleLarge":    { "size": 18, "lineHeight": 24, "weight": 600 },
+      "titleMedium":   { "size": 15, "lineHeight": 20, "weight": 600 },
+      "titleSmall":    { "size": 13, "lineHeight": 18, "weight": 500 },
+      "bodyLarge":     { "size": 15, "lineHeight": 22 },
+      "bodyMedium":    { "size": 14, "lineHeight": 20 },
+      "bodySmall":     { "size": 12, "lineHeight": 16 },
+      "labelLarge":    { "size": 14, "lineHeight": 20, "weight": 600 },
+      "labelMedium":   { "size": 12, "lineHeight": 16, "weight": 600 },
+      "labelSmall":    { "size": 11, "lineHeight": 14, "weight": 600, "letterSpacing": 1.5, "uppercase": true }
+    }
+  }
+}

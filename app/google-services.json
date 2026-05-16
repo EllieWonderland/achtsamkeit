@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1007038767175",
+    "project_id": "achtsamkeit-in-3-minuten",
+    "storage_bucket": "achtsamkeit-in-3-minuten.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007038767175:android:a59c11de36766ff1491162",
+        "android_client_info": {
+          "package_name": "com.elliewonderland.achtsamkeit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtLWPpfNhpFvCUIf5l9zYy4hYI8SzKSy8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
