@@ -79,8 +79,28 @@ class EntryViewModel(application: Application) : AndroidViewModel(application) {
         f.copy(selfCare = next)
     }
 
+    private val _showValidationDialog = MutableStateFlow(false)
+    val showValidationDialog: StateFlow<Boolean> = _showValidationDialog.asStateFlow()
+
     fun saveEntry(userId: String, type: String) {
         val f = _form.value
+        if (f.mood.isBlank() || f.energyLevel.isBlank()) {
+            _showValidationDialog.value = true
+            return
+        }
+        doSave(userId, type, f)
+    }
+
+    fun dismissValidationDialog() {
+        _showValidationDialog.value = false
+    }
+
+    fun saveEntryAnyway(userId: String, type: String) {
+        _showValidationDialog.value = false
+        doSave(userId, type, _form.value)
+    }
+
+    private fun doSave(userId: String, type: String, f: EntryFormState) {
         viewModelScope.launch {
             _saveState.value = EntrySaveState.Saving
             runCatching {

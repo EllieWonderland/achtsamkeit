@@ -1166,8 +1166,6 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 
 ## Phase 15: UX-Überarbeitung & Sprach-Umbenennung
 
-> Diese Phase enthält alle Verbesserungen aus dem Code-Review (Mai 2026). Priorität 1 zuerst — das sind inhaltlich die stärksten Änderungen.
-
 ### Priorität 1 — Formular morgens/abends inhaltlich differenzieren
 
 **Das ist der größte inhaltliche Fehler der aktuellen App:** Beide Formulare zeigen identische Sektionen, obwohl mehrere davon morgens semantisch unmöglich sind.
@@ -1190,30 +1188,30 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 | `FreeTextSection` | ✓ | ✓ |
 
 **Implementierung:**
-- [ ] `type`-Parameter an alle Section-Komponenten durchreichen (`type: String` — `"morning"` oder `"evening"`)
-- [ ] `RatingSection` in `EntryScreen.kt` nur bei `type == "evening"` anzeigen
-- [ ] `SelfCareSection`: Titel per `type` steuern (Intention vs. Rückblick)
-- [ ] `GratitudeSection`: Titel per `type` steuern
-- [ ] `MoodSection`: Titel per `type` steuern
-- [ ] `EnergySection`: Titel per `type` steuern
-- [ ] `MindfulnessSection`: Beide Fragen per `type` umformulieren
-- [ ] Entry-Modell ist nicht betroffen — alle Felder bleiben gleich, nur die UI-Texte ändern sich
+- [x] `type`-Parameter an alle Section-Komponenten durchreichen (`type: String` — `"morning"` oder `"evening"`)
+- [x] `RatingSection` in `EntryScreen.kt` nur bei `type == "evening"` anzeigen
+- [x] `SelfCareSection`: Titel per `type` steuern (Intention vs. Rückblick)
+- [x] `GratitudeSection`: Titel per `type` steuern
+- [x] `MoodSection`: Titel per `type` steuern
+- [x] `EnergySection`: Titel per `type` steuern
+- [x] `MindfulnessSection`: Beide Fragen per `type` umformulieren
+- [x] Entry-Modell ist nicht betroffen — alle Felder bleiben gleich, nur die UI-Texte ändern sich
 
 ### Priorität 1 — Umbenennung: „Morgen" → „Morgenroutine" / „Abend" → „Abendroutine"
 
 Alle sichtbaren UI-Texte umstellen. **Technische Werte** (`type = "morning"` / `"evening"` im Code und in Firestore) bleiben unverändert.
 
-- [ ] `HeuteScreen.kt`: Button „Morgen starten" → **„Morgenroutine starten"**, Button „Abend starten" → **„Abendroutine starten"**
-- [ ] `HeuteScreen.kt`: „Abend-Eintrag ab 17 Uhr verfügbar." → **„Abendroutine ab 17 Uhr verfügbar."**
-- [ ] `EntryScreen.kt`: Greeting-Logik anpassen — bei `type == "morning"` → z.B. „Guten Morgen, {Name}! Deine Morgenroutine." / `type == "evening"` → „Guten Abend, {Name}! Deine Abendroutine."
-- [ ] `EntryScreen.kt`: Subtitle „Nimm dir 3 Minuten nur für dich." kann bleiben (passt für beide)
-- [ ] `TagebuchScreen.kt` / `EntryListItem.kt`: Anzeige „Morgen" / „Abend" im Eintrag-Preview → **„Morgenroutine"** / **„Abendroutine"**
-- [ ] `EntryDetailScreen.kt`: Label für `type` → **„Morgenroutine"** / **„Abendroutine"**
-- [ ] `HeuteScreen.kt`: Statustext „Heute abgeschlossen ✓" bleibt, passt gut
+- [x] `HeuteScreen.kt`: Button „Morgen starten" → **„Morgenroutine starten"**, Button „Abend starten" → **„Abendroutine starten"**
+- [x] `HeuteScreen.kt`: „Abend-Eintrag ab 17 Uhr verfügbar." → **„Abendroutine ab 17 Uhr verfügbar."**
+- [x] `EntryScreen.kt`: Greeting-Logik anpassen — bei `type == "morning"` → z.B. „Guten Morgen, {Name}! Deine Morgenroutine." / `type == "evening"` → „Guten Abend, {Name}! Deine Abendroutine."
+- [x] `EntryScreen.kt`: Subtitle „Nimm dir 3 Minuten nur für dich." kann bleiben (passt für beide)
+- [x] `TagebuchScreen.kt` / `EntryListItem.kt`: Anzeige „Morgen" / „Abend" im Eintrag-Preview → **„Morgenroutine"** / **„Abendroutine"**
+- [x] `EntryDetailScreen.kt`: Label für `type` → **„Morgenroutine"** / **„Abendroutine"**
+- [x] `HeuteScreen.kt`: Statustext „Heute abgeschlossen ✓" bleibt, passt gut
 
 ### Priorität 1 — `HeuteScreen.kt`: Begrüßungstext je nach Tageszeit
 
-- [ ] `HeuteScreen.kt:66`: `Text("Wie war dein Tag?")` erscheint auch morgens um 7 Uhr — mit `isEvening`-Flag anpassen:
+- [x] `HeuteScreen.kt:66`: `Text("Wie war dein Tag?")` erscheint auch morgens um 7 Uhr — mit `isEvening`-Flag anpassen:
   ```kotlin
   val subtitle = if (isEvening) "Wie war dein Tag?" else "Wie startest du in den Tag?"
   Text(subtitle, ...)
@@ -1221,8 +1219,8 @@ Alle sichtbaren UI-Texte umstellen. **Technische Werte** (`type = "morning"` / `
 
 ### Priorität 2 — Guided Questions ausbauen
 
-- [ ] `guided_questions.json`: Morgen-Fragen auf mindestens **15** erhöhen (aktuell: 5 — Wiederholung alle 5 Tage!)
-- [ ] `guided_questions.json`: Abend-Fragen auf mindestens **15** erhöhen
+- [x] `guided_questions.json`: Morgen-Fragen auf mindestens **15** erhöhen (aktuell: 5 — Wiederholung alle 5 Tage!)
+- [x] `guided_questions.json`: Abend-Fragen auf mindestens **15** erhöhen
 
 **Vorschläge für neue Morgen-Fragen:**
 - „Welche drei Worte beschreiben meinen aktuellen Gemütszustand?"
@@ -1250,8 +1248,8 @@ Alle sichtbaren UI-Texte umstellen. **Technische Werte** (`type = "morning"` / `
 
 ### Priorität 2 — Soft-Validierung beim Speichern
 
-- [ ] `EntryViewModel.kt`: Vor dem Speichern prüfen ob `mood` und `energyLevel` gesetzt sind. Bei leerem Formular keine harte Sperre, aber Snackbar: „Du hast noch keine Stimmung und kein Energielevel ausgewählt. Trotzdem speichern?"
-- [ ] Leere Einträge verfälschen die Statistiken — zumindest einen Soft-Hinweis geben
+- [x] `EntryViewModel.kt`: Vor dem Speichern prüfen ob `mood` und `energyLevel` gesetzt sind. Bei leerem Formular keine harte Sperre, aber Dialog: „Du hast noch keine Stimmung oder kein Energielevel ausgewählt. Möchtest du trotzdem speichern?"
+- [x] Leere Einträge verfälschen die Statistiken — zumindest einen Soft-Hinweis geben
 
 ### Priorität 2 — Streak-Freeze (1× pro Monat)
 

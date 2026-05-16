@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -14,6 +15,7 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -42,6 +44,7 @@ fun EntryScreen(navController: NavController, type: String) {
     val vm: EntryViewModel = viewModel()
     val form by vm.form.collectAsState()
     val saveState by vm.saveState.collectAsState()
+    val showValidationDialog by vm.showValidationDialog.collectAsState()
 
     val snackbarHostState = remember { SnackbarHostState() }
     val userId = Firebase.auth.currentUser?.uid ?: ""
@@ -66,6 +69,24 @@ fun EntryScreen(navController: NavController, type: String) {
             is EntrySaveState.Error  -> snackbarHostState.showSnackbar(s.message)
             else -> Unit
         }
+    }
+
+    if (showValidationDialog) {
+        AlertDialog(
+            onDismissRequest = { vm.dismissValidationDialog() },
+            title = { Text("Eintrag unvollständig") },
+            text  = { Text("Du hast noch keine Stimmung oder kein Energielevel ausgewählt. Möchtest du trotzdem speichern?") },
+            confirmButton = {
+                TextButton(onClick = { vm.saveEntryAnyway(userId, type) }) {
+                    Text("Trotzdem speichern")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { vm.dismissValidationDialog() }) {
+                    Text("Weiter ausfüllen")
+                }
+            },
+        )
     }
 
     androidx.compose.material3.Scaffold(
