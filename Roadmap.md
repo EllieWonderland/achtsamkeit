@@ -1264,15 +1264,11 @@ Alle sichtbaren UI-Texte umstellen. **Technische Werte** (`type = "morning"` / `
 
 ### Priorität 3 — Statistik-Paywall anpassen
 
-- [ ] `StatistikScreen.kt:89`: Grenze von `state.days > 30` auf `state.days > 30` belassen, aber den kostenfreien Zeitraum überdenken:
-  - **Aktuell:** 7 und 30 Tage kostenlos, 90 Tage Premium
-  - **Empfehlung:** 30 Tage kostenlos, 90 Tage Premium — nach 7 Tagen hat man kaum Daten für aussagekräftige Charts
+- [x] `StatistikScreen.kt:89`: Paywall bei `days > 30` belassen (90 Tage = Premium). 7-Tage-Chip bleibt als Wochenübersicht sinnvoll, 30 Tage ist Default und kostenlos — diese Balance ist gut.
 
 ### Priorität 3 — `deriveTags`: „empty" Energie ≠ Stress
 
-- [ ] `EntryRepository.kt:23`: `"empty" -> tags.add("Stress")` überdenken. Erschöpft-aber-ruhig (`energy=empty` + `mood=balance`) bekommt aktuell Stress-Sprüche. Optionen:
-  - Neuer Tag `"Erschöpfung"` einführen und Sprüche dafür anlegen
-  - Oder: `"empty"` Energie nur als Stress taggen wenn auch `mood == "stress"`
+- [x] `EntryRepository.kt:23`: `"empty"` Energie wird nur noch als Stress getaggt wenn auch `mood == "stress"`. Erschöpft-aber-ruhig bekommt jetzt keine Stress-Sprüche mehr.
 
 ### Priorität 3 — Benachrichtigung nach Eintrag canceln
 

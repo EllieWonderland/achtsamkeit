@@ -23,7 +23,9 @@ class EntryRepository {
         }
         when (entry.energyLevel) {
             "full"  -> tags.add("Energie")
-            "empty" -> tags.add("Stress")
+            // "empty" nur als Stress taggen wenn auch Stimmung == Stress, sonst
+            // bekommt jemand der erschöpft-aber-ruhig ist Stress-Sprüche ausgespielt
+            "empty" -> if (entry.mood == "stress") tags.add("Stress")
         }
         if ("achievement" in entry.gratitudeAreas) tags.add("Dankbarkeit")
         if (entry.dayRating >= 3)                  tags.add("Dankbarkeit")
