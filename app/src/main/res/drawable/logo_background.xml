@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  Converted from logo_background.svg (Inkscape).
-  Vertical gradient: #21FFD4 (teal, solid) → #12D4FF (cyan-blue, ~48 % opacity).
-  The gradient starts solid from the top, transitioning at ~40 % of the height.
--->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
@@ -19,11 +14,9 @@
                 android:startY="0"
                 android:endX="627"
                 android:endY="1254">
-                <!-- Before 40 %: solid teal -->
-                <item android:offset="0.0"     android:color="#FF21FFD4"/>
-                <item android:offset="0.405"   android:color="#FF21FFD4"/>
-                <!-- Transition to cyan-blue at ~48 % opacity -->
-                <item android:offset="1.0"     android:color="#7912D4FF"/>
+                <item android:offset="0.0"   android:color="#FF21FFD4"/>
+                <item android:offset="0.405" android:color="#FF21FFD4"/>
+                <item android:offset="1.0"   android:color="#7912D4FF"/>
             </gradient>
         </aapt:attr>
     </path>
