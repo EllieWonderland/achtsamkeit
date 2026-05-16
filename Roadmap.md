@@ -12,7 +12,7 @@
 | Bereich | Status | Details |
 |---------|--------|---------|
 | Konzept & Inhalte | ✅ Fertig | `App_Inhalte.md`, `TechStack.md`, `Konzept_UX.md` |
-| Sprüche-Pool | ✅ Fertig | 360 Sprüche (S001–S360) in `sprueche.json` |
+| Sprüche-Pool | ✅ Fertig | 432 Sprüche (S001–S432) in `sprueche.json` — alle kritischen Tags ausgebaut |
 | Design-System Handoff | ✅ Fertig | `handoff/` komplett mit allen Kotlin-Theme-Dateien |
 | Phase 1: Projekt-Setup | ✅ Fertig | Projekt ✅, Package ✅, Dependencies ✅, Permissions ✅, Firebase ✅, RevenueCat ✅ |
 | Phase 2: Design-System einbinden | ✅ Fertig | Alle Theme-Dateien eingebunden, `MainActivity.kt` verdrahtet, RevenueCat-Key in BuildConfig |
@@ -27,9 +27,9 @@
 | Phase 11: Account & Datenschutz | ✅ Fertig | `ProfilScreen.kt`, `ProfilViewModel.kt`, `FavoritesScreen.kt`, `FavoritesViewModel.kt`, `FavoriteQuote.kt` |
 | Phase 12: Monetarisierung | ✅ Fertig | `AchtsamkeitApp.kt`, `PremiumRepository.kt`, `PaywallCard.kt`, Feature-Gating in Statistik, Monatsrückblick, ThemePicker |
 | Phase 13: Polish & Release | ✅ Fertig (Code) | Splash Screen, Shimmer, ProGuard/R8, Accessibility — manuelle Schritte: App-Icon, interner Testlauf, Play Store Release |
-| Phase 14: Bugfixes & Verbesserungen | ✅ Fertig (Code) | Offline-Bug, Streak-Optimierung, JSON async, Eintrag löschen |
-| Phase 15: UX-Überarbeitung & Sprach-Umbenennung | 🔧 In Arbeit | Formular morgens/abends differenzieren, Morgenroutine/Abendroutine, Guided Questions ausbauen, Validierung, Streak-Freeze |
-| Sprüche-Pool | ⚠️ Lücken | Ausgeglichenheit/Traurigkeit/Selbstfürsorge/Energie stark unterrepräsentiert — siehe Sprüchezähler |
+| Phase 14: Bugfixes & Verbesserungen | ✅ Fertig (Code) | Alle Code-Aufgaben erledigt. Noch manuell: Firestore Composite Indexes in Firebase Console anlegen |
+| Phase 15: UX-Überarbeitung & Sprach-Umbenennung | ✅ Fertig | Morgenroutine/Abendroutine, Formulare differenziert, Guided Questions ×15, Validierung, Streak-Freeze, Notifications, deriveTags |
+| Sprüche-Pool | ✅ Fertig | 432 Sprüche — alle kritischen Tags auf 20+ erhöht, Trauer/Traurigkeit-Fix, Angst bei Stress |
 
 ---
 
