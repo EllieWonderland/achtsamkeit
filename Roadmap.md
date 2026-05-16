@@ -57,10 +57,10 @@
 
 ### Was zu tun ist
 
-- [ ] **🔴 Dringend:** Sprüche für `Ausgeglichenheit`, `Traurigkeit`, `Selbstfürsorge`, `Energie` auf mind. **20–30** erhöhen (aktuell je 2–3!)
-- [ ] **⚠️ Tag-Inkonsistenz fixen:** In `sprueche.json` gibt es 30 Sprüche mit Tag `"Trauer"` und 3 mit `"Traurigkeit"` — das sind zwei verschiedene Tags. `deriveTags` nutzt `"Traurigkeit"`. Entweder alle `"Trauer"`-Sprüche auf `"Traurigkeit"` umbenennen **oder** in `deriveTags` beide Tags vergeben: `tags.add("Traurigkeit"); tags.add("Trauer")` — dann werden alle 33 Sprüche für traurige Nutzerinnen verfügbar.
-- [ ] **ℹ️ Entscheiden:** Tags `Liebe`, `Angst`, `Freundschaft`, `Motivation` sind in `sprueche.json` vorhanden, werden aber durch `deriveTags` nie ausgespielt. Entweder in `deriveTags` einbinden (z.B. `Angst` bei `mood = "stress"`) oder als allgemeinen Fallback-Pool belassen.
-- [ ] **⚠️ Stress:** Nur 20 Sprüche für einen der häufigsten Zustände. Auf mind. 40–50 erhöhen.
+- [x] **🔴 Ausgeglichenheit/Selbstfürsorge/Energie ausgebaut:** 72 neue Sprüche (S361–S432) — Ausgeglichenheit: 3→30, Selbstfürsorge: 3→28, Energie: 2→20, Stress: 20→41.
+- [x] **⚠️ Tag-Inkonsistenz gefixt:** `deriveTags` vergibt jetzt bei `mood = "sadness"` sowohl `"Traurigkeit"` als auch `"Trauer"` → alle 33 Sprüche für traurige Nutzerinnen verfügbar.
+- [ ] **ℹ️ Entscheiden:** Tags `Liebe`, `Angst`, `Freundschaft`, `Motivation` sind in `sprueche.json` vorhanden, werden aber durch `deriveTags` nie ausgespielt. Entweder in `deriveTags` einbinden oder als allgemeinen Fallback-Pool belassen.
+- [x] **⚠️ Stress:** Von 20 auf 41 Sprüche erhöht.
 
 ---
 

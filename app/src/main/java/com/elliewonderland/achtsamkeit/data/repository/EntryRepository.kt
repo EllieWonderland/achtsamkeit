@@ -19,7 +19,7 @@ class EntryRepository {
             "stress"  -> tags.add("Stress")
             "joy"     -> tags.add("Freude")
             "balance" -> tags.add("Ausgeglichenheit")
-            "sadness" -> tags.add("Traurigkeit")
+            "sadness" -> { tags.add("Traurigkeit"); tags.add("Trauer") }
         }
         when (entry.energyLevel) {
             "full"  -> tags.add("Energie")
