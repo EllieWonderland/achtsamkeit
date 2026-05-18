@@ -40,15 +40,17 @@ object PdfExporter {
             strokeWidth = 0.5f
         }
 
-        var pageNum   = 1
-        var y         = MARGIN + 40f
-        var canvas    = startPage(doc, pageNum)
+        var pageNum     = 1
+        var y           = MARGIN + 40f
+        var currentPage = startPage(doc, pageNum)
+        var canvas      = currentPage.canvas
 
         fun newPage() {
-            doc.finishPage(doc.pages.last())
+            doc.finishPage(currentPage)
             pageNum++
-            y      = MARGIN + 20f
-            canvas = startPage(doc, pageNum)
+            y           = MARGIN + 20f
+            currentPage = startPage(doc, pageNum)
+            canvas      = currentPage.canvas
         }
 
         fun ensureSpace(needed: Float) {
@@ -123,15 +125,14 @@ object PdfExporter {
             y += 14f
         }
 
-        doc.finishPage(doc.pages.last())
+        doc.finishPage(currentPage)
         out.outputStream().use { doc.writeTo(it) }
         doc.close()
     }
 
-    private fun startPage(doc: PdfDocument, num: Int): Canvas {
+    private fun startPage(doc: PdfDocument, num: Int): PdfDocument.Page {
         val info = PdfDocument.PageInfo.Builder(PAGE_WIDTH, PAGE_HEIGHT, num).create()
-        val page = doc.startPage(info)
-        return page.canvas
+        return doc.startPage(info)
     }
 
     // Einfacher Zeilenumbruch bei ~85 Zeichen
