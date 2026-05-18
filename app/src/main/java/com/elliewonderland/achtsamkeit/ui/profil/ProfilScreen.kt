@@ -5,21 +5,30 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -84,7 +93,6 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
         ) {
             Spacer(Modifier.height(40.dp))
 
-            // Avatar mit erstem Buchstaben des Namens
             Box(
                 modifier = Modifier
                     .size(72.dp)
@@ -92,7 +100,7 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = uiState.displayName.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
+                    text  = uiState.displayName.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
                     style = MaterialTheme.typography.headlineMedium,
                     color = AppTheme.colors.onAccent,
                 )
@@ -100,14 +108,48 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
 
             Spacer(Modifier.height(16.dp))
 
-            if (uiState.displayName.isNotBlank()) {
-                Text(
-                    uiState.displayName,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = AppTheme.colors.ink,
-                )
+            if (uiState.isEditingName) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    OutlinedTextField(
+                        value         = uiState.nameInput,
+                        onValueChange = { vm.onNameInput(it) },
+                        label         = { Text("Name") },
+                        singleLine    = true,
+                        modifier      = Modifier.weight(1f),
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    IconButton(onClick = { vm.saveDisplayName(userId) }) {
+                        Icon(Icons.Outlined.Check, contentDescription = "Speichern", tint = AppTheme.colors.accent)
+                    }
+                    IconButton(onClick = { vm.cancelEditName() }) {
+                        Icon(Icons.Outlined.Close, contentDescription = "Abbrechen", tint = AppTheme.colors.inkSoft)
+                    }
+                }
+            } else {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (uiState.displayName.isNotBlank()) {
+                        Text(
+                            uiState.displayName,
+                            style = MaterialTheme.typography.titleLarge,
+                            color = AppTheme.colors.ink,
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        IconButton(onClick = { vm.startEditName() }, modifier = Modifier.size(32.dp)) {
+                            Icon(Icons.Outlined.Edit, contentDescription = "Namen bearbeiten",
+                                tint = AppTheme.colors.inkSoft, modifier = Modifier.size(18.dp))
+                        }
+                    } else {
+                        TextButton(onClick = { vm.startEditName() }) {
+                            Text("Namen eingeben", color = AppTheme.colors.accent)
+                        }
+                    }
+                }
                 Spacer(Modifier.height(4.dp))
             }
+
             Text(
                 uiState.email,
                 style = MaterialTheme.typography.bodyMedium,
@@ -130,18 +172,18 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(DATENSCHUTZ_URL)))
             }
             Spacer(Modifier.height(12.dp))
-            ProfilButton("Meine Daten exportieren") { vm.exportData(userId, context) }
+            ProfilButton("Meine Daten exportieren") { vm.showExportDialog() }
+            Spacer(Modifier.height(12.dp))
+            ProfilButton("Alle Einträge zurücksetzen") { vm.showResetDialog() }
             Spacer(Modifier.height(12.dp))
             ProfilButton("Abmelden") { vm.logout() }
 
             Spacer(Modifier.height(24.dp))
 
             OutlinedButton(
-                onClick = { vm.showDeleteDialog() },
+                onClick  = { vm.showDeleteDialog() },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.error,
-                ),
+                colors   = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
             ) {
                 Text("Konto löschen", style = MaterialTheme.typography.labelLarge)
             }
@@ -151,7 +193,7 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
 
         if (uiState.isLoading) {
             Box(
-                modifier = Modifier
+                modifier         = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.6f)),
                 contentAlignment = Alignment.Center,
@@ -162,40 +204,75 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
 
         SnackbarHost(
             hostState = snackbarHostState,
-            modifier = Modifier.align(Alignment.BottomCenter),
-        ) { data ->
-            Snackbar(snackbarData = data)
-        }
+            modifier  = Modifier.align(Alignment.BottomCenter),
+        ) { data -> Snackbar(snackbarData = data) }
     }
 
+    // ── Konto löschen ────────────────────────────────────────────────────────
     if (uiState.showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { vm.hideDeleteDialog() },
-            title = {
-                Text("Konto wirklich löschen?", style = MaterialTheme.typography.titleMedium)
-            },
-            text = {
+            title = { Text("Konto wirklich löschen?", style = MaterialTheme.typography.titleMedium) },
+            text  = {
                 Text(
                     "Alle deine Einträge, Favoriten und Daten werden unwiderruflich gelöscht.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = AppTheme.colors.inkSoft,
+                    style     = MaterialTheme.typography.bodyMedium,
+                    color     = AppTheme.colors.inkSoft,
                     textAlign = TextAlign.Start,
                 )
             },
             confirmButton = {
                 TextButton(
                     onClick = { vm.deleteAccount(userId) },
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error,
-                    ),
-                ) {
-                    Text("Ja, Konto löschen")
-                }
+                    colors  = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                ) { Text("Ja, Konto löschen") }
             },
             dismissButton = {
-                TextButton(onClick = { vm.hideDeleteDialog() }) {
-                    Text("Abbrechen")
+                TextButton(onClick = { vm.hideDeleteDialog() }) { Text("Abbrechen") }
+            },
+        )
+    }
+
+    // ── Daten zurücksetzen ───────────────────────────────────────────────────
+    if (uiState.showResetDialog) {
+        AlertDialog(
+            onDismissRequest = { vm.hideResetDialog() },
+            title = { Text("Alle Daten zurücksetzen?", style = MaterialTheme.typography.titleMedium) },
+            text  = {
+                Text(
+                    "Alle Einträge, Statistiken und Spruch-Favoriten werden gelöscht. Dein Konto bleibt erhalten.",
+                    style     = MaterialTheme.typography.bodyMedium,
+                    color     = AppTheme.colors.inkSoft,
+                    textAlign = TextAlign.Start,
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = { vm.resetAllData(userId) },
+                    colors  = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                ) { Text("Ja, zurücksetzen") }
+            },
+            dismissButton = {
+                TextButton(onClick = { vm.hideResetDialog() }) { Text("Abbrechen") }
+            },
+        )
+    }
+
+    // ── Export-Format wählen ─────────────────────────────────────────────────
+    if (uiState.showExportDialog) {
+        AlertDialog(
+            onDismissRequest = { vm.hideExportDialog() },
+            title = { Text("Format wählen", style = MaterialTheme.typography.titleMedium) },
+            text  = {
+                Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
+                    ExportFormatButton("JSON (.json)") { vm.exportData(userId, ExportFormat.JSON, context) }
+                    ExportFormatButton("PDF (.pdf)")   { vm.exportData(userId, ExportFormat.PDF,  context) }
+                    ExportFormatButton("Excel (.xlsx)") { vm.exportData(userId, ExportFormat.EXCEL, context) }
                 }
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(onClick = { vm.hideExportDialog() }) { Text("Abbrechen") }
             },
         )
     }
@@ -204,9 +281,20 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
 @Composable
 private fun ProfilButton(label: String, onClick: () -> Unit) {
     OutlinedButton(
-        onClick = onClick,
+        onClick  = onClick,
         modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.ink),
+        colors   = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.ink),
+    ) {
+        Text(label, style = MaterialTheme.typography.labelLarge)
+    }
+}
+
+@Composable
+private fun ExportFormatButton(label: String, onClick: () -> Unit) {
+    OutlinedButton(
+        onClick  = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors   = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.accent),
     ) {
         Text(label, style = MaterialTheme.typography.labelLarge)
     }

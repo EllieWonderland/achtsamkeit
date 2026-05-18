@@ -19,4 +19,5 @@ data class Entry(
     val guidedQuestion: String = "",
     val guidedAnswer: String = "",
     val freeText: String = "",
+    val quoteId: String = "",
 )

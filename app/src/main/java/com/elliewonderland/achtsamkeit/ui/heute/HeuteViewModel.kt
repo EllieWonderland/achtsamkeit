@@ -82,11 +82,27 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
             val morningEntry = morningD.await()
             val eveningEntry = eveningD.await()
 
-            val userTags = buildList {
-                morningEntry?.let { addAll(repo.deriveTags(it)) }
-                eveningEntry?.let { addAll(repo.deriveTags(it)) }
-            }.distinct()
-            val quote = runCatching { quoteRepo.pickQuote(userId, userTags) }.getOrNull()
+            // Den Spruch vom letzten abgeschlossenen Eintrag des Tages zeigen (Abend hat Vorrang)
+            val lastEntry = eveningEntry ?: morningEntry
+            val quote = when {
+                lastEntry != null && lastEntry.quoteId.isNotBlank() ->
+                    quoteRepo.getQuoteById(lastEntry.quoteId)
+                        ?: runCatching {
+                            val userTags = buildList {
+                                morningEntry?.let { addAll(repo.deriveTags(it)) }
+                                eveningEntry?.let { addAll(repo.deriveTags(it)) }
+                            }.distinct()
+                            quoteRepo.pickQuote(userId, userTags)
+                        }.getOrNull()
+                lastEntry != null -> {
+                    val userTags = buildList {
+                        morningEntry?.let { addAll(repo.deriveTags(it)) }
+                        eveningEntry?.let { addAll(repo.deriveTags(it)) }
+                    }.distinct()
+                    runCatching { quoteRepo.pickQuote(userId, userTags) }.getOrNull()
+                }
+                else -> null
+            }
             val isFav = if (quote != null) runCatching { quoteRepo.isFavorite(userId, quote.id) }.getOrDefault(false) else false
 
             val weekEntries   = weekEntriesD.await()

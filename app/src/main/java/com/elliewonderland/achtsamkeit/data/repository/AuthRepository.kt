@@ -42,6 +42,22 @@ class AuthRepository {
             ?: ""
     }
 
+    suspend fun updateDisplayName(userId: String, name: String) {
+        db.collection("users").document(userId)
+            .update("display_name", name.trim()).await()
+    }
+
+    suspend fun resetAllData(userId: String) {
+        deleteSubcollection(userId, "entries")
+        deleteSubcollection(userId, "quote_cooldowns")
+        deleteSubcollection(userId, "favorites")
+        db.collection("users").document(userId).update(mapOf(
+            "current_streak"           to 0,
+            "last_entry_date"          to "",
+            "streak_freeze_used_month" to "",
+        )).await()
+    }
+
     suspend fun deleteAccount(userId: String) {
         deleteSubcollection(userId, "entries")
         deleteSubcollection(userId, "quote_cooldowns")

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.elliewonderland.achtsamkeit.data.local.QuoteLoader
+import com.elliewonderland.achtsamkeit.data.repository.EntryRepository
 import com.elliewonderland.achtsamkeit.data.repository.QuoteRepository
 import com.elliewonderland.achtsamkeit.model.Quote
 import com.google.firebase.Firebase
@@ -20,7 +21,8 @@ sealed class QuoteUiState {
 }
 
 class QuoteViewModel(application: Application) : AndroidViewModel(application) {
-    private val repo = QuoteRepository(QuoteLoader(application))
+    private val repo      = QuoteRepository(QuoteLoader(application))
+    private val entryRepo = EntryRepository()
 
     private val _uiState = MutableStateFlow<QuoteUiState>(QuoteUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -32,16 +34,33 @@ class QuoteViewModel(application: Application) : AndroidViewModel(application) {
                     .collection("users").document(userId)
                     .collection("entries").document(entryId)
                     .get().await()
-                @Suppress("UNCHECKED_CAST")
-                val tags = (snap.get("tags") as? List<*>)?.filterIsInstance<String>() ?: emptyList()
 
-                val quote = repo.pickQuote(userId, tags)
+                // Falls für diesen Eintrag schon ein Spruch ausgewählt wurde, denselben zeigen
+                val savedQuoteId = snap.getString("quote_id")
+                val quote = if (!savedQuoteId.isNullOrBlank()) {
+                    repo.getQuoteById(savedQuoteId) ?: pickAndSave(userId, entryId, snap)
+                } else {
+                    pickAndSave(userId, entryId, snap)
+                }
+
                 val isFav = repo.isFavorite(userId, quote.id)
                 _uiState.value = QuoteUiState.Ready(quote, isFav)
             }.onFailure {
                 _uiState.value = QuoteUiState.Error(it.message ?: "Fehler beim Laden")
             }
         }
+    }
+
+    private suspend fun pickAndSave(
+        userId: String,
+        entryId: String,
+        snap: com.google.firebase.firestore.DocumentSnapshot,
+    ): Quote {
+        @Suppress("UNCHECKED_CAST")
+        val tags  = (snap.get("tags") as? List<*>)?.filterIsInstance<String>() ?: emptyList()
+        val quote = repo.pickQuote(userId, tags)
+        runCatching { entryRepo.updateEntryQuoteId(userId, entryId, quote.id) }
+        return quote
     }
 
     fun toggleFavorite(userId: String) {

@@ -127,6 +127,12 @@ class EntryRepository {
             .get().await()
         return snap.documents.mapNotNull { it.toEntry() }
     }
+
+    suspend fun updateEntryQuoteId(userId: String, entryId: String, quoteId: String) {
+        db.collection("users").document(userId)
+            .collection("entries").document(entryId)
+            .update("quote_id", quoteId).await()
+    }
 }
 
 private fun DocumentSnapshot.toEntry(): Entry? = runCatching {
@@ -146,6 +152,7 @@ private fun DocumentSnapshot.toEntry(): Entry? = runCatching {
         guidedQuestion   = getString("guided_question") ?: "",
         guidedAnswer     = getString("guided_answer") ?: "",
         freeText         = getString("free_text") ?: "",
+        quoteId          = getString("quote_id") ?: "",
     )
 }.getOrNull()
 
