@@ -2,6 +2,7 @@ package com.elliewonderland.achtsamkeit.data.repository
 
 import com.elliewonderland.achtsamkeit.model.Entry
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
@@ -97,7 +98,56 @@ class EntryRepository {
             .get().await()
         return !snap.isEmpty
     }
+
+    suspend fun getTodayEntry(userId: String, type: String): Entry? {
+        val snap = db.collection("users").document(userId)
+            .collection("entries")
+            .whereEqualTo("type", type)
+            .whereGreaterThan("created_at", startOfCurrentJournalDay())
+            .get().await()
+        return snap.documents.firstOrNull()?.toEntry()
+    }
+
+    suspend fun getEntriesForMonth(userId: String, year: Int, month: Int): List<Entry> {
+        val prefix = "%04d-%02d".format(year, month)
+        val snap = db.collection("users").document(userId)
+            .collection("entries")
+            .whereGreaterThanOrEqualTo("date_str", "$prefix-01")
+            .whereLessThanOrEqualTo("date_str", "$prefix-31")
+            .get().await()
+        return snap.documents.mapNotNull { it.toEntry() }
+    }
+
+    suspend fun getEntriesForWeek(userId: String, weekStart: LocalDate): List<Entry> {
+        val weekEnd = weekStart.plusDays(6)
+        val snap = db.collection("users").document(userId)
+            .collection("entries")
+            .whereGreaterThanOrEqualTo("date_str", weekStart.toString())
+            .whereLessThanOrEqualTo("date_str", weekEnd.toString())
+            .get().await()
+        return snap.documents.mapNotNull { it.toEntry() }
+    }
 }
+
+private fun DocumentSnapshot.toEntry(): Entry? = runCatching {
+    Entry(
+        id               = id,
+        type             = getString("type") ?: "",
+        createdAt        = getLong("created_at") ?: 0L,
+        dateStr          = getString("date_str") ?: "",
+        energyLevel      = getString("energy_level") ?: "",
+        mood             = getString("mood") ?: "",
+        gratitudeAreas   = (get("gratitude_areas") as? List<*>)?.filterIsInstance<String>() ?: emptyList(),
+        dayRating        = (getLong("day_rating") ?: 0L).toInt(),
+        selfCare         = (get("self_care") as? List<*>)?.filterIsInstance<String>() ?: emptyList(),
+        mindfulnessFocus = getString("mindfulness_focus") ?: "",
+        mindfulnessPause = getString("mindfulness_pause") ?: "",
+        tags             = (get("tags") as? List<*>)?.filterIsInstance<String>() ?: emptyList(),
+        guidedQuestion   = getString("guided_question") ?: "",
+        guidedAnswer     = getString("guided_answer") ?: "",
+        freeText         = getString("free_text") ?: "",
+    )
+}.getOrNull()
 
 // Tagesbeginn um 4:00 Uhr: wer zwischen 0:00–3:59 Uhr einen Eintrag macht, gehört noch zum Vortag.
 private fun startOfCurrentJournalDay(): Long {
