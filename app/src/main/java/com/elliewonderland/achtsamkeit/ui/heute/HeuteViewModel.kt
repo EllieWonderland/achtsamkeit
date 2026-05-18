@@ -101,7 +101,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
                     }.distinct()
                     runCatching { quoteRepo.pickQuote(userId, userTags) }.getOrNull()
                 }
-                else -> null
+                else -> runCatching { quoteRepo.pickQuote(userId, emptyList()) }.getOrNull()
             }
             val isFav = if (quote != null) runCatching { quoteRepo.isFavorite(userId, quote.id) }.getOrDefault(false) else false
 

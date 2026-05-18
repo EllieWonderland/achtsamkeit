@@ -34,7 +34,7 @@ class StatsViewModel : ViewModel() {
         reload()
     }
 
-    private fun reload() {
+    fun reload() {
         val uid = Firebase.auth.currentUser?.uid ?: return
         val days = _state.value.days
         viewModelScope.launch {

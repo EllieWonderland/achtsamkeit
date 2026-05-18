@@ -51,7 +51,10 @@ fun StatistikScreen(
     val scope = rememberCoroutineScope()
 
     var isPremium by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { isPremium = PremiumRepository.isPremium() }
+    LaunchedEffect(Unit) {
+        vm.reload()
+        isPremium = PremiumRepository.isPremium()
+    }
 
     Column(
         modifier = Modifier
