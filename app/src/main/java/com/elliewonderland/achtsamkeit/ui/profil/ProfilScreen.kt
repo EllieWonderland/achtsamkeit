@@ -2,7 +2,11 @@ package com.elliewonderland.achtsamkeit.ui.profil
 
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,9 +21,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import coil.compose.AsyncImage
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -64,6 +72,11 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
 
     val userId = Firebase.auth.currentUser?.uid ?: ""
 
+    val photoLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri -> uri?.let { vm.uploadProfilePhoto(userId, it, context) } },
+    )
+
     LaunchedEffect(userId) {
         if (userId.isNotBlank()) vm.loadProfile(userId)
     }
@@ -95,15 +108,50 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
 
             Box(
                 modifier = Modifier
-                    .size(72.dp)
-                    .background(AppTheme.colors.accent, CircleShape),
-                contentAlignment = Alignment.Center,
+                    .size(80.dp)
+                    .clickable {
+                        photoLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    },
+                contentAlignment = Alignment.BottomEnd,
             ) {
-                Text(
-                    text  = uiState.displayName.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = AppTheme.colors.onAccent,
-                )
+                if (uiState.photoUrl.isNotBlank()) {
+                    AsyncImage(
+                        model              = uiState.photoUrl,
+                        contentDescription = "Profilbild",
+                        contentScale       = ContentScale.Crop,
+                        modifier           = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape),
+                    )
+                } else {
+                    Box(
+                        modifier         = Modifier
+                            .size(80.dp)
+                            .background(AppTheme.colors.accent, CircleShape),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text  = uiState.displayName.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = AppTheme.colors.onAccent,
+                        )
+                    }
+                }
+                Box(
+                    modifier         = Modifier
+                        .size(26.dp)
+                        .background(AppTheme.colors.accent, CircleShape),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        Icons.Outlined.CameraAlt,
+                        contentDescription = null,
+                        tint               = AppTheme.colors.onAccent,
+                        modifier           = Modifier.size(15.dp),
+                    )
+                }
             }
 
             Spacer(Modifier.height(16.dp))

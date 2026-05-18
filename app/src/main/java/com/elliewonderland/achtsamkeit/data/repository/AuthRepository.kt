@@ -47,6 +47,16 @@ class AuthRepository {
             .update("display_name", name.trim()).await()
     }
 
+    suspend fun getUserPhotoUrl(userId: String): String {
+        val snap = db.collection("users").document(userId).get().await()
+        return snap.getString("photo_url") ?: ""
+    }
+
+    suspend fun updatePhotoUrl(userId: String, url: String) {
+        db.collection("users").document(userId)
+            .update("photo_url", url).await()
+    }
+
     suspend fun resetAllData(userId: String) {
         deleteSubcollection(userId, "entries")
         deleteSubcollection(userId, "quote_cooldowns")

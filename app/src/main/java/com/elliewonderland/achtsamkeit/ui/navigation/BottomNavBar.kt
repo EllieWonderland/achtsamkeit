@@ -17,7 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
+
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
 private data class NavItem(
@@ -45,7 +45,7 @@ fun BottomNavBar(navController: NavController, currentRoute: String?) {
                 selected = selected,
                 onClick  = {
                     navController.navigate(item.screen.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
+                        popUpTo(Screen.Heute.route) {
                             saveState = true
                         }
                         launchSingleTop = true

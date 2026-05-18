@@ -3,6 +3,7 @@ package com.elliewonderland.achtsamkeit.ui.profil
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
@@ -13,8 +14,11 @@ import com.elliewonderland.achtsamkeit.data.local.QuoteLoader
 import com.elliewonderland.achtsamkeit.data.repository.AuthRepository
 import com.elliewonderland.achtsamkeit.data.repository.HistoryRepository
 import com.elliewonderland.achtsamkeit.data.repository.QuoteRepository
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -28,6 +32,7 @@ enum class ExportFormat { JSON, PDF, EXCEL }
 data class ProfilUiState(
     val displayName: String = "",
     val email: String = "",
+    val photoUrl: String = "",
     val isLoading: Boolean = false,
     val showDeleteDialog: Boolean = false,
     val showResetDialog: Boolean = false,
@@ -54,10 +59,36 @@ class ProfilViewModel(app: Application) : AndroidViewModel(app) {
             val name = runCatching { authRepo.getUserDisplayName(userId) }
                 .onFailure { Log.e("ProfilViewModel", "getUserDisplayName failed", it) }
                 .getOrDefault("")
+            val photoUrl = runCatching { authRepo.getUserPhotoUrl(userId) }.getOrDefault("")
             _uiState.value = _uiState.value.copy(
                 displayName = name,
                 nameInput   = name,
                 email       = authRepo.getUserEmail(),
+                photoUrl    = photoUrl,
+            )
+        }
+    }
+
+    fun uploadProfilePhoto(userId: String, imageUri: Uri, context: Context) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            runCatching {
+                val storageRef = Firebase.storage.reference.child("users/$userId/profile.jpg")
+                withContext(Dispatchers.IO) {
+                    storageRef.putFile(imageUri).await()
+                    storageRef.downloadUrl.await().toString()
+                }
+            }.fold(
+                onSuccess = { url ->
+                    runCatching { authRepo.updatePhotoUrl(userId, url) }
+                    _uiState.value = _uiState.value.copy(isLoading = false, photoUrl = url)
+                },
+                onFailure = { e ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading    = false,
+                        errorMessage = e.message ?: "Foto konnte nicht hochgeladen werden.",
+                    )
+                },
             )
         }
     }

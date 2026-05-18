@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.messaging)
+    implementation(libs.firebase.storage)
 
     // RevenueCat
     implementation(libs.revenuecat.purchases)
@@ -90,6 +91,9 @@ dependencies {
 
     // Charts
     implementation(libs.vico.compose.m3)
+
+    // Bildladen (Profilbild)
+    implementation(libs.coil.compose)
 
     // Splash Screen
     implementation(libs.androidx.core.splashscreen)
