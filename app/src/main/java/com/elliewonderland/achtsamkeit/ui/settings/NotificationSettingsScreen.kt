@@ -195,10 +195,15 @@ fun NotificationSettingsScreen(navController: NavController) {
                     }
                     isSaving = true
                     scope.launch {
-                        notifRepo.saveNotificationTimes(uid, morningTime, eveningTime)
-                        NotificationScheduler.scheduleAlarms(context, morningTime, eveningTime)
+                        runCatching {
+                            notifRepo.saveNotificationTimes(uid, morningTime, eveningTime)
+                            NotificationScheduler.scheduleAlarms(context, morningTime, eveningTime)
+                        }.onSuccess {
+                            snackbar.showSnackbar("Erinnerungszeiten gespeichert!")
+                        }.onFailure {
+                            snackbar.showSnackbar("Fehler beim Speichern. Bitte erneut versuchen.")
+                        }
                         isSaving = false
-                        snackbar.showSnackbar("Erinnerungszeiten gespeichert!")
                     }
                 },
                 enabled = !isSaving,
