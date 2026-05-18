@@ -1,8 +1,11 @@
 package com.elliewonderland.achtsamkeit.ui.settings
 
 import android.Manifest
+import android.app.AlarmManager
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Build
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +45,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.elliewonderland.achtsamkeit.data.repository.AuthRepository
 import com.elliewonderland.achtsamkeit.data.repository.NotificationRepository
@@ -63,6 +70,24 @@ fun NotificationSettingsScreen(navController: NavController) {
     var eveningTime by remember { mutableStateOf("21:00") }
     var permissionGranted by remember { mutableStateOf(false) }
     var isSaving by remember { mutableStateOf(false) }
+
+    val alarmManager = remember { context.getSystemService(AlarmManager::class.java) }
+    var canScheduleExact by remember {
+        mutableStateOf(
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.S || alarmManager.canScheduleExactAlarms()
+        )
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                canScheduleExact = alarmManager.canScheduleExactAlarms()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -140,6 +165,26 @@ fun NotificationSettingsScreen(navController: NavController) {
             )
 
             Spacer(Modifier.height(8.dp))
+
+            if (!canScheduleExact && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        "Für pünktliche Erinnerungen benötigt die App die Erlaubnis für exakte Alarme.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                    OutlinedButton(
+                        onClick = {
+                            context.startActivity(
+                                Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text("Exakte Alarme erlauben", style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+            }
 
             Button(
                 onClick = {
