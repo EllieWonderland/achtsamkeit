@@ -1,7 +1,5 @@
 package com.elliewonderland.achtsamkeit.ui.profil
 
-import android.content.Intent
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -59,8 +57,6 @@ import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.elliewonderland.achtsamkeit.ui.theme.ThemeChoice
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-
-private const val DATENSCHUTZ_URL = "https://elliewonderland.de/datenschutz"
 
 @Composable
 fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
@@ -218,9 +214,7 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
 
             ProfilButton("Impressum") { navController.navigate(Screen.Impressum.route) }
             Spacer(Modifier.height(12.dp))
-            ProfilButton("Datenschutzerklärung") {
-                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(DATENSCHUTZ_URL)))
-            }
+            ProfilButton("Datenschutzerklärung") { navController.navigate(Screen.Datenschutz.route) }
             Spacer(Modifier.height(12.dp))
             ProfilButton("Meine Daten exportieren") { vm.showExportDialog() }
             Spacer(Modifier.height(12.dp))

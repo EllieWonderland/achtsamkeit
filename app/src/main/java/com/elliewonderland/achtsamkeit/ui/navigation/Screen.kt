@@ -24,4 +24,5 @@ sealed class Screen(val route: String) {
         fun createRoute(entryId: String) = "entry_detail/$entryId"
     }
     object Impressum     : Screen("impressum")
+    object Datenschutz   : Screen("datenschutz")
 }

@@ -98,10 +98,10 @@ fun HeroHeader(
 
             Box(
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(56.dp)
                     .clip(CircleShape)
                     .background(colors.surface)
-                    .border(1.dp, colors.hair, CircleShape)
+                    .border(2.dp, if (!photoUrl.isNullOrBlank()) colors.accent.copy(alpha = 0.4f) else colors.hair, CircleShape)
                     .clickable(onClick = onProfileClick),
                 contentAlignment = Alignment.Center,
             ) {
@@ -117,7 +117,7 @@ fun HeroHeader(
                         Icons.Outlined.Person,
                         contentDescription = "Profil",
                         tint     = colors.ink,
-                        modifier = Modifier.size(18.dp),
+                        modifier = Modifier.size(26.dp),
                     )
                 }
             }
