@@ -61,7 +61,7 @@ fun DatenschutzScreen(navController: NavController) {
                 body  = "Die App erhebt folgende personenbezogene Daten:\n" +
                         "• E-Mail-Adresse (für Konto-Erstellung und Login)\n" +
                         "• Profilbild (optional, auf Wunsch hochgeladen)\n" +
-                        "• Tagebucheinträge, Stimmungsdaten und Routinen (nur lokal in deinem Konto gespeichert)",
+                        "• Tagebucheinträge, Stimmungsdaten und Routinen (gespeichert in deinem Konto)",
             )
 
             DatenschutzSection(
@@ -74,18 +74,21 @@ fun DatenschutzScreen(navController: NavController) {
 
             DatenschutzSection(
                 title = "4. Drittanbieter",
-                body  = "Die App nutzt Dienste von Google Firebase (Firebase Auth, Firestore, Cloud Messaging) sowie RevenueCat für die Verwaltung von In-App-Käufen. " +
+                body  = "Die App nutzt Dienste von Google Firebase (Firebase Auth, Firestore, Cloud Messaging) " +
+                        "sowie RevenueCat für die Verwaltung von In-App-Käufen. " +
                         "Beide Dienste verarbeiten Daten gemäß ihren eigenen Datenschutzrichtlinien.",
             )
 
             DatenschutzSection(
                 title = "5. Datenlöschung",
-                body  = "Du kannst dein Konto und alle gespeicherten Daten jederzeit über Profil → „Konto löschen" unwiderruflich entfernen.",
+                body  = "Du kannst dein Konto und alle gespeicherten Daten jederzeit über " +
+                        "Profil → Konto löschen unwiderruflich entfernen.",
             )
 
             DatenschutzSection(
                 title = "6. Deine Rechte",
-                body  = "Du hast das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung deiner personenbezogenen Daten (Art. 15–18 DSGVO). " +
+                body  = "Du hast das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung " +
+                        "der Verarbeitung deiner personenbezogenen Daten (Art. 15–18 DSGVO). " +
                         "Wende dich dazu an: janafisenko@hotmail.com",
             )
 
