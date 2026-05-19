@@ -1166,7 +1166,7 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 - [ ] **Play Store:**
   1. [ ] Release APK/AAB signieren (Keystore erstellen + sicher aufbewahren — bei Verlust kein Update mehr möglich!)
   2. [ ] Screenshots (Pflicht: mind. 2 Phone-Screenshots), Kurz- und Langbeschreibung auf Deutsch
-  3. [ ] Datenschutzerklärung-URL in Play Console eintragen (Pflicht)
+  3. [ ] Datenschutzerklärung verfeinern
   4. [ ] Release Track: **Intern → Geschlossen (Beta) → Produktion**
 
 ---
