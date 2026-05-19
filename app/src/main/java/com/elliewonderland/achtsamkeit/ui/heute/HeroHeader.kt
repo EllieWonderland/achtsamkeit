@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -25,8 +26,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
 @Composable
@@ -34,6 +37,7 @@ fun HeroHeader(
     greeting: String,
     firstName: String?,
     dateText: String,
+    photoUrl: String?,
     onProfileClick: () -> Unit,
 ) {
     val colors = AppTheme.colors
@@ -101,12 +105,21 @@ fun HeroHeader(
                     .clickable(onClick = onProfileClick),
                 contentAlignment = Alignment.Center,
             ) {
-                Icon(
-                    Icons.Outlined.Person,
-                    contentDescription = "Profil",
-                    tint     = colors.ink,
-                    modifier = Modifier.size(18.dp),
-                )
+                if (!photoUrl.isNullOrBlank()) {
+                    AsyncImage(
+                        model             = photoUrl,
+                        contentDescription = "Profilbild",
+                        contentScale      = ContentScale.Crop,
+                        modifier          = Modifier.fillMaxSize(),
+                    )
+                } else {
+                    Icon(
+                        Icons.Outlined.Person,
+                        contentDescription = "Profil",
+                        tint     = colors.ink,
+                        modifier = Modifier.size(18.dp),
+                    )
+                }
             }
         }
     }

@@ -51,6 +51,7 @@ data class HeuteUiState(
     val quoteOfDay: Quote? = null,
     val quoteIsFavorite: Boolean = false,
     val userFirstName: String? = null,
+    val photoUrl: String? = null,
 )
 
 class HeuteViewModel(app: Application) : AndroidViewModel(app) {
@@ -78,6 +79,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
             val monthEntriesD  = async { runCatching { repo.getEntriesForMonth(userId, today.year, today.monthValue) }.getOrDefault(emptyList()) }
             val prevMonthD     = async { runCatching { repo.getEntriesForMonth(userId, prevMonthDate.year, prevMonthDate.monthValue) }.getOrDefault(emptyList()) }
             val displayNameD   = async { runCatching { authRepo.getUserDisplayName(userId) }.getOrDefault("") }
+            val photoUrlD      = async { runCatching { authRepo.getUserPhotoUrl(userId) }.getOrDefault("") }
 
             val morningEntry = morningD.await()
             val eveningEntry = eveningD.await()
@@ -112,6 +114,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
             }
 
             val firstName = displayName.split(" ").firstOrNull()?.takeIf { it.isNotBlank() }
+            val photoUrl  = photoUrlD.await().takeIf { it.isNotBlank() }
 
             _uiState.value = HeuteUiState(
                 isLoading           = false,
@@ -130,6 +133,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
                 quoteOfDay          = quote,
                 quoteIsFavorite     = isFav,
                 userFirstName       = firstName,
+                photoUrl            = photoUrl,
             )
         }
     }

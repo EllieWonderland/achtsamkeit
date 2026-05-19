@@ -83,6 +83,7 @@ fun HeuteScreen(navController: NavController) {
             greeting       = greeting,
             firstName      = uiState.userFirstName,
             dateText       = dateText,
+            photoUrl       = uiState.photoUrl,
             onProfileClick = { navController.navigate(Screen.Profil.route) },
         )
 

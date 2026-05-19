@@ -68,7 +68,7 @@ fun QuoteScreen(navController: NavController, entryId: String) {
                 )
                 Spacer(Modifier.height(24.dp))
                 Button(
-                    onClick = { navController.navigate(Screen.Heute.route) },
+                    onClick = { navController.popBackStack(Screen.Heute.route, false) },
                     colors  = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.accent),
                 ) {
                     Text("Weiter", color = AppTheme.colors.onAccent)
@@ -121,7 +121,7 @@ fun QuoteScreen(navController: NavController, entryId: String) {
                 }
                 Spacer(Modifier.height(48.dp))
                 Button(
-                    onClick  = { navController.navigate(Screen.Heute.route) },
+                    onClick  = { navController.popBackStack(Screen.Heute.route, false) },
                     modifier = Modifier.fillMaxWidth(),
                     colors   = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.accent),
                 ) {
