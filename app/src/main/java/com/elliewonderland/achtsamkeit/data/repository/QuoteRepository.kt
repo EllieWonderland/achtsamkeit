@@ -10,9 +10,28 @@ import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 
 class QuoteRepository(private val loader: QuoteLoader) {
     private val db = Firebase.firestore
+
+    suspend fun getOrPickQuoteOfDay(userId: String, tags: List<String>): Quote {
+        val today  = LocalDate.now().toString()
+        val snap   = db.collection("users").document(userId).get().await()
+        val savedDate = snap.getString("quote_of_day_date") ?: ""
+        val savedId   = snap.getString("quote_of_day_id")   ?: ""
+        if (savedDate == today && savedId.isNotBlank()) {
+            getQuoteById(savedId)?.let { return it }
+        }
+        val quote = pickQuote(userId, tags)
+        runCatching {
+            db.collection("users").document(userId).update(mapOf(
+                "quote_of_day_date" to today,
+                "quote_of_day_id"   to quote.id,
+            )).await()
+        }
+        return quote
+    }
 
     suspend fun pickQuote(userId: String, tags: List<String>): Quote {
         val allQuotes  = withContext(Dispatchers.IO) { loader.quotes }

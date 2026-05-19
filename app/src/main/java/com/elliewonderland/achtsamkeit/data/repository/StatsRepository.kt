@@ -49,7 +49,7 @@ class StatsRepository {
             .whereGreaterThan("created_at", since)
             .get().await()
         return snap.documents
-            .groupingBy { it.getString("energy") ?: "" }
+            .groupingBy { it.getString("energy_level") ?: "" }
             .eachCount()
             .filter { it.key.isNotEmpty() }
     }

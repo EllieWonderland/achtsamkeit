@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.elliewonderland.achtsamkeit.MainActivity
 import com.elliewonderland.achtsamkeit.R
 import java.time.LocalDate
 import java.util.Calendar
@@ -56,11 +57,19 @@ class NotificationReceiver : BroadcastReceiver() {
 
     private fun showNotification(context: Context, title: String, body: String) {
         runCatching {
+            val launchIntent = Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
+            val contentIntent = PendingIntent.getActivity(
+                context, 0, launchIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
             val notif = NotificationCompat.Builder(context, AchtsameMessagingService.CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setAutoCancel(true)
+                .setContentIntent(contentIntent)
                 .build()
             NotificationManagerCompat.from(context)
                 .notify(System.currentTimeMillis().toInt(), notif)

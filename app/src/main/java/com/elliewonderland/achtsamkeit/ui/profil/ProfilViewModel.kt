@@ -73,7 +73,8 @@ class ProfilViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             runCatching {
-                val storageRef = Firebase.storage.reference.child("users/$userId/profile.jpg")
+                val storageRef = Firebase.storage("gs://achtsamkeit-in-3-minuten.firebasestorage.app")
+                    .reference.child("users/$userId/profile.jpg")
                 withContext(Dispatchers.IO) {
                     val stream = context.contentResolver.openInputStream(imageUri)
                         ?: throw Exception("Foto konnte nicht gelesen werden.")

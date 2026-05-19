@@ -84,24 +84,16 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
 
             // Den Spruch vom letzten abgeschlossenen Eintrag des Tages zeigen (Abend hat Vorrang)
             val lastEntry = eveningEntry ?: morningEntry
+            val userTags = buildList {
+                morningEntry?.let { addAll(repo.deriveTags(it)) }
+                eveningEntry?.let { addAll(repo.deriveTags(it)) }
+            }.distinct()
             val quote = when {
                 lastEntry != null && lastEntry.quoteId.isNotBlank() ->
                     quoteRepo.getQuoteById(lastEntry.quoteId)
-                        ?: runCatching {
-                            val userTags = buildList {
-                                morningEntry?.let { addAll(repo.deriveTags(it)) }
-                                eveningEntry?.let { addAll(repo.deriveTags(it)) }
-                            }.distinct()
-                            quoteRepo.pickQuote(userId, userTags)
-                        }.getOrNull()
-                lastEntry != null -> {
-                    val userTags = buildList {
-                        morningEntry?.let { addAll(repo.deriveTags(it)) }
-                        eveningEntry?.let { addAll(repo.deriveTags(it)) }
-                    }.distinct()
-                    runCatching { quoteRepo.pickQuote(userId, userTags) }.getOrNull()
-                }
-                else -> runCatching { quoteRepo.pickQuote(userId, emptyList()) }.getOrNull()
+                        ?: runCatching { quoteRepo.getOrPickQuoteOfDay(userId, userTags) }.getOrNull()
+                else ->
+                    runCatching { quoteRepo.getOrPickQuoteOfDay(userId, userTags) }.getOrNull()
             }
             val isFav = if (quote != null) runCatching { quoteRepo.isFavorite(userId, quote.id) }.getOrDefault(false) else false
 
