@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -54,8 +55,10 @@ fun HeuteScreen(navController: NavController) {
     val uiState by vm.uiState.collectAsState()
 
     val userId    = Firebase.auth.currentUser?.uid ?: ""
-    val hour      = LocalTime.now().hour
-    val isEvening = hour >= 17 || hour < 4
+    val hour               = LocalTime.now().hour
+    val isEvening          = hour >= 17 || hour < 4
+    val isMorningLocked    = hour >= 12 && !uiState.hasMorningEntry
+    val isEveningLocked    = !isEvening && !uiState.hasEveningEntry
     val today     = remember { LocalDate.now() }
 
     val greeting = when {
@@ -124,25 +127,31 @@ fun HeuteScreen(navController: NavController) {
             } else {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     RoutineCard(
-                        emoji       = "☀️",
-                        title       = "Morgenroutine",
-                        subtitle    = if (uiState.hasMorningEntry)
-                            uiState.morningCompletedAt?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
-                        else "Jetzt starten · 3 Minuten",
-                        isDone      = uiState.hasMorningEntry,
-                        onClick     = { navController.navigate(Screen.Entry.createRoute("morning")) },
+                        emoji    = "☀️",
+                        title    = "Morgenroutine",
+                        subtitle = when {
+                            uiState.hasMorningEntry -> uiState.morningCompletedAt
+                                ?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
+                            isMorningLocked         -> "Nur bis 12:00 Uhr verfügbar"
+                            else                    -> "Jetzt starten · 3 Minuten"
+                        },
+                        isDone   = uiState.hasMorningEntry,
+                        isLocked = isMorningLocked,
+                        onClick  = { navController.navigate(Screen.Entry.createRoute("morning")) },
                     )
-                    if (isEvening || uiState.hasEveningEntry) {
-                        RoutineCard(
-                            emoji       = "🌙",
-                            title       = "Abendroutine",
-                            subtitle    = if (uiState.hasEveningEntry)
-                                uiState.eveningCompletedAt?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
-                            else "Jetzt starten",
-                            isDone      = uiState.hasEveningEntry,
-                            onClick     = { navController.navigate(Screen.Entry.createRoute("evening")) },
-                        )
-                    }
+                    RoutineCard(
+                        emoji    = "🌙",
+                        title    = "Abendroutine",
+                        subtitle = when {
+                            uiState.hasEveningEntry -> uiState.eveningCompletedAt
+                                ?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
+                            isEveningLocked         -> "Erst ab 17:00 Uhr verfügbar"
+                            else                    -> "Jetzt starten"
+                        },
+                        isDone   = uiState.hasEveningEntry,
+                        isLocked = isEveningLocked,
+                        onClick  = { navController.navigate(Screen.Entry.createRoute("evening")) },
+                    )
                 }
             }
 
@@ -190,6 +199,7 @@ private fun RoutineCard(
     title   : String,
     subtitle: String,
     isDone  : Boolean,
+    isLocked: Boolean = false,
     onClick : () -> Unit,
 ) {
     val colors = AppTheme.colors
@@ -198,8 +208,8 @@ private fun RoutineCard(
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp))
             .border(1.dp, colors.hair, RoundedCornerShape(18.dp))
-            .background(if (isDone) colors.surfaceAlt else colors.surface)
-            .clickable(enabled = !isDone, onClick = onClick)
+            .background(if (isDone || isLocked) colors.surfaceAlt else colors.surface)
+            .clickable(enabled = !isDone && !isLocked, onClick = onClick)
             .padding(horizontal = 18.dp, vertical = 16.dp),
         verticalAlignment     = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -213,13 +223,17 @@ private fun RoutineCard(
                 modifier         = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(if (isDone) colors.surface else colors.background),
+                    .background(if (isDone || isLocked) colors.surface else colors.background),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(emoji, style = MaterialTheme.typography.titleLarge)
             }
             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(title, style = MaterialTheme.typography.titleMedium, color = colors.ink)
+                Text(
+                    title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = if (isLocked) colors.inkSoft else colors.ink,
+                )
                 Text(
                     subtitle,
                     style = MaterialTheme.typography.bodySmall.copy(
@@ -230,10 +244,10 @@ private fun RoutineCard(
             }
         }
         Spacer(Modifier.width(8.dp))
-        if (isDone) {
-            Icon(Icons.Outlined.Check, contentDescription = null, tint = colors.accent, modifier = Modifier.size(20.dp))
-        } else {
-            Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = colors.accent, modifier = Modifier.size(20.dp))
+        when {
+            isDone   -> Icon(Icons.Outlined.Check, contentDescription = null, tint = colors.accent, modifier = Modifier.size(20.dp))
+            isLocked -> Icon(Icons.Outlined.Schedule, contentDescription = null, tint = colors.inkSoft, modifier = Modifier.size(20.dp))
+            else     -> Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = colors.accent, modifier = Modifier.size(20.dp))
         }
     }
 }
