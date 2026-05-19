@@ -73,7 +73,7 @@ fun HeroHeader(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 22.dp, vertical = 22.dp),
-            verticalAlignment = Alignment.Top,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -98,7 +98,7 @@ fun HeroHeader(
 
             Box(
                 modifier = Modifier
-                    .size(72.dp)
+                    .size(96.dp)
                     .clip(CircleShape)
                     .background(colors.surface)
                     .border(2.dp, if (!photoUrl.isNullOrBlank()) colors.accent.copy(alpha = 0.4f) else colors.hair, CircleShape)
@@ -117,7 +117,7 @@ fun HeroHeader(
                         Icons.Outlined.Person,
                         contentDescription = "Profil",
                         tint     = colors.ink,
-                        modifier = Modifier.size(34.dp),
+                        modifier = Modifier.size(44.dp),
                     )
                 }
             }
