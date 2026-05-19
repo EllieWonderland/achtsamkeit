@@ -56,8 +56,8 @@ fun HeuteScreen(navController: NavController) {
 
     val userId    = Firebase.auth.currentUser?.uid ?: ""
     val hour               = LocalTime.now().hour
-    val isEvening          = hour >= 17 || hour < 4
-    val isMorningLocked    = hour >= 12 && !uiState.hasMorningEntry
+    val isEvening          = hour >= 15 || hour < 3
+    val isMorningLocked    = isEvening && !uiState.hasMorningEntry
     val isEveningLocked    = !isEvening && !uiState.hasEveningEntry
     val today     = remember { LocalDate.now() }
 
@@ -132,7 +132,7 @@ fun HeuteScreen(navController: NavController) {
                         subtitle = when {
                             uiState.hasMorningEntry -> uiState.morningCompletedAt
                                 ?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
-                            isMorningLocked         -> "Nur bis 12:00 Uhr verfügbar"
+                            isMorningLocked         -> "Nur bis 15:00 Uhr verfügbar"
                             else                    -> "Jetzt starten · 3 Minuten"
                         },
                         isDone   = uiState.hasMorningEntry,
@@ -145,7 +145,7 @@ fun HeuteScreen(navController: NavController) {
                         subtitle = when {
                             uiState.hasEveningEntry -> uiState.eveningCompletedAt
                                 ?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
-                            isEveningLocked         -> "Erst ab 17:00 Uhr verfügbar"
+                            isEveningLocked         -> "Erst ab 15:00 Uhr verfügbar"
                             else                    -> "Jetzt starten"
                         },
                         isDone   = uiState.hasEveningEntry,
