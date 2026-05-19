@@ -3,13 +3,10 @@ package com.elliewonderland.achtsamkeit.data.repository
 import com.elliewonderland.achtsamkeit.model.Entry
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 class EntryRepository {
 
@@ -38,10 +35,11 @@ class EntryRepository {
 
     suspend fun saveEntry(userId: String, entry: Entry): String {
         val now = System.currentTimeMillis()
+        val journalDate = if (java.time.LocalDateTime.now().hour < 4) LocalDate.now().minusDays(1) else LocalDate.now()
         val map = mapOf(
             "type"               to entry.type,
             "created_at"         to now,
-            "date_str"           to LocalDate.now().toString(),
+            "date_str"           to journalDate.toString(),
             "energy_level"       to entry.energyLevel,
             "mood"               to entry.mood,
             "gratitude_areas"    to entry.gratitudeAreas,
@@ -56,56 +54,26 @@ class EntryRepository {
         )
         val ref = db.collection("users").document(userId)
             .collection("entries").document()
-        ref.set(map)  // fire-and-forget: ID wird lokal generiert, Firestore synct im Hintergrund
-        updateStreak(userId)
+        ref.set(map).await()
         return ref.id
     }
 
-    private suspend fun updateStreak(userId: String) {
-        val today         = LocalDate.now().toString()
-        val yesterday     = LocalDate.now().minusDays(1).toString()
-        val currentMonth  = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))
-        val userRef       = db.collection("users").document(userId)
-        val snap          = userRef.get().await()
-        val lastDate      = snap.getString("last_entry_date") ?: ""
-        val currentStreak = (snap.getLong("current_streak") ?: 0L).toInt()
-        val freezeUsedMonth = snap.getString("streak_freeze_used_month") ?: ""
-
-        val updates = when (lastDate) {
-            today     -> mapOf("last_entry_date" to today, "current_streak" to currentStreak)
-            yesterday -> mapOf("last_entry_date" to today, "current_streak" to currentStreak + 1)
-            else -> {
-                // Streak wäre gebrochen — prüfe ob Freeze noch verfügbar
-                if (currentStreak > 0 && freezeUsedMonth != currentMonth) {
-                    mapOf(
-                        "last_entry_date"          to today,
-                        "current_streak"           to currentStreak,
-                        "streak_freeze_used_month" to currentMonth,
-                    )
-                } else {
-                    mapOf("last_entry_date" to today, "current_streak" to 1)
-                }
-            }
-        }
-        userRef.set(updates, SetOptions.merge()).await()
-    }
-
     suspend fun hasEntryToday(userId: String, type: String): Boolean {
+        val today = todayJournalDate()
         val snap = db.collection("users").document(userId)
             .collection("entries")
-            .whereEqualTo("type", type)
-            .whereGreaterThan("created_at", startOfCurrentJournalDay())
+            .whereEqualTo("date_str", today)
             .get().await()
-        return !snap.isEmpty
+        return snap.documents.mapNotNull { it.toEntry() }.any { it.type == type }
     }
 
     suspend fun getTodayEntry(userId: String, type: String): Entry? {
+        val today = todayJournalDate()
         val snap = db.collection("users").document(userId)
             .collection("entries")
-            .whereEqualTo("type", type)
-            .whereGreaterThan("created_at", startOfCurrentJournalDay())
+            .whereEqualTo("date_str", today)
             .get().await()
-        return snap.documents.firstOrNull()?.toEntry()
+        return snap.documents.mapNotNull { it.toEntry() }.firstOrNull { it.type == type }
     }
 
     suspend fun getEntriesForMonth(userId: String, year: Int, month: Int): List<Entry> {
@@ -156,9 +124,7 @@ private fun DocumentSnapshot.toEntry(): Entry? = runCatching {
     )
 }.getOrNull()
 
-// Tagesbeginn um 4:00 Uhr: wer zwischen 0:00–3:59 Uhr einen Eintrag macht, gehört noch zum Vortag.
-private fun startOfCurrentJournalDay(): Long {
+private fun todayJournalDate(): String {
     val now = LocalDateTime.now()
-    val journalDate = if (now.hour < 4) now.toLocalDate().minusDays(1) else now.toLocalDate()
-    return journalDate.atTime(4, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    return (if (now.hour < 4) now.toLocalDate().minusDays(1) else now.toLocalDate()).toString()
 }

@@ -9,7 +9,6 @@ import com.elliewonderland.achtsamkeit.data.repository.AuthRepository
 import com.elliewonderland.achtsamkeit.data.repository.EntryRepository
 import com.elliewonderland.achtsamkeit.data.repository.QuoteRepository
 import com.elliewonderland.achtsamkeit.data.repository.ReviewRepository
-import com.elliewonderland.achtsamkeit.data.repository.StatsRepository
 import com.elliewonderland.achtsamkeit.model.Quote
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,7 +39,6 @@ data class HeuteUiState(
     val hasEveningEntry: Boolean = false,
     val morningCompletedAt: LocalTime? = null,
     val eveningCompletedAt: LocalTime? = null,
-    val streak: Int = 0,
     val weeklyUnlocked: Boolean = false,
     val monthlyUnlocked: Boolean = false,
     val yearlyUnlocked: Boolean = false,
@@ -59,7 +57,6 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
 
     private val repo       = EntryRepository()
     private val reviewRepo = ReviewRepository()
-    private val statsRepo  = StatsRepository()
     private val authRepo   = AuthRepository()
     private val quoteRepo  = QuoteRepository(QuoteLoader(app))
 
@@ -74,7 +71,6 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
 
             val morningD       = async { runCatching { repo.getTodayEntry(userId, "morning") }.onFailure { Log.e("HeuteVM", "morning entry", it) }.getOrNull() }
             val eveningD       = async { runCatching { repo.getTodayEntry(userId, "evening") }.onFailure { Log.e("HeuteVM", "evening entry", it) }.getOrNull() }
-            val streakD        = async { runCatching { statsRepo.getCurrentStreak(userId) }.getOrDefault(0) }
             val weekEntriesD   = async { runCatching { repo.getEntriesForWeek(userId, weekStart) }.getOrDefault(emptyList()) }
             val monthEntriesD  = async { runCatching { repo.getEntriesForMonth(userId, today.year, today.monthValue) }.getOrDefault(emptyList()) }
             val prevMonthD     = async { runCatching { repo.getEntriesForMonth(userId, prevMonthDate.year, prevMonthDate.monthValue) }.getOrDefault(emptyList()) }
@@ -122,7 +118,6 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
                 hasEveningEntry     = eveningEntry != null,
                 morningCompletedAt  = morningEntry?.let { millisToLocalTime(it.createdAt) },
                 eveningCompletedAt  = eveningEntry?.let { millisToLocalTime(it.createdAt) },
-                streak              = streakD.await(),
                 weeklyUnlocked      = reviewRepo.isWeeklyReviewUnlocked(),
                 monthlyUnlocked     = reviewRepo.isMonthlyReviewUnlocked(),
                 yearlyUnlocked      = reviewRepo.isYearlyReviewUnlocked(),

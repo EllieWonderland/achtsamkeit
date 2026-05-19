@@ -37,7 +37,6 @@ import com.elliewonderland.achtsamkeit.ui.premium.PaywallCard
 import com.elliewonderland.achtsamkeit.ui.stats.components.EnergyBarChart
 import com.elliewonderland.achtsamkeit.ui.stats.components.GratitudePieChart
 import com.elliewonderland.achtsamkeit.ui.stats.components.MoodBarChart
-import com.elliewonderland.achtsamkeit.ui.stats.components.StreakCard
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import kotlinx.coroutines.launch
 
@@ -84,12 +83,9 @@ fun StatistikScreen(
         }
 
         if (state.isLoading) {
-            ShimmerCard(height = 80.dp)
             ShimmerCard(height = 200.dp)
             ShimmerCard(height = 200.dp)
         } else {
-            StreakCard(streak = state.streak, freezeAvailableThisMonth = state.freezeAvailableThisMonth)
-
             if (!isPremium && state.days > 30) {
                 PaywallCard(
                     description = "Statistiken über 30 Tage hinaus sind ein Premium-Feature. Upgrade, um Muster über bis zu 90 Tage zu entdecken.",

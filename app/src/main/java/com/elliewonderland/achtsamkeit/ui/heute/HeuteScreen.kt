@@ -101,10 +101,6 @@ fun HeuteScreen(navController: NavController) {
         ) {
             Spacer(Modifier.height(0.dp))
 
-            if (!uiState.isLoading && uiState.streak > 0) {
-                StreakPill(uiState.streak)
-            }
-
             MoodMonthCard(
                 moodMonth    = uiState.moodMonth,
                 moodTrendPct = uiState.moodTrendPct,
@@ -175,13 +171,13 @@ fun HeuteScreen(navController: NavController) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     ReviewCard(
                         title    = "Wochenrückblick",
-                        subtitle = if (uiState.weeklyUnlocked) "Jetzt schreiben" else "Samstag & Sonntag verfügbar",
+                        subtitle = if (uiState.weeklyUnlocked) "Jetzt schreiben" else "Am Wochenende verfügbar",
                         isLocked = !uiState.weeklyUnlocked,
                         onClick  = { navController.navigate(Screen.WeeklyReview.route) },
                     )
                     ReviewCard(
                         title    = "Monatsrückblick",
-                        subtitle = if (uiState.monthlyUnlocked) "Jetzt schreiben" else "Letzte Woche des Monats",
+                        subtitle = if (uiState.monthlyUnlocked) "Jetzt schreiben" else "In der letzten Woche des Monats verfügbar",
                         isLocked = !uiState.monthlyUnlocked,
                         onClick  = { navController.navigate(Screen.MonthlyReview.route) },
                     )
