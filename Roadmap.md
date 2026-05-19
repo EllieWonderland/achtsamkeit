@@ -66,6 +66,9 @@
 
 ## MVP
 
+> [!WARNING]
+> **Vor Veröffentlichung:** Das Impressum (`ImpressumScreen.kt`) enthält noch die Platzhalter-Steuernummer `123 456 789 0`. Die echte Steuernummer sowie alle Pflichtangaben gemäß § 5 TMG müssen vor dem Store-Release eingetragen werden.
+
 ---
 
 ## Phase 1: Projekt-Setup & Abhängigkeiten

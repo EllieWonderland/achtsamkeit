@@ -216,6 +216,8 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
             HorizontalDivider(color = AppTheme.colors.hair)
             Spacer(Modifier.height(32.dp))
 
+            ProfilButton("Impressum") { navController.navigate(Screen.Impressum.route) }
+            Spacer(Modifier.height(12.dp))
             ProfilButton("Datenschutzerklärung") {
                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(DATENSCHUTZ_URL)))
             }
