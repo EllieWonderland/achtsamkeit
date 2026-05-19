@@ -43,6 +43,7 @@ data class HeuteUiState(
     val streak: Int = 0,
     val weeklyUnlocked: Boolean = false,
     val monthlyUnlocked: Boolean = false,
+    val yearlyUnlocked: Boolean = false,
     val moodMonth: List<MoodPoint?> = emptyList(),
     val moodTrendPct: Int? = null,
     val weekDays: List<WeekDayStatus> = emptyList(),
@@ -73,7 +74,6 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
 
             val morningD       = async { runCatching { repo.getTodayEntry(userId, "morning") }.onFailure { Log.e("HeuteVM", "morning entry", it) }.getOrNull() }
             val eveningD       = async { runCatching { repo.getTodayEntry(userId, "evening") }.onFailure { Log.e("HeuteVM", "evening entry", it) }.getOrNull() }
-            val weeklyD        = async { runCatching { reviewRepo.isWeeklyReviewUnlocked(userId) }.getOrDefault(false) }
             val streakD        = async { runCatching { statsRepo.getCurrentStreak(userId) }.getOrDefault(0) }
             val weekEntriesD   = async { runCatching { repo.getEntriesForWeek(userId, weekStart) }.getOrDefault(emptyList()) }
             val monthEntriesD  = async { runCatching { repo.getEntriesForMonth(userId, today.year, today.monthValue) }.getOrDefault(emptyList()) }
@@ -123,8 +123,9 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
                 morningCompletedAt  = morningEntry?.let { millisToLocalTime(it.createdAt) },
                 eveningCompletedAt  = eveningEntry?.let { millisToLocalTime(it.createdAt) },
                 streak              = streakD.await(),
-                weeklyUnlocked      = weeklyD.await(),
+                weeklyUnlocked      = reviewRepo.isWeeklyReviewUnlocked(),
                 monthlyUnlocked     = reviewRepo.isMonthlyReviewUnlocked(),
+                yearlyUnlocked      = reviewRepo.isYearlyReviewUnlocked(),
                 moodMonth           = moodMonth,
                 moodTrendPct        = moodTrend,
                 weekDays            = weekDays,

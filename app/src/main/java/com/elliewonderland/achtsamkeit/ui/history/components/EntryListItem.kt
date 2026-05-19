@@ -91,6 +91,7 @@ private fun typeLabel(type: String): String = when (type) {
     "evening"        -> "Abendroutine"
     "weekly_review"  -> "Wochenrückblick"
     "monthly_review" -> "Monatsrückblick"
+    "yearly_review"  -> "Jahresrückblick"
     else             -> type
 }
 

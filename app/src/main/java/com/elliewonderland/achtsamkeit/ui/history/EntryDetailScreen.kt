@@ -14,7 +14,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -23,6 +26,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.SuggestionChipDefaults
@@ -31,9 +36,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -55,15 +60,20 @@ import java.util.Locale
 @Composable
 fun EntryDetailScreen(navController: NavController, entryId: String) {
     val userId = Firebase.auth.currentUser?.uid ?: ""
-    val repo = remember { HistoryRepository() }
+    val repo  = remember { HistoryRepository() }
     val scope = rememberCoroutineScope()
     var showDeleteDialog by remember { mutableStateOf(false) }
 
-    val entry by produceState<Entry?>(initialValue = null, entryId, userId) {
+    var entry by remember { mutableStateOf<Entry?>(null) }
+    LaunchedEffect(entryId, userId) {
         if (userId.isNotBlank() && entryId.isNotBlank()) {
-            value = runCatching { repo.getEntryById(userId, entryId) }.getOrNull()
+            entry = runCatching { repo.getEntryById(userId, entryId) }.getOrNull()
         }
     }
+
+    var isEditing        by remember { mutableStateOf(false) }
+    var editGuidedAnswer by remember { mutableStateOf("") }
+    var editFreeText     by remember { mutableStateOf("") }
 
     val topBarTitle = entry?.let { e ->
         buildString {
@@ -117,12 +127,30 @@ fun EntryDetailScreen(navController: NavController, entryId: String) {
                 },
                 actions = {
                     if (entry != null) {
-                        IconButton(onClick = { showDeleteDialog = true }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Delete,
-                                contentDescription = "Eintrag löschen",
-                                tint = AppTheme.colors.inkSoft,
-                            )
+                        if (isEditing) {
+                            IconButton(onClick = { isEditing = false }) {
+                                Icon(Icons.Outlined.Close, contentDescription = "Abbrechen", tint = AppTheme.colors.inkSoft)
+                            }
+                            IconButton(onClick = {
+                                scope.launch {
+                                    runCatching { repo.updateEntry(userId, entryId, editGuidedAnswer, editFreeText) }
+                                    entry = entry?.copy(guidedAnswer = editGuidedAnswer, freeText = editFreeText)
+                                    isEditing = false
+                                }
+                            }) {
+                                Icon(Icons.Outlined.Check, contentDescription = "Speichern", tint = AppTheme.colors.accent)
+                            }
+                        } else {
+                            IconButton(onClick = {
+                                editGuidedAnswer = entry?.guidedAnswer ?: ""
+                                editFreeText     = entry?.freeText ?: ""
+                                isEditing = true
+                            }) {
+                                Icon(Icons.Outlined.Edit, contentDescription = "Bearbeiten", tint = AppTheme.colors.inkSoft)
+                            }
+                            IconButton(onClick = { showDeleteDialog = true }) {
+                                Icon(Icons.Outlined.Delete, contentDescription = "Eintrag löschen", tint = AppTheme.colors.inkSoft)
+                            }
                         }
                     }
                 },
@@ -227,22 +255,54 @@ fun EntryDetailScreen(navController: NavController, entryId: String) {
                     // Rotierende Frage
                     if (e.guidedQuestion.isNotBlank()) {
                         DetailCard(title = e.guidedQuestion) {
-                            Text(
-                                text = e.guidedAnswer.ifBlank { "—" },
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = if (e.guidedAnswer.isBlank()) AppTheme.colors.inkSoft else AppTheme.colors.ink,
-                            )
+                            if (isEditing) {
+                                OutlinedTextField(
+                                    value         = editGuidedAnswer,
+                                    onValueChange = { editGuidedAnswer = it },
+                                    modifier      = Modifier.fillMaxWidth(),
+                                    minLines      = 3,
+                                    textStyle     = MaterialTheme.typography.bodyMedium,
+                                    colors        = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor   = AppTheme.colors.accent,
+                                        unfocusedBorderColor = AppTheme.colors.hair,
+                                        focusedTextColor     = AppTheme.colors.ink,
+                                        unfocusedTextColor   = AppTheme.colors.ink,
+                                    ),
+                                )
+                            } else {
+                                Text(
+                                    text  = e.guidedAnswer.ifBlank { "—" },
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = if (e.guidedAnswer.isBlank()) AppTheme.colors.inkSoft else AppTheme.colors.ink,
+                                )
+                            }
                         }
                     }
 
                     // Freie Gedanken
-                    if (e.freeText.isNotBlank()) {
+                    if (isEditing || e.freeText.isNotBlank()) {
                         DetailCard(title = "Weitere Gedanken") {
-                            Text(
-                                text = e.freeText,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = AppTheme.colors.ink,
-                            )
+                            if (isEditing) {
+                                OutlinedTextField(
+                                    value         = editFreeText,
+                                    onValueChange = { editFreeText = it },
+                                    modifier      = Modifier.fillMaxWidth(),
+                                    minLines      = 3,
+                                    textStyle     = MaterialTheme.typography.bodyMedium,
+                                    colors        = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor   = AppTheme.colors.accent,
+                                        unfocusedBorderColor = AppTheme.colors.hair,
+                                        focusedTextColor     = AppTheme.colors.ink,
+                                        unfocusedTextColor   = AppTheme.colors.ink,
+                                    ),
+                                )
+                            } else {
+                                Text(
+                                    text  = e.freeText,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = AppTheme.colors.ink,
+                                )
+                            }
                         }
                     }
                 }

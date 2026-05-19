@@ -64,6 +64,10 @@
 
 ---
 
+## MVP
+
+---
+
 ## Phase 1: Projekt-Setup & Abhängigkeiten
 
 ### Android Studio Projekt anlegen
@@ -1277,3 +1281,19 @@ Alle sichtbaren UI-Texte umstellen. **Technische Werte** (`type = "morning"` / `
 ### Priorität 3 — Lokale Notifications statt FCM
 
 - [x] `NotificationScheduler`, `NotificationReceiver`, `BootReceiver` implementiert. `AlarmManager.setAndAllowWhileIdle()` plant täglich neu. FCM-Service bleibt als toter Fallback.
+
+---
+
+## Zukünftige Features
+
+> Ideen und Erweiterungen für nach dem MVP-Release.
+
+- [ ] **Jahresrückblick** — Vollständiger Jahresrückblick mit tiefen Reflexionsfragen (aktuell: „Coming soon"-Platzhalter im Dezember verfügbar)
+- [ ] **Monatsrückblick ausbauen** — Mehr Visualisierungen (Mood-Verlauf, Streak-Jahreskalender) direkt im Monatsrückblick
+- [ ] **Weitere Anpassungsmöglichkeiten** — Eigene Akzentfarbe wählen (über die 4 Paletten hinaus), Kartenreihenfolge auf dem Heute-Tab frei verschieben
+- [ ] **Weitere Statistiken** — Wochentag-Analyse (an welchen Tagen bin ich am ausgeglichensten?), Energie-Trend, Selbstfürsorge-Häufigkeit, Export als PDF/CSV
+- [ ] **Sprüche-Pool erweitern** — Neue Sprüche zu bestehenden Tags (insb. Ausgeglichenheit, Selbstfürsorge, Energie), Sprüche auf Englisch als Option
+- [ ] **Daumen-runter für Sprüche** — Sprüche, die man nicht mag, dauerhaft ausblenden (Firestore: `disliked/{quoteId}`)
+- [ ] **Profilbild-Ausschnitt anpassen** — Nach dem Upload den Bildausschnitt (Crop) frei wählen statt fest auf Kreismitte
+- [ ] **Neue rotierende Fragen** — Fragen-Pool auf 30+ Morning / 30+ Evening erhöhen, optionale Themenpakete (z. B. „Selbstfürsorge-Woche")
+- [ ] **Widget** — Android-Home-Screen-Widget mit Streak und Tagesspruch

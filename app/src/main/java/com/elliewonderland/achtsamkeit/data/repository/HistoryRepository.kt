@@ -36,6 +36,13 @@ class HistoryRepository {
         return doc.toEntry()
     }
 
+    suspend fun updateEntry(userId: String, entryId: String, guidedAnswer: String, freeText: String) {
+        db.collection("users").document(userId)
+            .collection("entries").document(entryId)
+            .update(mapOf("guided_answer" to guidedAnswer, "free_text" to freeText))
+            .await()
+    }
+
     suspend fun deleteEntry(userId: String, entryId: String) {
         db.collection("users").document(userId)
             .collection("entries").document(entryId)

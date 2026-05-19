@@ -22,11 +22,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Schedule
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.elliewonderland.achtsamkeit.ui.navigation.Screen
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.google.firebase.Firebase
@@ -72,8 +71,11 @@ fun HeuteScreen(navController: NavController) {
         today.format(DateTimeFormatter.ofPattern("EEEE · d. MMMM", Locale.GERMAN))
     }
 
-    LaunchedEffect(userId) {
-        if (userId.isNotBlank()) vm.loadTodayStatus(userId)
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    LaunchedEffect(navBackStackEntry?.destination?.route, userId) {
+        if (navBackStackEntry?.destination?.route == Screen.Heute.route && userId.isNotBlank()) {
+            vm.loadTodayStatus(userId)
+        }
     }
 
     Column(
@@ -164,29 +166,31 @@ fun HeuteScreen(navController: NavController) {
                 )
             }
 
-            if (!uiState.isLoading && (uiState.weeklyUnlocked || uiState.monthlyUnlocked)) {
+            if (!uiState.isLoading) {
                 Text(
                     "RÜCKBLICKE",
                     style = MaterialTheme.typography.labelSmall,
                     color = AppTheme.colors.inkSoft,
                 )
-                if (uiState.weeklyUnlocked) {
-                    OutlinedButton(
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    ReviewCard(
+                        title    = "Wochenrückblick",
+                        subtitle = if (uiState.weeklyUnlocked) "Jetzt schreiben" else "Samstag & Sonntag verfügbar",
+                        isLocked = !uiState.weeklyUnlocked,
                         onClick  = { navController.navigate(Screen.WeeklyReview.route) },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors   = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.accent),
-                    ) {
-                        Text("Wochenrückblick", style = MaterialTheme.typography.labelLarge)
-                    }
-                }
-                if (uiState.monthlyUnlocked) {
-                    OutlinedButton(
+                    )
+                    ReviewCard(
+                        title    = "Monatsrückblick",
+                        subtitle = if (uiState.monthlyUnlocked) "Jetzt schreiben" else "Letzte Woche des Monats",
+                        isLocked = !uiState.monthlyUnlocked,
                         onClick  = { navController.navigate(Screen.MonthlyReview.route) },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors   = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.accent),
-                    ) {
-                        Text("Monatsrückblick", style = MaterialTheme.typography.labelLarge)
-                    }
+                    )
+                    ReviewCard(
+                        title    = "Jahresrückblick",
+                        subtitle = if (uiState.yearlyUnlocked) "Jetzt schreiben" else "Im Dezember verfügbar",
+                        isLocked = !uiState.yearlyUnlocked,
+                        onClick  = { navController.navigate(Screen.YearlyReview.route) },
+                    )
                 }
             }
         }
@@ -248,6 +252,49 @@ private fun RoutineCard(
             isDone   -> Icon(Icons.Outlined.Check, contentDescription = null, tint = colors.accent, modifier = Modifier.size(20.dp))
             isLocked -> Icon(Icons.Outlined.Schedule, contentDescription = null, tint = colors.inkSoft, modifier = Modifier.size(20.dp))
             else     -> Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = colors.accent, modifier = Modifier.size(20.dp))
+        }
+    }
+}
+
+@Composable
+private fun ReviewCard(
+    title   : String,
+    subtitle: String,
+    isLocked: Boolean,
+    onClick : () -> Unit,
+) {
+    val colors = AppTheme.colors
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(18.dp))
+            .border(1.dp, colors.hair, RoundedCornerShape(18.dp))
+            .background(if (isLocked) colors.surfaceAlt else colors.surface)
+            .clickable(enabled = !isLocked, onClick = onClick)
+            .padding(horizontal = 18.dp, vertical = 14.dp),
+        verticalAlignment     = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Column(
+            modifier              = Modifier.weight(1f),
+            verticalArrangement   = Arrangement.spacedBy(2.dp),
+        ) {
+            Text(
+                title,
+                style = MaterialTheme.typography.titleSmall,
+                color = if (isLocked) colors.inkSoft else colors.ink,
+            )
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = colors.inkSoft,
+            )
+        }
+        Spacer(Modifier.width(8.dp))
+        if (isLocked) {
+            Icon(Icons.Outlined.Schedule, contentDescription = null, tint = colors.inkSoft, modifier = Modifier.size(18.dp))
+        } else {
+            Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = colors.accent, modifier = Modifier.size(18.dp))
         }
     }
 }

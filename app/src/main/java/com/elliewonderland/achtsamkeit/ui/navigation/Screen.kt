@@ -13,6 +13,7 @@ sealed class Screen(val route: String) {
     object Favorites     : Screen("favorites")
     object WeeklyReview  : Screen("weekly_review")
     object MonthlyReview : Screen("monthly_review")
+    object YearlyReview  : Screen("yearly_review")
     object Quote         : Screen("quote/{entryId}") {
         fun createRoute(entryId: String) = "quote/$entryId"
     }

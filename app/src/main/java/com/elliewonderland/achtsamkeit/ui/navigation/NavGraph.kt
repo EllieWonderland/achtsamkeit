@@ -29,6 +29,7 @@ import com.elliewonderland.achtsamkeit.ui.settings.NotificationSettingsScreen
 import com.elliewonderland.achtsamkeit.ui.stats.StatistikScreen
 import com.elliewonderland.achtsamkeit.ui.theme.ThemeChoice
 import com.elliewonderland.achtsamkeit.ui.weekly.WeeklyReviewScreen
+import com.elliewonderland.achtsamkeit.ui.yearly.YearlyReviewScreen
 
 private val bottomNavRoutes = setOf(
     Screen.Heute.route,
@@ -71,6 +72,7 @@ fun AppNavHost(choice: ThemeChoice) {
             composable(Screen.Favorites.route)     { FavoritesScreen(navController) }
             composable(Screen.WeeklyReview.route)  { WeeklyReviewScreen(navController) }
             composable(Screen.MonthlyReview.route) { MonthlyReviewScreen(navController) }
+            composable(Screen.YearlyReview.route)  { YearlyReviewScreen(navController) }
             composable(
                 route     = Screen.Entry.route,
                 arguments = listOf(navArgument("type") { type = NavType.StringType }),
