@@ -2,10 +2,11 @@ package com.elliewonderland.achtsamkeit.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.googlefonts.Font as GFont
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
 import com.elliewonderland.achtsamkeit.R
@@ -17,12 +18,12 @@ private val GoogleProvider = GoogleFont.Provider(
 )
 
 private val InstrumentSerif = FontFamily(
-    Font(
+    GFont(
         googleFont = GoogleFont("Instrument Serif"),
         fontProvider = GoogleProvider,
         weight = FontWeight.Normal,
     ),
-    Font(
+    GFont(
         googleFont = GoogleFont("Instrument Serif"),
         fontProvider = GoogleProvider,
         weight = FontWeight.Normal,
@@ -31,29 +32,17 @@ private val InstrumentSerif = FontFamily(
 )
 
 private val GeistSans = FontFamily(
-    Font(googleFont = GoogleFont("Geist"), fontProvider = GoogleProvider, weight = FontWeight.Light),
-    Font(googleFont = GoogleFont("Geist"), fontProvider = GoogleProvider, weight = FontWeight.Normal),
-    Font(googleFont = GoogleFont("Geist"), fontProvider = GoogleProvider, weight = FontWeight.Medium),
-    Font(googleFont = GoogleFont("Geist"), fontProvider = GoogleProvider, weight = FontWeight.SemiBold),
-    Font(googleFont = GoogleFont("Geist"), fontProvider = GoogleProvider, weight = FontWeight.Bold),
+    GFont(googleFont = GoogleFont("Geist"), fontProvider = GoogleProvider, weight = FontWeight.Light),
+    GFont(googleFont = GoogleFont("Geist"), fontProvider = GoogleProvider, weight = FontWeight.Normal),
+    GFont(googleFont = GoogleFont("Geist"), fontProvider = GoogleProvider, weight = FontWeight.Medium),
+    GFont(googleFont = GoogleFont("Geist"), fontProvider = GoogleProvider, weight = FontWeight.SemiBold),
+    GFont(googleFont = GoogleFont("Geist"), fontProvider = GoogleProvider, weight = FontWeight.Bold),
 )
 
 private val Caveat = FontFamily(
-    Font(
-        googleFont = GoogleFont("Caveat"),
-        fontProvider = GoogleProvider,
-        weight = FontWeight.Normal,
-    ),
-    Font(
-        googleFont = GoogleFont("Caveat"),
-        fontProvider = GoogleProvider,
-        weight = FontWeight.Medium,
-    ),
-    Font(
-        googleFont = GoogleFont("Caveat"),
-        fontProvider = GoogleProvider,
-        weight = FontWeight.Bold,
-    ),
+    Font(R.font.caveat_regular, weight = FontWeight.Normal),
+    Font(R.font.caveat_medium,  weight = FontWeight.Medium),
+    Font(R.font.caveat_bold,    weight = FontWeight.Bold),
 )
 
 val HandwrittenStyle = TextStyle(
