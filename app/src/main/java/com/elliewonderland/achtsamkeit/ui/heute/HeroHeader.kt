@@ -118,15 +118,24 @@ fun HeroHeader(
                             .graphicsLayer(
                                 scaleX       = photoScale,
                                 scaleY       = photoScale,
-                                translationX = photoOffsetX,
-                                translationY = photoOffsetY
+                                translationX = photoOffsetX * (96f / 200f),
+                                translationY = photoOffsetY * (96f / 200f)
                             ),
                     )
                 } else {
                     Image(
-                        painter            = painterResource(id = com.elliewonderland.achtsamkeit.R.drawable.logo_round),
-                        contentDescription = "App-Logo",
+                        painter            = painterResource(id = com.elliewonderland.achtsamkeit.R.drawable.logo_background),
+                        contentDescription = null,
+                        contentScale       = ContentScale.Crop,
                         modifier           = Modifier.fillMaxSize()
+                    )
+                    Image(
+                        painter            = painterResource(id = com.elliewonderland.achtsamkeit.R.drawable.logo_foreground),
+                        contentDescription = "App-Logo",
+                        contentScale       = ContentScale.Fit,
+                        modifier           = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
                     )
                 }
             }

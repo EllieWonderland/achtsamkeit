@@ -150,19 +150,32 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
                                 .graphicsLayer(
                                     scaleX       = uiState.photoScale,
                                     scaleY       = uiState.photoScale,
-                                    translationX = uiState.photoOffsetX,
-                                    translationY = uiState.photoOffsetY
+                                    translationX = uiState.photoOffsetX * (80f / 200f),
+                                    translationY = uiState.photoOffsetY * (80f / 200f)
                                 ),
                         )
                     }
                 } else {
-                    Image(
-                        painter            = painterResource(id = com.elliewonderland.achtsamkeit.R.drawable.logo_round),
-                        contentDescription = "App-Logo",
-                        modifier           = Modifier
+                    Box(
+                        modifier = Modifier
                             .size(80.dp)
                             .clip(CircleShape)
-                    )
+                    ) {
+                        Image(
+                            painter            = painterResource(id = com.elliewonderland.achtsamkeit.R.drawable.logo_background),
+                            contentDescription = null,
+                            contentScale       = ContentScale.Crop,
+                            modifier           = Modifier.fillMaxSize()
+                        )
+                        Image(
+                            painter            = painterResource(id = com.elliewonderland.achtsamkeit.R.drawable.logo_foreground),
+                            contentDescription = "App-Logo",
+                            contentScale       = ContentScale.Fit,
+                            modifier           = Modifier
+                                .fillMaxSize()
+                                .padding(12.dp)
+                        )
+                    }
                 }
                 Box(
                     modifier         = Modifier

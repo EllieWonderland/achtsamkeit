@@ -3,7 +3,7 @@
     <!-- Applied to MainActivity via android:theme in AndroidManifest -->
     <style name="Theme.AchtsamkeitIn3Minuten" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/splash_background</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_splash</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_foreground_inset</item>
         <item name="postSplashScreenTheme">@style/Theme.AchtsamkeitIn3Minuten.App</item>
     </style>
 
