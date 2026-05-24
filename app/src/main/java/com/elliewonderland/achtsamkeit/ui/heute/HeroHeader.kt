@@ -1,5 +1,6 @@
 package com.elliewonderland.achtsamkeit.ui.heute
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,9 +15,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +24,9 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -38,6 +38,9 @@ fun HeroHeader(
     firstName: String?,
     dateText: String,
     photoUrl: String?,
+    photoScale: Float = 1.0f,
+    photoOffsetX: Float = 0.0f,
+    photoOffsetY: Float = 0.0f,
     onProfileClick: () -> Unit,
 ) {
     val colors = AppTheme.colors
@@ -72,7 +75,7 @@ fun HeroHeader(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 22.dp, vertical = 22.dp),
+                .padding(start = 22.dp, end = 22.dp, top = 22.dp, bottom = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f)) {
@@ -101,26 +104,33 @@ fun HeroHeader(
                     .size(96.dp)
                     .clip(CircleShape)
                     .background(colors.surface)
-                    .border(2.dp, if (!photoUrl.isNullOrBlank()) colors.accent.copy(alpha = 0.4f) else colors.hair, CircleShape)
+                    .border(2.dp, colors.accent.copy(alpha = 0.4f), CircleShape)
                     .clickable(onClick = onProfileClick),
                 contentAlignment = Alignment.Center,
             ) {
                 if (!photoUrl.isNullOrBlank()) {
                     AsyncImage(
-                        model             = photoUrl,
+                        model              = photoUrl,
                         contentDescription = "Profilbild",
-                        contentScale      = ContentScale.Crop,
-                        modifier          = Modifier.fillMaxSize(),
+                        contentScale       = ContentScale.Crop,
+                        modifier           = Modifier
+                            .fillMaxSize()
+                            .graphicsLayer(
+                                scaleX       = photoScale,
+                                scaleY       = photoScale,
+                                translationX = photoOffsetX,
+                                translationY = photoOffsetY
+                            ),
                     )
                 } else {
-                    Icon(
-                        Icons.Outlined.Person,
-                        contentDescription = "Profil",
-                        tint     = colors.ink,
-                        modifier = Modifier.size(44.dp),
+                    Image(
+                        painter            = painterResource(id = com.elliewonderland.achtsamkeit.R.drawable.logo_round),
+                        contentDescription = "App-Logo",
+                        modifier           = Modifier.fillMaxSize()
                     )
                 }
             }
         }
     }
 }
+
