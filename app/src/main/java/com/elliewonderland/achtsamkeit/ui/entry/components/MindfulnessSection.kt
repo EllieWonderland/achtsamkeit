@@ -18,27 +18,28 @@ import androidx.compose.ui.unit.dp
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
 private val morningFocusOptions = listOf(
-    "present" to "Ja, ich bin angekommen — präsent und geerdet.",
-    "future"  to "Teilweise — meine Gedanken wandern schon zu den Aufgaben des Tages.",
-    "past"    to "Kaum — ich bin in Gedanken noch bei gestern.",
+    "present" to "🍃 Ganz im Jetzt – Ich spüre meinen Körper, atme ruhig und bin präsent.",
+    "future"  to "📅 Aufgaben-Tunnel – Meine Gedanken kreisen schon hektisch um die To-Dos des Tages.",
+    "past"    to "💭 Gedankenschwere – Ich hänge emotional noch bei gestrigen Erlebnissen oder Sorgen fest.",
 )
 
 private val morningPauseOptions = listOf(
-    "yes_pure"       to "Ja, ganz bewusst (Kaffee, Stille, Stretching).",
-    "yes_distracted" to "Ein bisschen, aber schon mit Handy o.Ä.",
-    "no"             to "Nein, ich bin direkt in den Trubel gestartet.",
+    "yes_pure"       to "🧘 Bewusster Start – Ja, in vollkommener Stille oder bei Tee/Kaffee ohne Ablenkung.",
+    "yes_distracted" to "📱 Nebengeschäftigt – Ein bisschen, aber mit Handy, Nachrichten oder Podcasts nebenbei.",
+    "no"             to "🏃 Direkt im Trubel – Nein, ich bin direkt vom Bett in den Autopiloten und die Hektik gesprungen.",
 )
 
 private val eveningFocusOptions = listOf(
-    "past"    to "In der Vergangenheit (gegrübelt oder in Erinnerungen geschwelgt)",
-    "future"  to "In der Zukunft (geplant oder gesorgt)",
-    "present" to "Überwiegend im gegenwärtigen Moment",
+    "present"    to "🍃 Überwiegend im Jetzt – Ich war aufmerksam und konnte den Tag bewusst erleben.",
+    "future"     to "📅 In der Zukunft – Ich war gedanklich schon bei morgen, habe geplant oder mir Sorgen gemacht.",
+    "past"       to "💭 In der Vergangenheit – Ich habe viel gegrübelt, Erlebnisse analysiert oder bereut.",
+    "autopilot"  to "🤖 Im Autopiloten – Der Tag ist wie ein Film an mir vorbeigezogen, ohne dass ich richtig anwesend war.",
 )
 
 private val eveningPauseOptions = listOf(
-    "yes_pure"       to "Ja, ganz ohne Ablenkung (kein Handy, kein TV).",
-    "yes_distracted" to "Ja, aber nebenbei etwas anderes gemacht.",
-    "no"             to "Nein, ich war im Dauer-Rotations-Modus.",
+    "yes_pure"       to "🌲 Echte Pause – Ja, eine handyfreie, stille Auszeit genommen (Natur, Atmen, Nichtstun).",
+    "yes_distracted" to "📱 Konsum-Pause – Ja, aber abgelenkt mit Social Media, Mails oder Podcasts.",
+    "no"             to "🏃 Dauer-Rauschen – Nein, ich war durchgehend aktiv und im Dauer-Rotations-Modus.",
 )
 
 @Composable
@@ -50,7 +51,7 @@ fun MindfulnessSection(
     onPauseSelect: (String) -> Unit,
 ) {
     val focusQuestion = if (type == "morning") "Bin ich heute Morgen im Moment angekommen?" else "Wo waren meine Gedanken heute die meiste Zeit?"
-    val pauseQuestion = if (type == "morning") "Habe ich mir heute Morgen einen ruhigen Moment gegönnt?" else "Habe ich heute bewusst eine Pause eingelegt?"
+    val pauseQuestion = if (type == "morning") "Habe ich mir heute Morgen einen bewussten, ruhigen Moment gegönnt?" else "Habe ich heute tagsüber bewusst eine kurze Pause eingelegt?"
     val focusOptions  = if (type == "morning") morningFocusOptions else eveningFocusOptions
     val pauseOptions  = if (type == "morning") morningPauseOptions else eveningPauseOptions
 

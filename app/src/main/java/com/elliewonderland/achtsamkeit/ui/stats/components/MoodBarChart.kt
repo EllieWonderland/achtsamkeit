@@ -21,20 +21,23 @@ import androidx.compose.ui.unit.dp
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.elliewonderland.achtsamkeit.ui.theme.MoodColors
 
-private data class MoodBar(val key: String, val label: String, val color: Color)
+private data class MoodGroup(val keys: List<String>, val label: String, val color: Color)
 
-private val moodBars = listOf(
-    MoodBar("joy",     "Freude",    MoodColors.Joy),
-    MoodBar("balance", "Ausgegl.",  MoodColors.Calm),
-    MoodBar("stress",  "Stress",    MoodColors.Mist),
-    MoodBar("sadness", "Traurig",   MoodColors.Soft),
+// Mehrere Keys pro Gruppe — alte und neue Stimmungs-Keys werden zusammengefasst
+private val moodGroups = listOf(
+    MoodGroup(listOf("joy", "excitement", "satisfaction", "relief"), "Positiv",       MoodColors.Joy),
+    MoodGroup(listOf("balance", "peace"),                            "Ausgegl.",       MoodColors.Calm),
+    MoodGroup(listOf("stress", "anxiety", "overwhelmed"),            "Herausf.",       MoodColors.Mist),
+    MoodGroup(listOf("sadness", "melancholy", "loneliness",
+                     "tiredness", "exhaustion"),                     "Schwer",         MoodColors.Soft),
 )
 
 @Composable
 fun MoodBarChart(distribution: Map<String, Int>) {
-    val maxValue    = moodBars.maxOf { distribution[it.key] ?: 0 }.coerceAtLeast(1)
+    val groupCounts = moodGroups.map { group -> group.keys.sumOf { distribution[it] ?: 0 } }
+    val maxValue    = groupCounts.maxOrNull()?.coerceAtLeast(1) ?: 1
     val hairColor   = AppTheme.colors.hair
-    val hasAnyData  = moodBars.any { (distribution[it.key] ?: 0) > 0 }
+    val hasAnyData  = groupCounts.any { it > 0 }
 
     if (!hasAnyData) {
         Text(
@@ -51,7 +54,7 @@ fun MoodBarChart(distribution: Map<String, Int>) {
                 .fillMaxWidth()
                 .height(160.dp)
         ) {
-            val barCount    = moodBars.size
+            val barCount    = moodGroups.size
             val slotWidth   = size.width / barCount
             val barWidth    = slotWidth * 0.5f
             val chartHeight = size.height
@@ -63,14 +66,14 @@ fun MoodBarChart(distribution: Map<String, Int>) {
                 strokeWidth = 1.dp.toPx(),
             )
 
-            moodBars.forEachIndexed { i, bar ->
-                val count     = distribution[bar.key] ?: 0
+            moodGroups.forEachIndexed { i, group ->
+                val count     = groupCounts[i]
                 val barHeight = (count.toFloat() / maxValue) * chartHeight
                 val left      = i * slotWidth + (slotWidth - barWidth) / 2f
                 val top       = chartHeight - barHeight
 
                 drawRoundRect(
-                    color        = bar.color,
+                    color        = group.color,
                     topLeft      = Offset(left, top),
                     size         = Size(barWidth, barHeight.coerceAtLeast(4.dp.toPx())),
                     cornerRadius = CornerRadius(6.dp.toPx()),
@@ -81,14 +84,14 @@ fun MoodBarChart(distribution: Map<String, Int>) {
         Spacer(Modifier.height(6.dp))
 
         Row(modifier = Modifier.fillMaxWidth()) {
-            moodBars.forEach { bar ->
-                val count = distribution[bar.key] ?: 0
+            moodGroups.forEachIndexed { i, group ->
+                val count = groupCounts[i]
                 Column(
                     modifier            = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text      = bar.label,
+                        text      = group.label,
                         style     = MaterialTheme.typography.labelSmall,
                         color     = AppTheme.colors.inkSoft,
                         textAlign = TextAlign.Center,

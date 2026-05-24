@@ -14,22 +14,43 @@ class EntryRepository {
 
     fun deriveTags(entry: Entry): List<String> {
         val tags = mutableListOf<String>()
+
+        // Stimmung → Tags (alte + neue Keys)
         when (entry.mood) {
-            "stress"  -> { tags.add("Stress"); tags.add("Angst") }
-            "joy"     -> tags.add("Freude")
-            "balance" -> tags.add("Ausgeglichenheit")
-            "sadness" -> { tags.add("Traurigkeit"); tags.add("Trauer") }
+            "stress", "anxiety", "overwhelmed"            -> { tags.add("Stress"); tags.add("Angst") }
+            "joy", "excitement", "satisfaction", "relief" -> tags.add("Freude")
+            "balance", "peace"                            -> tags.add("Ausgeglichenheit")
+            "sadness", "melancholy", "loneliness"         -> { tags.add("Traurigkeit"); tags.add("Trauer") }
         }
+
+        // Energie → Tags (neue Abend-Keys; "empty" nur bei Stress-Stimmung)
         when (entry.energyLevel) {
-            "full"  -> tags.add("Energie")
-            // "empty" nur als Stress taggen wenn auch Stimmung == Stress, sonst
-            // bekommt jemand der erschöpft-aber-ruhig ist Stress-Sprüche ausgespielt
-            "empty" -> if (entry.mood == "stress") tags.add("Stress")
+            "full", "satisfied_tired" -> tags.add("Energie")
+            "empty" -> if (entry.mood in listOf("stress", "anxiety", "overwhelmed")) tags.add("Stress")
         }
-        if ("achievement" in entry.gratitudeAreas) tags.add("Dankbarkeit")
-        if (entry.dayRating >= 3)                  tags.add("Dankbarkeit")
-        if ("breathing" in entry.selfCare ||
-            "outside"   in entry.selfCare)         tags.add("Selbstfürsorge")
+
+        // Dankbarkeit → Tags (alte + neue Keys)
+        val gratitudeKeys = entry.gratitudeAreas
+        if ("achievement" in gratitudeKeys || "encounter" in gratitudeKeys ||
+            "relations"   in gratitudeKeys || "opportunity" in gratitudeKeys) tags.add("Dankbarkeit")
+        if ("self_compassion" in gratitudeKeys || "learning" in gratitudeKeys ||
+            "comfort_received" in gratitudeKeys)                              tags.add("Selbstfürsorge")
+        if (entry.dayRating >= 3) tags.add("Dankbarkeit")
+
+        // Selbstfürsorge → Tags (alte + neue Keys)
+        val selfCareKeys = entry.selfCare
+        if ("breathing"  in selfCareKeys || "outside"   in selfCareKeys ||
+            "stillness"  in selfCareKeys || "compassion" in selfCareKeys ||
+            "release"    in selfCareKeys || "forgiveness" in selfCareKeys) tags.add("Selbstfürsorge")
+
+        // Schwere Tage → mitfühlende Sprüche (Trost, Selbstfürsorge, Traurigkeit)
+        if ("struggled" in gratitudeKeys || "none" in gratitudeKeys ||
+            "neglected" in selfCareKeys  || "no_energy" in selfCareKeys) {
+            tags.add("Trost")
+            tags.add("Selbstfürsorge")
+            tags.add("Traurigkeit")
+        }
+
         return tags.distinct()
     }
 

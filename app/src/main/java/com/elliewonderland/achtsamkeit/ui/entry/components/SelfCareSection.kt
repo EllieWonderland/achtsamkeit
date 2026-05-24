@@ -17,24 +17,28 @@ import androidx.compose.ui.unit.dp
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
 private val morningOptions = listOf(
-    "water"     to "Ausreichend Wasser trinken.",
-    "outside"   to "Mich an der frischen Luft bewegen.",
-    "food"      to "Etwas essen, das mir wirklich guttut.",
-    "hobby"     to "Zeit für ein Hobby oder mich selbst nehmen.",
-    "breathing" to "Bewusst und tief durchatmen.",
+    "physical"      to "💧 Körper & Pflege – Ausreichend Wasser trinken, gesund essen, sanft bewegen",
+    "boundaries"    to "🛑 Gesunde Grenzen – Bewusst 'Nein' sagen, Überlastung vermeiden, rechtzeitig stoppen",
+    "digital_detox" to "📱 Digitaler Schutz – Den Morgen/Tag ohne sinnloses Scrollen auf dem Handy verbringen",
+    "soul"          to "🎨 Seelennahrung – Etwas tun, das mir Freude bringt (Musik, Lesen, Hobby, Kreativität)",
+    "stillness"     to "🧘 Ruhemomente – Tiefes Durchatmen, eine kurze Meditation oder Dehnen einbauen",
+    "compassion"    to "🕊️ Selbstmitgefühl – Nett zu mir selbst sprechen, mir Fehler verzeihen, Druck rausnehmen",
+    "no_energy"     to "🪫 Keine Kraft für Vorsätze – Ich bin heute im reinen Überlebensmodus und erlege mir keinen Druck auf.",
 )
 
 private val eveningOptions = listOf(
-    "water"     to "Ausreichend Wasser getrunken.",
-    "outside"   to "Mich an der frischen Luft bewegt.",
-    "food"      to "Etwas gegessen, das mir wirklich gutgetan hat.",
-    "hobby"     to "Zeit für ein Hobby oder mich selbst genommen.",
-    "breathing" to "Bewusst und tief durchgeatmet.",
+    "needs_met"      to "💧 Bedürfnisse geachtet – Genug getrunken, gegessen oder meinem Körper Ruhe gegönnt",
+    "boundaries_kept"to "🛑 Grenzen gesetzt – Mich abgegrenzt (z. B. rechtzeitig Feierabend gemacht, 'Nein' gesagt)",
+    "unplugged"      to "📱 Abschaltzeit gegönnt – Offline-Zeit genossen, bewusst Abstand zu Bildschirmen gehalten",
+    "joyful_moment"  to "🎨 Seelenbalsam – Zeit mit Dingen verbracht, die mir Spaß machen und mich nähren",
+    "release"        to "🌬️ Druck abgelassen – Bewusst durchgeatmet, Stress abgeschüttelt, Tränen zugelassen oder gedehnt",
+    "forgiveness"    to "🕊️ Selbstvergebung – Mich so akzeptiert, wie ich heute war – auch mit Fehlern und ohne Perfektion",
+    "neglected"      to "🚨 Mich selbst vernachlässigt – Keine Zeit oder Kraft für mich gehabt, eigene Bedürfnisse übergangen.",
 )
 
 @Composable
 fun SelfCareSection(type: String, selected: List<String>, onToggle: (String) -> Unit) {
-    val title = if (type == "morning") "Was möchte ich heute für mein Wohlbefinden tun?" else "Was habe ich heute für mein Wohlbefinden getan?"
+    val title = if (type == "morning") "Was nehme ich mir heute vor, um gut für mich zu sorgen?" else "Wie habe ich heute für mein Wohlbefinden gesorgt?"
     val options = if (type == "morning") morningOptions else eveningOptions
     SectionCard(title = title) {
         options.forEach { (value, label) ->

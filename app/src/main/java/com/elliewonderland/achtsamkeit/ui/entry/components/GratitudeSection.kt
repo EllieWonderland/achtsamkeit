@@ -16,17 +16,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
-private val options = listOf(
-    "people"      to "Mitmenschen (Familie, Freunde, nette Begegnung)",
-    "body"        to "Mein Körper / Meine Gesundheit",
-    "achievement" to "Ein kleiner Erfolg / Eine erledigte Aufgabe",
-    "nature"      to "Die Natur (Sonne, frische Luft, Tiere)",
-    "pleasure"    to "Ein Genussmoment (z. B. ein richtig guter Kaffee)",
+private val morningOptions = listOf(
+    "relations"       to "👥 Menschen & Beziehungen – Familie, enge Freunde, Liebe, eine treue Partnerschaft",
+    "comfort"         to "🏡 Sicherheit & Komfort – Ein warmes Bett, ein sicheres Zuhause, Frieden, Privilegien",
+    "health"          to "🩺 Gesundheit & Vitalität – Körperliche Gesundheit, atmen können, schmerzfreier Zustand",
+    "nature"          to "🌲 Natur & Umgebung – Morgensonne, Vogelgezwitscher, frische Luft, Jahreszeiten",
+    "opportunity"     to "🚀 Chancen & Neubeginn – Ein neuer Tag, die Möglichkeit zu lernen, zu arbeiten oder zu gestalten",
+    "self_compassion" to "🌸 Selbstannahme & eigener Weg – Die eigene Resilienz, gemachte Fortschritte, Geduld mit sich selbst",
+    "struggled"       to "🌧️ Dankbarkeit fällt mir heute schwer – Es gibt Tage, an denen alles grau ist. Das ist völlig okay.",
+)
+
+private val eveningOptions = listOf(
+    "encounter"        to "💬 Wertvolle Begegnung – Ein tiefes Gespräch, ein Lächeln, unerwartete Hilfe, nette Gesten",
+    "micro_joys"       to "☕ Kleine Alltagsfreuden – Ein gutes Essen, warme Dusche, Lieblingslied, gemütliche Decke",
+    "achievement"      to "🏆 Erfolg & Fortschritt – Ein gelöstes Problem, etwas Erledigtes, Stolz auf das eigene Schaffen",
+    "learning"         to "💡 Erkenntnis & Wachstum – Etwas Wichtiges gelernt (auch aus Fehlern oder schweren Zeiten)",
+    "comfort_received" to "🛡️ Trost & Beistand – Ein sicherer Hafen, Mitgefühl erhalten, die Hürde wurde bewältigt",
+    "connection"       to "🤝 Gelungenes Miteinander – Ein geklärtes Missverständnis, tiefe Verbundenheit mit Partner/Familie",
+    "none"             to "🌧️ Keiner – mir fiel Dankbarkeit heute extrem schwer – Heute gab es keinen Lichtblick. Das ist okay.",
 )
 
 @Composable
 fun GratitudeSection(type: String, selected: List<String>, onToggle: (String) -> Unit) {
     val title = if (type == "morning") "Wofür bin ich heute oder generell dankbar?" else "Aus welchem Bereich kam mein heutiger Dankbarkeits-Moment?"
+    val options = if (type == "morning") morningOptions else eveningOptions
     SectionCard(title = title) {
         options.forEach { (value, label) ->
             Row(

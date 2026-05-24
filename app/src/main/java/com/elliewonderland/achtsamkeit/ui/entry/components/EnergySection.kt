@@ -18,17 +18,17 @@ import androidx.compose.ui.unit.dp
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
 private val morningOptions = listOf(
-    "full"   to "Akku voll – ich starte mit voller Kraft.",
-    "medium" to "Solides Mittelfeld.",
-    "low"    to "Im Energiesparmodus.",
-    "empty"  to "Komplett leer – ich brauche Ruhe.",
+    "full"   to "⚡ Voller Akku – Klarer Kopf, erholt und bereit für alles.",
+    "medium" to "🔋 Solide Basis – Ganz okay, bereit anzufangen (aber erst mal einen Kaffee).",
+    "low"    to "🪫 Im Schonmodus – Schwerfällig, Akku recht niedrig, ich gehe es langsam an.",
+    "empty"  to "🚨 Komplett leer – Ausgelaugt, jede Bewegung kostet Kraft, brauche dringend Pausen.",
 )
 
 private val eveningOptions = listOf(
-    "full"   to "Akku noch voll – ein produktiver Tag.",
-    "medium" to "Solides Mittelfeld.",
-    "low"    to "Im Energiesparmodus.",
-    "empty"  to "Komplett leer – ich brauche dringend Erholung.",
+    "satisfied_tired" to "🌙 Zufrieden erschöpft – Angenehm müde nach einem produktiven oder ereignisreichen Tag.",
+    "wired"           to "🔌 Unter Strom – Körperlich müde, aber mein Geist rattert noch und steht unter Spannung.",
+    "low"             to "🪫 Im roten Bereich – Sehr geringe Restenergie, der Tag war anstrengend und kräftezehrend.",
+    "empty"           to "🚨 Völlig ausgebrannt – Absolut leer, ich sehne mich nur noch nach Schlaf, Dunkelheit und Ruhe.",
 )
 
 @Composable

@@ -7,37 +7,60 @@
 
 ---
 
-## Projektstand (Mai 2026)
+## 🎯 Aktuelle Prioritäten (Offene Aufgaben für den Release)
 
-| Bereich | Status | Details |
-|---------|--------|---------|
-| Konzept & Inhalte | ✅ Fertig | `App_Inhalte.md`, `TechStack.md`, `Konzept_UX.md` |
-| Sprüche-Pool | ✅ Fertig | 432 Sprüche (S001–S432) in `sprueche.json` — alle kritischen Tags ausgebaut |
-| Design-System Handoff | ✅ Fertig | `handoff/` komplett mit allen Kotlin-Theme-Dateien |
-| Phase 1: Projekt-Setup | ✅ Fertig | Projekt ✅, Package ✅, Dependencies ✅, Permissions ✅, Firebase ✅, RevenueCat ✅ |
-| Phase 2: Design-System einbinden | ✅ Fertig | Alle Theme-Dateien eingebunden, `MainActivity.kt` verdrahtet, RevenueCat-Key in BuildConfig |
-| Phase 3: Authentication & Onboarding | ✅ Fertig | `model/User.kt`, `AuthRepository.kt`, `AuthViewModel.kt`, `LoginScreen.kt`, `RegisterScreen.kt`, `OnboardingScreen.kt` |
-| Phase 4: Navigation & App Shell | ✅ Fertig | `Screen.kt`, `NavGraph.kt`, `BottomNavBar.kt`, `AppScaffold.kt` |
-| Phase 5: Kern-Feature — Tageseintrag | ✅ Fertig | `Entry.kt`, `EntryRepository.kt`, `EntryViewModel.kt`, `HeuteViewModel.kt`, alle Section-Komponenten, `EntryScreen.kt`, `HeuteScreen.kt`, `guided_questions.json` |
-| Phase 6: Spruch-Logik & Favoriten | ✅ Fertig | `Quote.kt`, `QuoteLoader.kt`, `QuoteRepository.kt`, `QuoteViewModel.kt`, `QuoteScreen.kt` |
-| Phase 7: Push-Benachrichtigungen | ✅ Fertig | `AchtsameMessagingService.kt`, `NotificationRepository.kt`, `NotificationSettingsScreen.kt` |
-| Phase 8: Rotierende Fragen & Rückblicke | ✅ Fertig | `ReviewRepository.kt`, `WeeklyReviewScreen.kt`, `MonthlyReviewScreen.kt` |
-| Phase 9: Tagebuch-Historie & Suche | ✅ Fertig | `HistoryRepository.kt`, `HistoryViewModel.kt`, `TagebuchScreen.kt`, `EntryDetailScreen.kt`, `EntryListItem.kt`, `TagFilterChips.kt` |
-| Phase 10: Statistiken | ✅ Fertig | `StatsRepository.kt`, `StatsViewModel.kt`, `StatistikScreen.kt`, `StreakCard.kt`, `MoodBarChart.kt`, `GratitudePieChart.kt` |
-| Phase 11: Account & Datenschutz | ✅ Fertig | `ProfilScreen.kt`, `ProfilViewModel.kt`, `FavoritesScreen.kt`, `FavoritesViewModel.kt`, `FavoriteQuote.kt` |
-| Phase 12: Monetarisierung | ✅ Fertig | `AchtsamkeitApp.kt`, `PremiumRepository.kt`, `PaywallCard.kt`, Feature-Gating in Statistik, Monatsrückblick, ThemePicker |
-| Phase 13: Polish & Release | ✅ Fertig (Code) | Splash Screen, Shimmer, ProGuard/R8, Accessibility — manuelle Schritte: App-Icon, interner Testlauf, Play Store Release |
-| Phase 14: Bugfixes & Verbesserungen | ✅ Fertig (Code) | Alle Code-Aufgaben erledigt. Noch manuell: Firestore Composite Indexes in Firebase Console anlegen |
-| Phase 15: UX-Überarbeitung & Sprach-Umbenennung | ✅ Fertig | Morgenroutine/Abendroutine, Formulare differenziert, Guided Questions ×15, Validierung, Streak-Freeze, Notifications, deriveTags |
-| Sprüche-Pool | ✅ Fertig | 432 Sprüche — alle kritischen Tags auf 20+ erhöht, Trauer/Traurigkeit-Fix, Angst bei Stress |
+> [!WARNING]
+> **Vor Veröffentlichung:** Diese Aufgaben müssen zwingend vor dem Play Store Release abgeschlossen werden!
+
+### 🛠 Infrastruktur & Rechtliches
+- [ ] **Impressum & DSGVO:** Platzhalter-Steuernummer `123 456 789 0` in `ImpressumScreen.kt` durch echte Steuernummer ersetzen. Vollständige Pflichtangaben nach § 5 TMG ergänzen.
+- [ ] **Datenschutzerklärung:** Finalisieren und in der App sowie in der Play Console verlinken.
+- [ ] **Firestore Composite Indexes:** In der Firebase Console anlegen für alle Compound-Queries (z.B. `type + created_at`, `tags + created_at`). Verhindert stumme Abstürze bei Filterungen in der Tagebuch-Historie.
+
+### 🎨 Design Polish
+- [ ] **App-Icon:** 512×512 px PNG entwerfen und via Android Studio (New → Image Asset → Adaptive Icon) als Foreground/Background anlegen.
+
+### 🧪 Testlauf & Play Store Release
+- [ ] **Interner Testlauf:** Mindestens 7 Tage echte Nutzung auf dem eigenen Gerät (Streak, Spruch-Cooldown, Rückblick-Unlock testen).
+- [ ] **Play Store Vorbereitung:**
+  - [ ] Release APK/AAB signieren (Keystore erstellen + sicher aufbewahren — bei Verlust kein Update mehr möglich!).
+  - [ ] Screenshots (Pflicht: mind. 2 Phone-Screenshots), Kurz- und Langbeschreibung auf Deutsch.
+  - [ ] Release Track: **Intern → Geschlossen (Beta) → Produktion**.
 
 ---
 
-## Sprüchezähler
+## 🚀 Backlog & Zukünftige Features (Nach MVP)
+
+> Ideen und Erweiterungen für Version 1.1 und später.
+
+- [ ] **Premium:** Favoriten-Liste ohne Limit (Aktuell noch fehlend aus Phase 12).
+- [ ] **Jahresrückblick:** Vollständiger Jahresrückblick mit tiefen Reflexionsfragen (geplant für Dezember).
+- [ ] **Monatsrückblick ausbauen:** Mehr Visualisierungen (Mood-Verlauf, Streak-Jahreskalender) direkt im Monatsrückblick.
+- [ ] **Weitere Anpassungsmöglichkeiten:** Eigene Akzentfarbe wählen (über die 4 Paletten hinaus), Kartenreihenfolge auf dem Heute-Tab frei verschieben.
+- [ ] **Weitere Statistiken:** Wochentag-Analyse (an welchen Tagen bin ich am ausgeglichensten?), Energie-Trend, Selbstfürsorge-Häufigkeit, Export als PDF/CSV.
+- [ ] **Sprüche-Pool erweitern:** Neue Sprüche zu bestehenden Tags (insb. Ausgeglichenheit, Selbstfürsorge, Energie), Sprüche auf Englisch als Option.
+- [ ] **Daumen-runter für Sprüche:** Sprüche, die man nicht mag, dauerhaft ausblenden (Firestore: `disliked/{quoteId}`).
+- [ ] **Profilbild-Ausschnitt anpassen:** Nach dem Upload den Bildausschnitt (Crop) frei wählen statt fest auf Kreismitte.
+- [ ] **Neue rotierende Fragen:** Fragen-Pool auf 30+ Morning / 30+ Evening erhöhen, optionale Themenpakete (z. B. „Selbstfürsorge-Woche").
+- [ ] **Widget:** Android-Home-Screen-Widget mit Streak und Tagesspruch.
+
+---
+
+## 📊 Projektstand & Metriken (Mai 2026)
+
+| Bereich | Status | Details |
+|---------|--------|---------|
+| 1. Konzept, Design & Setup | ✅ Fertig | UX-Konzept, Handoff, Projekt-Infrastruktur, Firebase, RevenueCat |
+| 2. Kern-Features (Tagebuch) | ✅ Fertig | Morgen-/Abendroutine, Historie, Spruch-Logik (432 Sprüche) |
+| 3. User Engagement | ✅ Fertig | Push-Notifications (lokal), Statistiken, Weekly/Monthly Reviews |
+| 4. Polish, Fixes & Premium | ✅ Fertig | Offline-Support, RevenueCat Paywall, Account-Löschung, Export |
+| **5. Release-Vorbereitung** | ⏳ In Arbeit | App-Icon, Firestore Indizes, Store-Metadaten, Testing |
+| **6. Fragensammlung & Statistik-Redesign** | ✅ Fertig | Neue Mood/Energy/Gratitude/SelfCare-Keys, 30+30 Leitfragen, Multi-Key-Charts |
+
+### 📝 Sprüchezähler
 
 > Zählt wie viele Sprüche es pro Tag in `sprueche.json` gibt. Zeigt, wo dringend neue Sprüche hinzugefügt werden müssen.
-
-**Gesamt: 360 Sprüche (S001–S360)**
+> **Gesamt: 432 Sprüche (S001–S432)**
 
 | Tag | Anzahl | In `deriveTags` genutzt? | Bewertung |
 |-----|--------|--------------------------|-----------|
@@ -47,12 +70,12 @@
 | Freude | 63 | ✅ (`mood = "joy"`) | ✅ Gut |
 | Angst | 60 | ❌ (nicht in `deriveTags`) | ℹ️ Wird nie gezielt ausgespielt |
 | Freundschaft | 60 | ❌ (nicht in `deriveTags`) | ℹ️ Wird nie gezielt ausgespielt |
-| Trauer | 30 | ❌ (nicht in `deriveTags`) | ⚠️ Verwechslungsgefahr mit „Traurigkeit"! |
-| Stress | 20 | ✅ (`mood = "stress"`, `energy = "empty"`) | ⚠️ Wenig — Stress ist häufiger Zustand |
-| Ausgeglichenheit | 3 | ✅ (`mood = "balance"`) | 🔴 Kritisch — nur 3 Sprüche! |
-| Traurigkeit | 3 | ✅ (`mood = "sadness"`) | 🔴 Kritisch — nur 3 Sprüche! |
-| Selbstfürsorge | 3 | ✅ (`breathing`/`outside` Self-Care) | 🔴 Kritisch — nur 3 Sprüche! |
-| Energie | 2 | ✅ (`energy = "full"`) | 🔴 Kritisch — nur 2 Sprüche! |
+| Stress | 41 | ✅ (`mood = "stress"`, `energy = "empty"`) | ✅ Ausgebaut |
+| Trauer | 30 | ❌ (nicht in `deriveTags`) | ⚠️ Verwechslungsgefahr mit „Traurigkeit"! (Behoben) |
+| Ausgeglichenheit | 30 | ✅ (`mood = "balance"`) | ✅ Ausgebaut |
+| Selbstfürsorge | 28 | ✅ (`breathing`/`outside` Self-Care) | ✅ Ausgebaut |
+| Energie | 20 | ✅ (`energy = "full"`) | ✅ Ausgebaut |
+| Traurigkeit | 3 | ✅ (`mood = "sadness"`) | 🔴 Kritisch — nur 3 Sprüche! (Workaround aktiv) |
 | Motivation | 1 | ❌ (nicht in `deriveTags`) | ⚠️ Fast nicht vorhanden |
 
 ### Was zu tun ist
@@ -64,12 +87,7 @@
 
 ---
 
-## MVP
-
-> [!WARNING]
-> **Vor Veröffentlichung:** Das Impressum (`ImpressumScreen.kt`) enthält noch die Platzhalter-Steuernummer `123 456 789 0`. Die echte Steuernummer sowie alle Pflichtangaben gemäß § 5 TMG müssen vor dem Store-Release eingetragen werden.
-
----
+## 🗄️ Archiv: Detaillierte Implementierungs-Phasen (Abgeschlossen)
 
 ## Phase 1: Projekt-Setup & Abhängigkeiten
 
@@ -1122,7 +1140,7 @@ Premium-Features (Vorschlag):
 - [x] Statistiken über 30 Tage hinaus
 - [x] Monatsrückblick freischalten
 - [x] Alle 3 Varianten (Velvet + Aura) freischalten (Hain ist immer kostenlos)
-- [ ] Favoriten-Liste ohne Limit
+- [x] Favoriten-Liste ohne Limit *(Verschoben in Backlog)*
 
 ### Verifizierung Phase 12
 Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück. Premium-Features sichtbar.
@@ -1131,7 +1149,7 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 
 ## Phase 13: Polish & Release
 
-- [ ] **App-Icon:** 512×512 px PNG in Android Studio → New → Image Asset → Adaptive Icon anlegen (Foreground + Background getrennt)
+- [x] **App-Icon:** *(Verschoben in Aktuelle Prioritäten)*
 - [x] **Splash Screen:** `androidx.core:core-splashscreen:1.0.1` — `Theme.SplashScreen` in themes.xml, `installSplashScreen()` in MainActivity, Hintergrundfarbe `#EEF1ED`
 - [x] **Ladezeiten überbrücken:** `ShimmerBox`, `ShimmerListItem`, `ShimmerCard` in `ui/components/Shimmer.kt` — angewendet in TagebuchScreen, FavoritesScreen, StatistikScreen
 - [x] **Accessibility:** Alle `contentDescription`-Werte geprüft — alle Icons korrekt beschriftet oder bewusst `null` (dekorativ neben Textlabels)
@@ -1155,21 +1173,11 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 
 ### Verbesserungen & Hinweise
 
-- [ ] **Firestore Composite Indexes** — In der Firebase Console Composite Indexes anlegen für alle Compound-Queries (z.B. `type + created_at`, `tags + created_at`). Aktuell werden Fehler stumm via `runCatching` abgefangen.
+- [x] **Firestore Composite Indexes** — *(Verschoben in Aktuelle Prioritäten)*
 - [x] **Fehlerlogging verbessern** — `onFailure { Log.e(...) }` vor allen `getOrDefault`-Aufrufen in ViewModels ergänzt (HeuteViewModel, HistoryViewModel, FavoritesViewModel, ProfilViewModel).
 - [x] **Zeitzonen-Absicherung** — Verifiziert: `System.currentTimeMillis()` ist UTC-Epoch (immer korrekt), `date_str` = `LocalDate.now()` (lokale Zeitzone), alle Boundary-Checks mit `ZoneId.systemDefault()`. Kein Handlungsbedarf.
 - [x] **Paywall-Timing optimieren** — Verifiziert: StatistikScreen zeigt PaywallCard erst wenn 90-Tage-Chip geklickt, MonthlyReviewScreen nur nach Navigation via HeuteScreen-Button, ThemePicker zeigt AlertDialog nur bei Klick auf gesperrten Stil. Kein App-Start-Paywall.
 - [x] **Datenmigration-Fallbacks sicherstellen** — `Entry.kt` hat Kotlin-Defaults für alle Felder, `toEntry()` nutzt `?: ""` / `?: emptyList()` überall. `ensureUserDocument()` initialisiert jetzt auch `current_streak`, `last_entry_date`, `streak_freeze_used_month` mit sicheren Defaults.
-
-## Endphase: Test & Release
-- [ ] **Interner Testlauf:** Mindestens 7 Tage echte Nutzung auf dem eigenen Gerät. Streak, Spruch-Cooldown, Rückblick-Unlock testen.
-- [ ] **Play Store:**
-  1. [ ] Release APK/AAB signieren (Keystore erstellen + sicher aufbewahren — bei Verlust kein Update mehr möglich!)
-  2. [ ] Screenshots (Pflicht: mind. 2 Phone-Screenshots), Kurz- und Langbeschreibung auf Deutsch
-  3. [ ] Datenschutzerklärung verfeinern
-  4. [ ] Release Track: **Intern → Geschlossen (Beta) → Produktion**
-
----
 
 ## Phase 15: UX-Überarbeitung & Sprach-Umbenennung
 
@@ -1181,7 +1189,7 @@ Mit internem Test-Account Abo abschließen → `isPremium()` gibt `true` zurück
 - Morgen-Eintrag = **Morgenroutine** (Achtsamkeit, Intention, Ankommen im Tag)
 - Abend-Eintrag = **Abendroutine** (Dankbarkeit, Rückblick, Loslassen)
 
-#### Änderungen in `EntryScreen.kt` + Section-Komponenten
+#### Priorität 2 - Änderungen in `EntryScreen.kt` + Section-Komponenten
 
 | Section | Morgenroutine | Abendroutine |
 |---------|--------------|--------------|
@@ -1287,16 +1295,47 @@ Alle sichtbaren UI-Texte umstellen. **Technische Werte** (`type = "morning"` / `
 
 ---
 
-## Zukünftige Features
+## Phase 16: Fragensammlung & Statistik-Redesign
 
-> Ideen und Erweiterungen für nach dem MVP-Release.
+Vollständige Überarbeitung der Morgen- und Abendroutine-Formulare sowie der Statistik-Charts auf Basis von `fragensammlung.md`.
 
-- [ ] **Jahresrückblick** — Vollständiger Jahresrückblick mit tiefen Reflexionsfragen (aktuell: „Coming soon"-Platzhalter im Dezember verfügbar)
-- [ ] **Monatsrückblick ausbauen** — Mehr Visualisierungen (Mood-Verlauf, Streak-Jahreskalender) direkt im Monatsrückblick
-- [ ] **Weitere Anpassungsmöglichkeiten** — Eigene Akzentfarbe wählen (über die 4 Paletten hinaus), Kartenreihenfolge auf dem Heute-Tab frei verschieben
-- [ ] **Weitere Statistiken** — Wochentag-Analyse (an welchen Tagen bin ich am ausgeglichensten?), Energie-Trend, Selbstfürsorge-Häufigkeit, Export als PDF/CSV
-- [ ] **Sprüche-Pool erweitern** — Neue Sprüche zu bestehenden Tags (insb. Ausgeglichenheit, Selbstfürsorge, Energie), Sprüche auf Englisch als Option
-- [ ] **Daumen-runter für Sprüche** — Sprüche, die man nicht mag, dauerhaft ausblenden (Firestore: `disliked/{quoteId}`)
-- [ ] **Profilbild-Ausschnitt anpassen** — Nach dem Upload den Bildausschnitt (Crop) frei wählen statt fest auf Kreismitte
-- [ ] **Neue rotierende Fragen** — Fragen-Pool auf 30+ Morning / 30+ Evening erhöhen, optionale Themenpakete (z. B. „Selbstfürsorge-Woche")
-- [ ] **Widget** — Android-Home-Screen-Widget mit Streak und Tagesspruch
+### Ziele
+- Klare inhaltliche Trennung von Morgen- und Abendroutine auf Antwort-Ebene
+- Emotionale Tiefe & Ehrlichkeit (inkl. "negativer" Optionen ohne toxische Positivität)
+- Erweiterte Statistiken durch Multi-Key-Aggregierung in den Charts
+
+### Neue Stimmungs-Keys (MoodSection.kt)
+- [x] **Morgen:** `excitement`, `peace`, `tiredness`, `anxiety`, `melancholy`
+- [x] **Abend:** `satisfaction`, `relief`, `exhaustion`, `overwhelmed`, `loneliness`
+- [x] Rückwärtskompatibilität: Alte Keys (`joy`, `stress`, `balance`, `sadness`) bleiben in `deriveTags` und Charts unterstützt
+
+### Neue Energie-Keys (EnergySection.kt)
+- [x] **Morgen:** `full`, `medium`, `low`, `empty` — neue beschreibende Labels mit Emojis
+- [x] **Abend:** `satisfied_tired`, `wired`, `low`, `empty` — zwei neue abendspezifische Keys
+
+### Neue Dankbarkeits-Keys (GratitudeSection.kt)
+- [x] **Morgen (7 Optionen):** `relations`, `comfort`, `health`, `nature`, `opportunity`, `self_compassion`, `struggled`
+- [x] **Abend (7 Optionen):** `encounter`, `micro_joys`, `achievement`, `learning`, `comfort_received`, `connection`, `none`
+- [x] Rückwärtskompatibilität: Alte Keys (`people`, `body`, `pleasure`) in Charts weiter unterstützt
+
+### Neue Selbstfürsorge-Keys (SelfCareSection.kt)
+- [x] **Morgen (7 Intentionen):** `physical`, `boundaries`, `digital_detox`, `soul`, `stillness`, `compassion`, `no_energy`
+- [x] **Abend (7 Aktionen):** `needs_met`, `boundaries_kept`, `unplugged`, `joyful_moment`, `release`, `forgiveness`, `neglected`
+
+### Achtsamkeits-Sektion (MindfulnessSection.kt)
+- [x] Neue emotionalere Labels für alle Optionen (Morgen & Abend)
+- [x] Neue Abend-Option `autopilot` beim Fokus-Feld: *„Der Tag ist wie ein Film an mir vorbeigezogen."*
+
+### deriveTags erweitert (EntryRepository.kt)
+- [x] Alle neuen Mood-Keys → korrekte Tag-Zuweisung
+- [x] Neue Gratitude/SelfCare-Keys → Dankbarkeit & Selbstfürsorge-Tags
+- [x] `struggled`, `none`, `neglected`, `no_energy` → Tags `"Trost"`, `"Selbstfürsorge"`, `"Traurigkeit"` (mitfühlende Sprüche an schweren Tagen)
+
+### Statistik-Charts neu (Multi-Key-Aggregierung)
+- [x] **MoodBarChart.kt:** 4 Gruppen (Positiv / Neutral / Herausfordernd / Schwer) — jede Gruppe fasst mehrere Keys zusammen
+- [x] **EnergyBarChart.kt:** 4 Gruppen (Voll / Mittel / Niedrig / Leer) — `satisfied_tired` → Voll, `wired` → Mittel
+- [x] **GratitudePieChart.kt:** 7 Dankbarkeits-Säulen (Beziehungen / Körper / Erfolg / Natur / Genuss / Selbstfürsorge / Schwere Tage)
+
+### Guided Questions (guided_questions.json)
+- [x] Morgen-Fragen: 15 → **30** tiefgründige Impulsfragen (Fokus: Ausrichtung, innere Stärken, Selbstmitgefühl)
+- [x] Abend-Fragen: 15 → **30** tiefgründige Impulsfragen (Fokus: Reflexion, Loslassen, Verarbeitung)
