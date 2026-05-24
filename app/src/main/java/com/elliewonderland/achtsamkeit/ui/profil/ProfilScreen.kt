@@ -1,10 +1,14 @@
 package com.elliewonderland.achtsamkeit.ui.profil
 
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,6 +39,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -44,10 +50,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -68,9 +80,16 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
 
     val userId = Firebase.auth.currentUser?.uid ?: ""
 
+    var pendingImageUri by remember { mutableStateOf<Uri?>(null) }
+    var showCropDialog by remember { mutableStateOf(false) }
+    var showPhotoOptionsDialog by remember { mutableStateOf(false) }
+
     val photoLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri -> uri?.let { vm.uploadProfilePhoto(userId, it, context) } },
+        onResult = { uri -> uri?.let { 
+            pendingImageUri = it
+            showCropDialog = true
+        } },
     )
 
     LaunchedEffect(userId) {
@@ -106,34 +125,44 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
                 modifier = Modifier
                     .size(80.dp)
                     .clickable {
-                        photoLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
+                        if (uiState.photoUrl.isNotBlank()) {
+                            showPhotoOptionsDialog = true
+                        } else {
+                            photoLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }
                     },
                 contentAlignment = Alignment.BottomEnd,
             ) {
                 if (uiState.photoUrl.isNotBlank()) {
-                    AsyncImage(
-                        model              = uiState.photoUrl,
-                        contentDescription = "Profilbild",
-                        contentScale       = ContentScale.Crop,
-                        modifier           = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape),
-                    )
-                } else {
                     Box(
-                        modifier         = Modifier
+                        modifier = Modifier
                             .size(80.dp)
-                            .background(AppTheme.colors.accent, CircleShape),
-                        contentAlignment = Alignment.Center,
+                            .clip(CircleShape)
                     ) {
-                        Text(
-                            text  = uiState.displayName.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
-                            style = MaterialTheme.typography.headlineMedium,
-                            color = AppTheme.colors.onAccent,
+                        AsyncImage(
+                            model              = uiState.photoUrl,
+                            contentDescription = "Profilbild",
+                            contentScale       = ContentScale.Crop,
+                            modifier           = Modifier
+                                .fillMaxSize()
+                                .graphicsLayer(
+                                    scaleX       = uiState.photoScale,
+                                    scaleY       = uiState.photoScale,
+                                    translationX = uiState.photoOffsetX,
+                                    translationY = uiState.photoOffsetY
+                                ),
                         )
                     }
+                } else {
+                    Image(
+                        painter            = painterResource(id = com.elliewonderland.achtsamkeit.R.drawable.logo_round),
+                        contentDescription = "App-Logo",
+                        modifier           = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                    )
                 }
                 Box(
                     modifier         = Modifier
@@ -318,6 +347,144 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
             dismissButton = {
                 TextButton(onClick = { vm.hideExportDialog() }) { Text("Abbrechen") }
             },
+        )
+    }
+
+    // ── Photo Options Dialog ────────────────────────────────────────────────
+    if (showPhotoOptionsDialog) {
+        AlertDialog(
+            onDismissRequest = { showPhotoOptionsDialog = false },
+            title = { Text("Profilbild anpassen", style = MaterialTheme.typography.titleMedium) },
+            text = {
+                Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(
+                        onClick = {
+                            showPhotoOptionsDialog = false
+                            photoLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.ink)
+                    ) {
+                        Text("Neues Foto auswählen")
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            showPhotoOptionsDialog = false
+                            pendingImageUri = null // adjusting current photo
+                            showCropDialog = true
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.ink)
+                    ) {
+                        Text("Foto-Ausschnitt anpassen")
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            showPhotoOptionsDialog = false
+                            vm.deleteProfilePhoto(userId)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                    ) {
+                        Text("Foto löschen")
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(onClick = { showPhotoOptionsDialog = false }) { Text("Abbrechen") }
+            }
+        )
+    }
+
+    // ── Crop & Adjustment Dialog ────────────────────────────────────────────
+    if (showCropDialog) {
+        val cropImageModel = pendingImageUri ?: uiState.photoUrl
+        
+        var scale by remember { mutableStateOf(if (pendingImageUri == null) uiState.photoScale else 1.0f) }
+        var offset by remember { mutableStateOf(if (pendingImageUri == null) Offset(uiState.photoOffsetX, uiState.photoOffsetY) else Offset.Zero) }
+
+        AlertDialog(
+            onDismissRequest = { showCropDialog = false },
+            title = { Text("Ausschnitt anpassen", style = MaterialTheme.typography.titleMedium) },
+            text = {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        "Bewege das Bild mit einem Finger und zoome es mit zwei Fingern oder dem Regler.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = AppTheme.colors.inkSoft,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    
+                    Box(
+                        modifier = Modifier
+                            .size(200.dp)
+                            .clip(CircleShape)
+                            .background(AppTheme.colors.surfaceAlt)
+                            .border(2.dp, AppTheme.colors.accent, CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        AsyncImage(
+                            model = cropImageModel,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .pointerInput(Unit) {
+                                    detectTransformGestures { _, pan, zoom, _ ->
+                                        scale = (scale * zoom).coerceIn(1.0f, 4.0f)
+                                        offset = offset + pan
+                                    }
+                                }
+                                .graphicsLayer(
+                                    scaleX = scale,
+                                    scaleY = scale,
+                                    translationX = offset.x,
+                                    translationY = offset.y
+                                )
+                        )
+                    }
+                    
+                    Spacer(Modifier.height(16.dp))
+                    
+                    Text("Zoom", style = MaterialTheme.typography.labelSmall, color = AppTheme.colors.inkSoft)
+                    Slider(
+                        value = scale,
+                        onValueChange = { scale = it },
+                        valueRange = 1.0f..4.0f,
+                        colors = SliderDefaults.colors(
+                            thumbColor = AppTheme.colors.accent,
+                            activeTrackColor = AppTheme.colors.accent
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showCropDialog = false
+                        if (pendingImageUri != null) {
+                            vm.uploadProfilePhoto(userId, pendingImageUri!!, context, scale, offset.x, offset.y)
+                        } else {
+                            vm.savePhotoCropParams(userId, scale, offset.x, offset.y)
+                        }
+                    }
+                ) {
+                    Text("Speichern", color = AppTheme.colors.accent)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showCropDialog = false }) {
+                    Text("Abbrechen", color = AppTheme.colors.inkSoft)
+                }
+            }
         )
     }
 }
