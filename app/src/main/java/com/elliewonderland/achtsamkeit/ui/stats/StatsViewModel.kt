@@ -3,6 +3,7 @@ package com.elliewonderland.achtsamkeit.ui.stats
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elliewonderland.achtsamkeit.data.repository.StatsRepository
+import com.elliewonderland.achtsamkeit.model.Entry
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,9 +14,14 @@ import kotlinx.coroutines.launch
 
 data class StatsUiState(
     val days: Int = 30,
+    val entries: List<Entry> = emptyList(),
     val moodDistribution: Map<String, Int> = emptyMap(),
     val gratitudeDistribution: Map<String, Int> = emptyMap(),
     val energyDistribution: Map<String, Int> = emptyMap(),
+    val selfCareDistribution: Map<String, Int> = emptyMap(),
+    val focusDistribution: Map<String, Int> = emptyMap(),
+    val pauseDistribution: Map<String, Int> = emptyMap(),
+    val avgDayRating: Double = 0.0,
     val isLoading: Boolean = false,
 )
 
@@ -37,17 +43,46 @@ class StatsViewModel : ViewModel() {
         val days = _state.value.days
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            val moodDist   = repo.getMoodDistribution(uid, days)
-            val gratDist   = repo.getGratitudeDistribution(uid, days)
-            val energyDist = repo.getEnergyDistribution(uid, days)
+            val entries = repo.getEntries(uid, days)
+            
+            val moodDist = entries.groupingBy { it.mood }.eachCount().filter { it.key.isNotEmpty() }
+            
+            val gratDist = mutableMapOf<String, Int>()
+            entries.forEach { entry ->
+                entry.gratitudeAreas.forEach { area ->
+                    gratDist[area] = (gratDist[area] ?: 0) + 1
+                }
+            }
+            
+            val energyDist = entries.groupingBy { it.energyLevel }.eachCount().filter { it.key.isNotEmpty() }
+            
+            val selfCareDist = mutableMapOf<String, Int>()
+            entries.forEach { entry ->
+                entry.selfCare.forEach { action ->
+                    selfCareDist[action] = (selfCareDist[action] ?: 0) + 1
+                }
+            }
+            
+            val focusDist = entries.map { it.mindfulnessFocus }.filter { it.isNotEmpty() }.groupingBy { it }.eachCount()
+            val pauseDist = entries.map { it.mindfulnessPause }.filter { it.isNotEmpty() }.groupingBy { it }.eachCount()
+            
+            val ratings = entries.filter { it.dayRating > 0 }.map { it.dayRating }
+            val avgRating = if (ratings.isEmpty()) 0.0 else ratings.average()
+
             _state.update {
                 it.copy(
+                    entries               = entries,
                     moodDistribution      = moodDist,
                     gratitudeDistribution = gratDist,
                     energyDistribution    = energyDist,
+                    selfCareDistribution  = selfCareDist,
+                    focusDistribution     = focusDist,
+                    pauseDistribution     = pauseDist,
+                    avgDayRating          = avgRating,
                     isLoading             = false,
                 )
             }
         }
     }
 }
+

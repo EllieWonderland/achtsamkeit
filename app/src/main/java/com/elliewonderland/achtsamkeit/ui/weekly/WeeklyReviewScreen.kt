@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.elliewonderland.achtsamkeit.data.repository.ReviewRepository
+import com.elliewonderland.achtsamkeit.ui.navigation.Screen
 import com.elliewonderland.achtsamkeit.ui.entry.components.SectionCard
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.google.firebase.Firebase
@@ -137,7 +138,9 @@ fun WeeklyReviewScreen(navController: NavController) {
                         runCatching { repo.saveReview(uid, "weekly_review", pairs) }
                             .onSuccess {
                                 snackbar.showSnackbar("Wochenrückblick gespeichert!")
-                                navController.popBackStack()
+                                navController.navigate(Screen.Tagebuch.route) {
+                                    popUpTo(Screen.Heute.route) { inclusive = false }
+                                }
                             }
                             .onFailure {
                                 snackbar.showSnackbar("Fehler beim Speichern.")

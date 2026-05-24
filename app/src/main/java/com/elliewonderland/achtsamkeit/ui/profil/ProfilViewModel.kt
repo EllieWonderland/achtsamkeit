@@ -33,6 +33,9 @@ data class ProfilUiState(
     val displayName: String = "",
     val email: String = "",
     val photoUrl: String = "",
+    val photoScale: Float = 1.0f,
+    val photoOffsetX: Float = 0.0f,
+    val photoOffsetY: Float = 0.0f,
     val isLoading: Boolean = false,
     val showDeleteDialog: Boolean = false,
     val showResetDialog: Boolean = false,
@@ -60,16 +63,20 @@ class ProfilViewModel(app: Application) : AndroidViewModel(app) {
                 .onFailure { Log.e("ProfilViewModel", "getUserDisplayName failed", it) }
                 .getOrDefault("")
             val photoUrl = runCatching { authRepo.getUserPhotoUrl(userId) }.getOrDefault("")
+            val crop = runCatching { authRepo.getPhotoCropParams(userId) }.getOrDefault(Triple(1f, 0f, 0f))
             _uiState.value = _uiState.value.copy(
-                displayName = name,
-                nameInput   = name,
-                email       = authRepo.getUserEmail(),
-                photoUrl    = photoUrl,
+                displayName  = name,
+                nameInput    = name,
+                email        = authRepo.getUserEmail(),
+                photoUrl     = photoUrl,
+                photoScale   = crop.first,
+                photoOffsetX = crop.second,
+                photoOffsetY = crop.third,
             )
         }
     }
 
-    fun uploadProfilePhoto(userId: String, imageUri: Uri, context: Context) {
+    fun uploadProfilePhoto(userId: String, imageUri: Uri, context: Context, scale: Float, offsetX: Float, offsetY: Float) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             runCatching {
@@ -83,8 +90,17 @@ class ProfilViewModel(app: Application) : AndroidViewModel(app) {
                 }
             }.fold(
                 onSuccess = { url ->
-                    runCatching { authRepo.updatePhotoUrl(userId, url) }
-                    _uiState.value = _uiState.value.copy(isLoading = false, photoUrl = url)
+                    runCatching { 
+                        authRepo.updatePhotoUrl(userId, url)
+                        authRepo.updatePhotoCropParams(userId, scale, offsetX, offsetY)
+                    }
+                    _uiState.value = _uiState.value.copy(
+                        isLoading    = false,
+                        photoUrl     = url,
+                        photoScale   = scale,
+                        photoOffsetX = offsetX,
+                        photoOffsetY = offsetY,
+                    )
                 },
                 onFailure = { e ->
                     _uiState.value = _uiState.value.copy(
@@ -92,6 +108,56 @@ class ProfilViewModel(app: Application) : AndroidViewModel(app) {
                         errorMessage = e.message ?: "Foto konnte nicht hochgeladen werden.",
                     )
                 },
+            )
+        }
+    }
+
+    fun deleteProfilePhoto(userId: String) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            runCatching {
+                authRepo.updatePhotoUrl(userId, "")
+                authRepo.updatePhotoCropParams(userId, 1.0f, 0.0f, 0.0f)
+            }.fold(
+                onSuccess = {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading    = false,
+                        photoUrl     = "",
+                        photoScale   = 1.0f,
+                        photoOffsetX = 0.0f,
+                        photoOffsetY = 0.0f,
+                    )
+                },
+                onFailure = { e ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading    = false,
+                        errorMessage = e.message ?: "Foto konnte nicht gelöscht werden.",
+                    )
+                }
+            )
+        }
+    }
+
+    fun savePhotoCropParams(userId: String, scale: Float, offsetX: Float, offsetY: Float) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            runCatching {
+                authRepo.updatePhotoCropParams(userId, scale, offsetX, offsetY)
+            }.fold(
+                onSuccess = {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading    = false,
+                        photoScale   = scale,
+                        photoOffsetX = offsetX,
+                        photoOffsetY = offsetY,
+                    )
+                },
+                onFailure = { e ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading    = false,
+                        errorMessage = e.message ?: "Ausschnitt konnte nicht gespeichert werden.",
+                    )
+                }
             )
         }
     }

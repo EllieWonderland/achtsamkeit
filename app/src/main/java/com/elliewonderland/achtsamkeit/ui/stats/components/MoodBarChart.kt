@@ -10,40 +10,50 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
-import com.elliewonderland.achtsamkeit.ui.theme.MoodColors
+import com.elliewonderland.achtsamkeit.ui.theme.SerifItalic
 
 private data class MoodGroup(val keys: List<String>, val label: String, val color: Color)
 
-// Mehrere Keys pro Gruppe — alte und neue Stimmungs-Keys werden zusammengefasst
-private val moodGroups = listOf(
-    MoodGroup(listOf("joy", "excitement", "satisfaction", "relief"), "Positiv",       MoodColors.Joy),
-    MoodGroup(listOf("balance", "peace"),                            "Ausgegl.",       MoodColors.Calm),
-    MoodGroup(listOf("stress", "anxiety", "overwhelmed"),            "Herausf.",       MoodColors.Mist),
-    MoodGroup(listOf("sadness", "melancholy", "loneliness",
-                     "tiredness", "exhaustion"),                     "Schwer",         MoodColors.Soft),
-)
-
 @Composable
 fun MoodBarChart(distribution: Map<String, Int>) {
-    val groupCounts = moodGroups.map { group -> group.keys.sumOf { distribution[it] ?: 0 } }
-    val maxValue    = groupCounts.maxOrNull()?.coerceAtLeast(1) ?: 1
-    val hairColor   = AppTheme.colors.hair
-    val hasAnyData  = groupCounts.any { it > 0 }
+    val colors = AppTheme.colors
+    val moodGroups = remember(colors) {
+        listOf(
+            MoodGroup(listOf("joy", "excitement", "satisfaction", "relief"), "Freude",       colors.accent),
+            MoodGroup(listOf("balance", "peace"),                            "Balance",      colors.accent2),
+            MoodGroup(listOf("stress", "anxiety", "overwhelmed"),            "Anspannung",   colors.accent3),
+            MoodGroup(listOf("sadness", "melancholy", "loneliness",
+                             "tiredness", "exhaustion"),                     "Schwere",      colors.inkSoft.copy(alpha = 0.45f)),
+        )
+    }
+
+    val groupCounts = remember(distribution, moodGroups) {
+        moodGroups.map { group -> group.keys.sumOf { distribution[it] ?: 0 } }
+    }
+    val maxValue   = remember(groupCounts) { groupCounts.maxOrNull()?.coerceAtLeast(1) ?: 1 }
+    val hairColor  = colors.hair
+    val inkSoft    = colors.inkSoft
+    val hasAnyData = remember(groupCounts) { groupCounts.any { it > 0 } }
 
     if (!hasAnyData) {
         Text(
             text  = "Noch keine Einträge im gewählten Zeitraum.",
             style = MaterialTheme.typography.bodyMedium,
-            color = AppTheme.colors.inkSoft,
+            color = colors.inkSoft,
+            modifier = Modifier.padding(vertical = 12.dp)
         )
         return
     }
@@ -52,36 +62,52 @@ fun MoodBarChart(distribution: Map<String, Int>) {
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(160.dp)
+                .height(180.dp)
+                .padding(vertical = 10.dp)
         ) {
             val barCount    = moodGroups.size
             val slotWidth   = size.width / barCount
-            val barWidth    = slotWidth * 0.5f
+            val barWidth    = slotWidth * 0.45f
             val chartHeight = size.height
 
-            drawLine(
-                color       = hairColor,
-                start       = Offset(0f, chartHeight),
-                end         = Offset(size.width, chartHeight),
-                strokeWidth = 1.dp.toPx(),
-            )
+            // Elegant horizontal dotted/dashed gridlines at 0%, 50%, 100% of height
+            val gridLevels = listOf(0.0f, 0.5f, 1.0f)
+            gridLevels.forEach { ratio ->
+                val y = chartHeight * (1f - ratio)
+                drawLine(
+                    color       = hairColor,
+                    start       = Offset(0f, y),
+                    end         = Offset(size.width, y),
+                    strokeWidth = 1.dp.toPx(),
+                    pathEffect  = PathEffect.dashPathEffect(floatArrayOf(12f, 12f), 0f)
+                )
+            }
 
             moodGroups.forEachIndexed { i, group ->
                 val count     = groupCounts[i]
-                val barHeight = (count.toFloat() / maxValue) * chartHeight
-                val left      = i * slotWidth + (slotWidth - barWidth) / 2f
-                val top       = chartHeight - barHeight
+                if (count > 0) {
+                    val barHeight = (count.toFloat() / maxValue) * chartHeight
+                    val left      = i * slotWidth + (slotWidth - barWidth) / 2f
+                    val top       = chartHeight - barHeight
 
-                drawRoundRect(
-                    color        = group.color,
-                    topLeft      = Offset(left, top),
-                    size         = Size(barWidth, barHeight.coerceAtLeast(4.dp.toPx())),
-                    cornerRadius = CornerRadius(6.dp.toPx()),
-                )
+                    // Subtle premium vertical gradient brush
+                    val gradientBrush = Brush.verticalGradient(
+                        colors = listOf(group.color, group.color.copy(alpha = 0.55f)),
+                        startY = top,
+                        endY   = chartHeight
+                    )
+
+                    drawRoundRect(
+                        brush        = gradientBrush,
+                        topLeft      = Offset(left, top),
+                        size         = Size(barWidth, barHeight.coerceAtLeast(6.dp.toPx())),
+                        cornerRadius = CornerRadius(8.dp.toPx()),
+                    )
+                }
             }
         }
 
-        Spacer(Modifier.height(6.dp))
+        Spacer(Modifier.height(12.dp))
 
         Row(modifier = Modifier.fillMaxWidth()) {
             moodGroups.forEachIndexed { i, group ->
@@ -93,13 +119,14 @@ fun MoodBarChart(distribution: Map<String, Int>) {
                     Text(
                         text      = group.label,
                         style     = MaterialTheme.typography.labelSmall,
-                        color     = AppTheme.colors.inkSoft,
+                        color     = inkSoft,
                         textAlign = TextAlign.Center,
                     )
+                    Spacer(Modifier.height(2.dp))
                     Text(
                         text      = count.toString(),
-                        style     = MaterialTheme.typography.labelMedium,
-                        color     = AppTheme.colors.ink,
+                        style     = SerifItalic.copy(fontSize = 18.sp),
+                        color     = colors.ink,
                         textAlign = TextAlign.Center,
                     )
                 }
@@ -107,3 +134,4 @@ fun MoodBarChart(distribution: Map<String, Int>) {
         }
     }
 }
+

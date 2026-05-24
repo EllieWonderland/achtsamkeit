@@ -57,6 +57,22 @@ class AuthRepository {
             .update("photo_url", url).await()
     }
 
+    suspend fun getPhotoCropParams(userId: String): Triple<Float, Float, Float> {
+        val snap = db.collection("users").document(userId).get().await()
+        val scale = snap.getDouble("photo_scale")?.toFloat() ?: 1.0f
+        val x = snap.getDouble("photo_offset_x")?.toFloat() ?: 0.0f
+        val y = snap.getDouble("photo_offset_y")?.toFloat() ?: 0.0f
+        return Triple(scale, x, y)
+    }
+
+    suspend fun updatePhotoCropParams(userId: String, scale: Float, x: Float, y: Float) {
+        db.collection("users").document(userId).update(mapOf(
+            "photo_scale" to scale,
+            "photo_offset_x" to x,
+            "photo_offset_y" to y
+        )).await()
+    }
+
     suspend fun resetAllData(userId: String) {
         deleteSubcollection(userId, "entries")
         deleteSubcollection(userId, "quote_cooldowns")

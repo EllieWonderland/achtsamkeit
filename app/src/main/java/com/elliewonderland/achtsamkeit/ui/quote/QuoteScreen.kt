@@ -1,4 +1,4 @@
-﻿package com.elliewonderland.achtsamkeit.ui.quote
+package com.elliewonderland.achtsamkeit.ui.quote
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
@@ -68,7 +68,11 @@ fun QuoteScreen(navController: NavController, entryId: String) {
                 )
                 Spacer(Modifier.height(24.dp))
                 Button(
-                    onClick = { navController.popBackStack(Screen.Heute.route, false) },
+                    onClick = {
+                        navController.navigate(Screen.Tagebuch.route) {
+                            popUpTo(Screen.Heute.route) { inclusive = false }
+                        }
+                    },
                     colors  = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.accent),
                 ) {
                     Text("Weiter", color = AppTheme.colors.onAccent)
@@ -121,7 +125,11 @@ fun QuoteScreen(navController: NavController, entryId: String) {
                 }
                 Spacer(Modifier.height(48.dp))
                 Button(
-                    onClick  = { navController.popBackStack(Screen.Heute.route, false) },
+                    onClick  = {
+                        navController.navigate(Screen.Tagebuch.route) {
+                            popUpTo(Screen.Heute.route) { inclusive = false }
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     colors   = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.accent),
                 ) {

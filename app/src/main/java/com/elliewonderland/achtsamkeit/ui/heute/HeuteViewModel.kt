@@ -54,6 +54,9 @@ data class HeuteUiState(
     val quoteIsFavorite: Boolean = false,
     val userFirstName: String? = null,
     val photoUrl: String? = null,
+    val photoScale: Float = 1.0f,
+    val photoOffsetX: Float = 0.0f,
+    val photoOffsetY: Float = 0.0f,
 )
 
 class HeuteViewModel(app: Application) : AndroidViewModel(app) {
@@ -79,6 +82,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
             val prevMonthD     = async { runCatching { repo.getEntriesForMonth(userId, prevMonthDate.year, prevMonthDate.monthValue) }.getOrDefault(emptyList()) }
             val displayNameD   = async { runCatching { authRepo.getUserDisplayName(userId) }.getOrDefault("") }
             val photoUrlD      = async { runCatching { authRepo.getUserPhotoUrl(userId) }.getOrDefault("") }
+            val cropParamsD    = async { runCatching { authRepo.getPhotoCropParams(userId) }.getOrDefault(Triple(1.0f, 0.0f, 0.0f)) }
 
             val morningEntry = morningD.await()
             val eveningEntry = eveningD.await()
@@ -102,6 +106,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
             val monthEntries  = monthEntriesD.await()
             val prevMonthEntries = prevMonthD.await()
             val displayName   = displayNameD.await()
+            val cropParams    = cropParamsD.await()
 
             val daysInMonth = today.lengthOfMonth()
             val moodMonth = buildMoodMonth(monthEntries, daysInMonth)
@@ -136,6 +141,9 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
                 quoteIsFavorite     = isFav,
                 userFirstName       = firstName,
                 photoUrl            = photoUrl,
+                photoScale          = cropParams.first,
+                photoOffsetX         = cropParams.second,
+                photoOffsetY         = cropParams.third,
             )
         }
     }

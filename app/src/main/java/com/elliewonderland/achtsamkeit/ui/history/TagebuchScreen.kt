@@ -1,9 +1,12 @@
 package com.elliewonderland.achtsamkeit.ui.history
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
@@ -25,6 +29,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -46,10 +52,18 @@ fun TagebuchScreen(navController: NavController) {
         if (userId.isNotBlank()) vm.load(userId)
     }
 
-    val visibleEntries = remember(uiState.entries, uiState.searchText) {
+    val visibleEntries = remember(uiState.entries, uiState.searchText, uiState.selectedTab) {
         val text = uiState.searchText.trim()
-        if (text.isEmpty()) uiState.entries
-        else uiState.entries.filter { e ->
+        val tabFiltered = uiState.entries.filter { e ->
+            when (uiState.selectedTab) {
+                HistoryTab.TAG -> e.type == "morning" || e.type == "evening"
+                HistoryTab.WOCHE -> e.type == "weekly_review"
+                HistoryTab.MONAT -> e.type == "monthly_review"
+                HistoryTab.JAHR -> e.type == "yearly_review"
+            }
+        }
+        if (text.isEmpty()) tabFiltered
+        else tabFiltered.filter { e ->
             e.freeText.contains(text, ignoreCase = true) ||
             e.guidedAnswer.contains(text, ignoreCase = true)
         }
@@ -64,7 +78,14 @@ fun TagebuchScreen(navController: NavController) {
             color = AppTheme.colors.ink,
             modifier = Modifier.padding(horizontal = 16.dp),
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(8.dp))
+
+        // Elegante Segment-Steuerung (Tabs)
+        HistoryTabSelector(
+            selectedTab = uiState.selectedTab,
+            onTabSelected = vm::selectTab
+        )
+        Spacer(Modifier.height(8.dp))
 
         OutlinedTextField(
             value = uiState.searchText,
@@ -92,11 +113,14 @@ fun TagebuchScreen(navController: NavController) {
         )
         Spacer(Modifier.height(12.dp))
 
-        TagFilterChips(
-            selectedTag = uiState.selectedTag,
-            onTagSelected = { tag -> vm.selectTag(userId, tag) },
-        )
-        Spacer(Modifier.height(8.dp))
+        // Themen-Filterchips nur beim aktiven Tag-Tab einblenden
+        if (uiState.selectedTab == HistoryTab.TAG) {
+            TagFilterChips(
+                selectedTag = uiState.selectedTag,
+                onTagSelected = { tag -> vm.selectTag(userId, tag) },
+            )
+            Spacer(Modifier.height(8.dp))
+        }
 
         when {
             uiState.isLoading -> {
@@ -132,6 +156,46 @@ fun TagebuchScreen(navController: NavController) {
                         )
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HistoryTabSelector(
+    selectedTab: HistoryTab,
+    onTabSelected: (HistoryTab) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .background(AppTheme.colors.surface, shape = RoundedCornerShape(12.dp))
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        HistoryTab.values().forEach { tab ->
+            val isSelected = selectedTab == tab
+            val label = when (tab) {
+                HistoryTab.TAG -> "Tag"
+                HistoryTab.WOCHE -> "Woche"
+                HistoryTab.MONAT -> "Monat"
+                HistoryTab.JAHR -> "Jahr"
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(36.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(if (isSelected) AppTheme.colors.accent else Color.Transparent)
+                    .clickable { onTabSelected(tab) },
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = if (isSelected) AppTheme.colors.onAccent else AppTheme.colors.inkSoft,
+                )
             }
         }
     }

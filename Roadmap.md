@@ -18,7 +18,7 @@
 - [ ] **Firestore Composite Indexes:** In der Firebase Console anlegen für alle Compound-Queries (z.B. `type + created_at`, `tags + created_at`). Verhindert stumme Abstürze bei Filterungen in der Tagebuch-Historie.
 
 ### 🎨 Design Polish
-- [ ] **App-Icon:** 512×512 px PNG entwerfen und via Android Studio (New → Image Asset → Adaptive Icon) als Foreground/Background anlegen.
+- [x] **App-Icon:** Adaptive Icon vollständig (`mipmap-anydpi-v26/logo.xml` + alle Dichte-Stufen). Play Store Hi-Res Icon (512×512 PNG) generiert → `app/src/main/res/drawable/play_store_icon_512.png`.
 
 ### 🧪 Testlauf & Play Store Release
 - [ ] **Interner Testlauf:** Mindestens 7 Tage echte Nutzung auf dem eigenen Gerät (Streak, Spruch-Cooldown, Rückblick-Unlock testen).
@@ -54,7 +54,7 @@
 | 2. Kern-Features (Tagebuch) | ✅ Fertig | Morgen-/Abendroutine, Historie, Spruch-Logik (432 Sprüche) |
 | 3. User Engagement | ✅ Fertig | Push-Notifications (lokal), Statistiken, Weekly/Monthly Reviews |
 | 4. Polish, Fixes & Premium | ✅ Fertig | Offline-Support, RevenueCat Paywall, Account-Löschung, Export |
-| **5. Release-Vorbereitung** | ⏳ In Arbeit | App-Icon, Firestore Indizes, Store-Metadaten, Testing |
+| **5. Release-Vorbereitung** | ⏳ In Arbeit | ~~App-Icon ✅~~, Firestore Indizes, Store-Metadaten, Testing |
 | **6. Fragensammlung & Statistik-Redesign** | ✅ Fertig | Neue Mood/Energy/Gratitude/SelfCare-Keys, 30+30 Leitfragen, Multi-Key-Charts |
 
 ### 📝 Sprüchezähler

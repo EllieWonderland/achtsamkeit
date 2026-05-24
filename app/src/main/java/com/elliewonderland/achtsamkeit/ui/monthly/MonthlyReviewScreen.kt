@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
 import com.elliewonderland.achtsamkeit.data.repository.ReviewRepository
+import com.elliewonderland.achtsamkeit.ui.navigation.Screen
 import com.elliewonderland.achtsamkeit.ui.entry.components.SectionCard
 import com.elliewonderland.achtsamkeit.ui.premium.PaywallCard
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
@@ -179,7 +180,9 @@ fun MonthlyReviewScreen(navController: NavController) {
                                 runCatching { repo.saveReview(uid, "monthly_review", pairs) }
                                     .onSuccess {
                                         snackbar.showSnackbar("Monatsrückblick gespeichert!")
-                                        navController.popBackStack()
+                                        navController.navigate(Screen.Tagebuch.route) {
+                                            popUpTo(Screen.Heute.route) { inclusive = false }
+                                        }
                                     }
                                     .onFailure {
                                         snackbar.showSnackbar("Fehler beim Speichern.")

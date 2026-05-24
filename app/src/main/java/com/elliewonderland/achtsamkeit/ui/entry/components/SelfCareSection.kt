@@ -28,7 +28,7 @@ private val morningOptions = listOf(
 
 private val eveningOptions = listOf(
     "needs_met"      to "💧 Bedürfnisse geachtet – Genug getrunken, gegessen oder meinem Körper Ruhe gegönnt",
-    "boundaries_kept"to "🛑 Grenzen gesetzt – Mich abgegrenzt (z. B. rechtzeitig Feierabend gemacht, 'Nein' gesagt)",
+    "boundaries_kept" to "🛑 Grenzen gesetzt – Mich abgegrenzt (z. B. rechtzeitig Feierabend gemacht, 'Nein' gesagt)",
     "unplugged"      to "📱 Abschaltzeit gegönnt – Offline-Zeit genossen, bewusst Abstand zu Bildschirmen gehalten",
     "joyful_moment"  to "🎨 Seelenbalsam – Zeit mit Dingen verbracht, die mir Spaß machen und mich nähren",
     "release"        to "🌬️ Druck abgelassen – Bewusst durchgeatmet, Stress abgeschüttelt, Tränen zugelassen oder gedehnt",

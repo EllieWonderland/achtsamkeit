@@ -10,11 +10,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+enum class HistoryTab {
+    TAG, WOCHE, MONAT, JAHR
+}
+
 data class HistoryUiState(
     val entries: List<Entry> = emptyList(),
     val isLoading: Boolean = false,
     val selectedTag: String? = null,
     val searchText: String = "",
+    val selectedTab: HistoryTab = HistoryTab.TAG,
 )
 
 class HistoryViewModel : ViewModel() {
@@ -40,6 +45,10 @@ class HistoryViewModel : ViewModel() {
             }.onFailure { Log.e("HistoryViewModel", "getEntriesByTag failed (tag=$tag)", it) }.getOrDefault(emptyList())
             _uiState.update { it.copy(entries = entries, isLoading = false) }
         }
+    }
+
+    fun selectTab(tab: HistoryTab) {
+        _uiState.update { it.copy(selectedTab = tab) }
     }
 
     fun setSearchText(text: String) {
