@@ -55,7 +55,7 @@ fun HeuteScreen(navController: NavController) {
 
     val userId    = Firebase.auth.currentUser?.uid ?: ""
     val hour               = LocalTime.now().hour
-    val isEvening          = hour >= 15 || hour < 3
+    val isEvening          = hour >= 17 || hour < 5
     val isMorningLocked    = isEvening && !uiState.hasMorningEntry
     val isEveningLocked    = !isEvening && !uiState.hasEveningEntry
     val today     = remember { LocalDate.now() }
@@ -89,6 +89,9 @@ fun HeuteScreen(navController: NavController) {
             firstName      = uiState.userFirstName,
             dateText       = dateText,
             photoUrl       = uiState.photoUrl,
+            photoScale     = uiState.photoScale,
+            photoOffsetX    = uiState.photoOffsetX,
+            photoOffsetY    = uiState.photoOffsetY,
             onProfileClick = { navController.navigate(Screen.Profil.route) },
         )
 
@@ -99,7 +102,7 @@ fun HeuteScreen(navController: NavController) {
                 .padding(bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            Spacer(Modifier.height(0.dp))
+            // Spacer removed for unified spacing
 
             MoodMonthCard(
                 moodMonth    = uiState.moodMonth,
@@ -130,7 +133,7 @@ fun HeuteScreen(navController: NavController) {
                         subtitle = when {
                             uiState.hasMorningEntry -> uiState.morningCompletedAt
                                 ?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
-                            isMorningLocked         -> "Nur bis 15:00 Uhr verfügbar"
+                            isMorningLocked         -> "Nur bis 17:00 Uhr verfügbar"
                             else                    -> "Jetzt starten · 3 Minuten"
                         },
                         isDone   = uiState.hasMorningEntry,
@@ -143,7 +146,7 @@ fun HeuteScreen(navController: NavController) {
                         subtitle = when {
                             uiState.hasEveningEntry -> uiState.eveningCompletedAt
                                 ?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
-                            isEveningLocked         -> "Erst ab 15:00 Uhr verfügbar"
+                            isEveningLocked         -> "Erst ab 17:00 Uhr verfügbar"
                             else                    -> "Jetzt starten"
                         },
                         isDone   = uiState.hasEveningEntry,

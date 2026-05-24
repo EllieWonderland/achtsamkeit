@@ -56,7 +56,7 @@ class EntryRepository {
 
     suspend fun saveEntry(userId: String, entry: Entry): String {
         val now = System.currentTimeMillis()
-        val journalDate = if (java.time.LocalDateTime.now().hour < 4) LocalDate.now().minusDays(1) else LocalDate.now()
+        val journalDate = if (java.time.LocalDateTime.now().hour < 5) LocalDate.now().minusDays(1) else LocalDate.now()
         val map = mapOf(
             "type"               to entry.type,
             "created_at"         to now,
@@ -147,5 +147,5 @@ private fun DocumentSnapshot.toEntry(): Entry? = runCatching {
 
 private fun todayJournalDate(): String {
     val now = LocalDateTime.now()
-    return (if (now.hour < 4) now.toLocalDate().minusDays(1) else now.toLocalDate()).toString()
+    return (if (now.hour < 5) now.toLocalDate().minusDays(1) else now.toLocalDate()).toString()
 }
