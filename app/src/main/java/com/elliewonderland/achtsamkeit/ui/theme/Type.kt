@@ -38,6 +38,38 @@ private val GeistSans = FontFamily(
     Font(googleFont = GoogleFont("Geist"), fontProvider = GoogleProvider, weight = FontWeight.Bold),
 )
 
+private val Caveat = FontFamily(
+    Font(
+        googleFont = GoogleFont("Caveat"),
+        fontProvider = GoogleProvider,
+        weight = FontWeight.Normal,
+    ),
+    Font(
+        googleFont = GoogleFont("Caveat"),
+        fontProvider = GoogleProvider,
+        weight = FontWeight.Medium,
+    ),
+    Font(
+        googleFont = GoogleFont("Caveat"),
+        fontProvider = GoogleProvider,
+        weight = FontWeight.Bold,
+    ),
+)
+
+val HandwrittenStyle = TextStyle(
+    fontFamily = Caveat,
+    fontSize = 20.sp,
+    lineHeight = 26.sp,
+    fontWeight = FontWeight.Normal,
+)
+
+val HandwrittenLabelStyle = TextStyle(
+    fontFamily = Caveat,
+    fontSize = 16.sp,
+    lineHeight = 22.sp,
+    fontWeight = FontWeight.Medium,
+)
+
 val AppTypography = Typography(
     // ─── Display (Instrument Serif)
     displayLarge  = TextStyle(fontFamily = InstrumentSerif, fontSize = 40.sp, lineHeight = 44.sp, letterSpacing = (-0.5).sp),

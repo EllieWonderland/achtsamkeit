@@ -171,19 +171,34 @@ fun HeuteScreen(navController: NavController) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     ReviewCard(
                         title    = "Wochenrückblick",
-                        subtitle = if (uiState.weeklyUnlocked) "Jetzt schreiben" else "Am Wochenende verfügbar",
+                        subtitle = when {
+                            uiState.hasWeeklyReview  -> "Diese Woche verfasst"
+                            uiState.weeklyUnlocked   -> "Jetzt schreiben"
+                            else                     -> "Am Wochenende verfügbar"
+                        },
+                        isDone   = uiState.hasWeeklyReview,
                         isLocked = !uiState.weeklyUnlocked,
                         onClick  = { navController.navigate(Screen.WeeklyReview.route) },
                     )
                     ReviewCard(
                         title    = "Monatsrückblick",
-                        subtitle = if (uiState.monthlyUnlocked) "Jetzt schreiben" else "In der letzten Woche des Monats verfügbar",
+                        subtitle = when {
+                            uiState.hasMonthlyReview -> "Diesen Monat verfasst"
+                            uiState.monthlyUnlocked  -> "Jetzt schreiben"
+                            else                     -> "In der letzten Woche des Monats verfügbar"
+                        },
+                        isDone   = uiState.hasMonthlyReview,
                         isLocked = !uiState.monthlyUnlocked,
                         onClick  = { navController.navigate(Screen.MonthlyReview.route) },
                     )
                     ReviewCard(
                         title    = "Jahresrückblick",
-                        subtitle = if (uiState.yearlyUnlocked) "Jetzt schreiben" else "Im Dezember verfügbar",
+                        subtitle = when {
+                            uiState.hasYearlyReview -> "Dieses Jahr verfasst"
+                            uiState.yearlyUnlocked  -> "Jetzt schreiben"
+                            else                    -> "Im Dezember verfügbar"
+                        },
+                        isDone   = uiState.hasYearlyReview,
                         isLocked = !uiState.yearlyUnlocked,
                         onClick  = { navController.navigate(Screen.YearlyReview.route) },
                     )
@@ -256,6 +271,7 @@ private fun RoutineCard(
 private fun ReviewCard(
     title   : String,
     subtitle: String,
+    isDone  : Boolean = false,
     isLocked: Boolean,
     onClick : () -> Unit,
 ) {
@@ -265,8 +281,8 @@ private fun ReviewCard(
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp))
             .border(1.dp, colors.hair, RoundedCornerShape(18.dp))
-            .background(if (isLocked) colors.surfaceAlt else colors.surface)
-            .clickable(enabled = !isLocked, onClick = onClick)
+            .background(if (isDone || isLocked) colors.surfaceAlt else colors.surface)
+            .clickable(enabled = !isDone && !isLocked, onClick = onClick)
             .padding(horizontal = 18.dp, vertical = 14.dp),
         verticalAlignment     = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -278,19 +294,21 @@ private fun ReviewCard(
             Text(
                 title,
                 style = MaterialTheme.typography.titleSmall,
-                color = if (isLocked) colors.inkSoft else colors.ink,
+                color = if (isLocked && !isDone) colors.inkSoft else colors.ink,
             )
             Text(
                 subtitle,
-                style = MaterialTheme.typography.bodySmall,
-                color = colors.inkSoft,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = if (isDone) androidx.compose.ui.text.font.FontWeight.SemiBold else androidx.compose.ui.text.font.FontWeight.Normal,
+                ),
+                color = if (isDone) colors.accent else colors.inkSoft,
             )
         }
         Spacer(Modifier.width(8.dp))
-        if (isLocked) {
-            Icon(Icons.Outlined.Schedule, contentDescription = null, tint = colors.inkSoft, modifier = Modifier.size(18.dp))
-        } else {
-            Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = colors.accent, modifier = Modifier.size(18.dp))
+        when {
+            isDone   -> Icon(Icons.Outlined.Check, contentDescription = null, tint = colors.accent, modifier = Modifier.size(18.dp))
+            isLocked -> Icon(Icons.Outlined.Schedule, contentDescription = null, tint = colors.inkSoft, modifier = Modifier.size(18.dp))
+            else     -> Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = colors.accent, modifier = Modifier.size(18.dp))
         }
     }
 }
