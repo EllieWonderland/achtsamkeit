@@ -7,4 +7,5 @@ data class FavoriteQuote(
     val id: String = "",
     val text: String = "",
     val savedAt: Long = 0L,
+    val isLifehack: Boolean = false,
 )
