@@ -35,6 +35,7 @@
 - [ ] **Daumen-runter für Sprüche:** Sprüche, die man nicht mag, dauerhaft ausblenden (Firestore: `disliked/{quoteId}`).
 - [ ] **Neue rotierende Fragen:** Fragen-Pool weiter ausbauen.
 - [ ] **Widget:** Android-Home-Screen-Widget.
+- [ ] **Wochen-Strip Interaktivität & Navigation:** Klick auf einen Tag in der „Diese Woche"-Card springt direkt zu diesem Eintrag im Tagebuch. Zusätzlich können die Wochen per Swipe/Geste durchgewischt werden, um auch ältere Wochen und deren Einträge schnell zu finden.
 
 ### 🔧 Tech Debt (Niedrige Priorität)
 
