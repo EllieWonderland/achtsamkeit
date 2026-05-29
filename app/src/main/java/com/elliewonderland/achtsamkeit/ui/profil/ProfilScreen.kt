@@ -248,10 +248,9 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
             Spacer(Modifier.height(12.dp))
             ProfilButton("Bereiche personalisieren") { navController.navigate(Screen.CardCustomization.route) }
             Spacer(Modifier.height(12.dp))
-            ProfilButton("Benachrichtigungen") { navController.navigate(Screen.NotifSettings.route) }
+            ProfilButton("Impulse personalisieren") { navController.navigate(Screen.LifeProfile.route) }
             Spacer(Modifier.height(12.dp))
-
-            ProfilButton("Impuls-Personalisierung") { navController.navigate(Screen.LifeProfile.route) }
+            ProfilButton("Benachrichtigungen") { navController.navigate(Screen.NotifSettings.route) }
 
             Spacer(Modifier.height(32.dp))
             HorizontalDivider(color = AppTheme.colors.hair)
