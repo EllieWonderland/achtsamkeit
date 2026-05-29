@@ -434,9 +434,11 @@ private fun buildNarrativeProse(e: Entry): String {
     } else if (e.type == "evening") {
         buildString {
             val ratingStr = when (e.dayRating) {
-                1, 2 -> "einen ziemlich schweren und anstrengenden"
+                1    -> "einen sehr schweren und herausfordernden"
+                2    -> "einen eher unruhigen und anstrengenden"
                 3    -> "einen ganz passablen, ausgeglichenen"
-                4, 5 -> "einen wunderschönen und erfüllten"
+                4    -> "einen schönen und friedvollen"
+                5    -> "einen wunderschönen, zutiefst erfüllten"
                 else -> "einen ereignisreichen"
             }
             append("Ich blicke heute Abend auf $ratingStr Tag zurück. ")
