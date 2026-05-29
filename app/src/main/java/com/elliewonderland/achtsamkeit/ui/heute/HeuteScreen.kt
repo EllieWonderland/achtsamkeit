@@ -47,6 +47,13 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import androidx.compose.ui.platform.LocalContext
 import com.elliewonderland.achtsamkeit.data.local.CardPreferences
+import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.ButtonDefaults
+import android.app.Activity
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -57,8 +64,42 @@ fun HeuteScreen(navController: NavController) {
     val vm: HeuteViewModel = viewModel()
     val uiState by vm.uiState.collectAsState()
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val cardsConfig by remember(context) { CardPreferences.getHeuteCards(context) }
         .collectAsState(initial = CardPreferences.defaultHeuteCards)
+
+    if (uiState.showFavoriteLimitDialog) {
+        AlertDialog(
+            onDismissRequest = { vm.dismissFavoriteLimitDialog() },
+            title = { Text("Favoriten-Limit erreicht") },
+            text = {
+                Text(
+                    "Als kostenfreie Nutzerin kannst du bis zu 3 Einträge favorisieren. Upgrade auf Premium, um unbegrenzt Lieblingssprüche zu speichern.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = AppTheme.colors.inkSoft,
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        vm.dismissFavoriteLimitDialog()
+                        scope.launch {
+                            val activity = context as? Activity ?: return@launch
+                            PremiumRepository.purchase(activity)
+                        }
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.accent),
+                ) {
+                    Text("Upgrade")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { vm.dismissFavoriteLimitDialog() }) {
+                    Text("Abbrechen")
+                }
+            },
+        )
+    }
 
     val userId    = Firebase.auth.currentUser?.uid ?: ""
     val hour by produceState(initialValue = LocalTime.now().hour) {

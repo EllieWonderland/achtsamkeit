@@ -15,10 +15,12 @@ import com.elliewonderland.achtsamkeit.model.EnergyKey
 import com.elliewonderland.achtsamkeit.model.Lifehack
 import com.elliewonderland.achtsamkeit.model.MoodKey
 import com.elliewonderland.achtsamkeit.model.Quote
+import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.Instant
@@ -64,6 +66,7 @@ data class HeuteUiState(
     val photoScale: Float = 1.0f,
     val photoOffsetX: Float = 0.0f,
     val photoOffsetY: Float = 0.0f,
+    val showFavoriteLimitDialog: Boolean = false,
 )
 
 class HeuteViewModel(app: Application) : AndroidViewModel(app) {
@@ -166,8 +169,18 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
         val quote = state.quoteOfDay ?: return
         val userId = authRepo.getCurrentUser()?.uid ?: return
         viewModelScope.launch {
+            if (!state.quoteIsFavorite) {
+                val isPremium = PremiumRepository.isPremium()
+                if (!isPremium) {
+                    val count = quoteRepo.getFavoritesCount(userId)
+                    if (count >= 3) {
+                        _uiState.update { it.copy(showFavoriteLimitDialog = true) }
+                        return@launch
+                    }
+                }
+            }
             runCatching { quoteRepo.toggleFavorite(userId, quote) }
-            _uiState.value = state.copy(quoteIsFavorite = !state.quoteIsFavorite)
+            _uiState.update { it.copy(quoteIsFavorite = !state.quoteIsFavorite) }
         }
     }
 
@@ -176,9 +189,23 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
         val hack = state.lifehackOfDay ?: return
         val userId = authRepo.getCurrentUser()?.uid ?: return
         viewModelScope.launch {
+            if (!state.lifehackIsFavorite) {
+                val isPremium = PremiumRepository.isPremium()
+                if (!isPremium) {
+                    val count = quoteRepo.getFavoritesCount(userId)
+                    if (count >= 3) {
+                        _uiState.update { it.copy(showFavoriteLimitDialog = true) }
+                        return@launch
+                    }
+                }
+            }
             runCatching { quoteRepo.toggleFavoriteLifehack(userId, hack) }
-            _uiState.value = state.copy(lifehackIsFavorite = !state.lifehackIsFavorite)
+            _uiState.update { it.copy(lifehackIsFavorite = !state.lifehackIsFavorite) }
         }
+    }
+
+    fun dismissFavoriteLimitDialog() {
+        _uiState.update { it.copy(showFavoriteLimitDialog = false) }
     }
 
     private fun buildMoodMonth(entries: List<com.elliewonderland.achtsamkeit.model.Entry>, daysInMonth: Int): List<MoodPoint?> {

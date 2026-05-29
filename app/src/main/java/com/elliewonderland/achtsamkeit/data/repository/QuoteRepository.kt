@@ -61,6 +61,12 @@ class QuoteRepository(private val loader: QuoteLoader) {
             .get().await().exists()
     }
 
+    suspend fun getFavoritesCount(userId: String): Int = withContext(Dispatchers.IO) {
+        db.collection("users").document(userId)
+            .collection("favorites")
+            .get().await().size()
+    }
+
     suspend fun toggleFavorite(userId: String, quote: Quote) {
         val ref = db.collection("users").document(userId)
             .collection("favorites").document(quote.id)

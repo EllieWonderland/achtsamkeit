@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.elliewonderland.achtsamkeit.data.local.QuoteLoader
 import com.elliewonderland.achtsamkeit.data.repository.EntryRepository
+import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
 import com.elliewonderland.achtsamkeit.data.repository.QuoteRepository
 import com.elliewonderland.achtsamkeit.model.Quote
 import com.google.firebase.Firebase
@@ -16,7 +17,11 @@ import kotlinx.coroutines.tasks.await
 
 sealed class QuoteUiState {
     object Loading : QuoteUiState()
-    data class Ready(val quote: Quote, val isFavorite: Boolean) : QuoteUiState()
+    data class Ready(
+        val quote: Quote,
+        val isFavorite: Boolean,
+        val showFavoriteLimitDialog: Boolean = false,
+    ) : QuoteUiState()
     data class Error(val message: String) : QuoteUiState()
 }
 
@@ -67,10 +72,25 @@ class QuoteViewModel(application: Application) : AndroidViewModel(application) {
         val current = _uiState.value as? QuoteUiState.Ready ?: return
         viewModelScope.launch {
             runCatching {
+                if (!current.isFavorite) {
+                    val isPremium = PremiumRepository.isPremium()
+                    if (!isPremium) {
+                        val count = repo.getFavoritesCount(userId)
+                        if (count >= 3) {
+                            _uiState.value = current.copy(showFavoriteLimitDialog = true)
+                            return@launch
+                        }
+                    }
+                }
                 repo.toggleFavorite(userId, current.quote)
                 val isFav = repo.isFavorite(userId, current.quote.id)
                 _uiState.value = current.copy(isFavorite = isFav)
             }
         }
+    }
+
+    fun dismissFavoriteLimitDialog() {
+        val current = _uiState.value as? QuoteUiState.Ready ?: return
+        _uiState.value = current.copy(showFavoriteLimitDialog = false)
     }
 }

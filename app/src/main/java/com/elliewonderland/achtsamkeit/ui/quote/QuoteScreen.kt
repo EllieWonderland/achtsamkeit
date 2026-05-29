@@ -1,5 +1,6 @@
 package com.elliewonderland.achtsamkeit.ui.quote
 
+import android.app.Activity
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -21,10 +23,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,16 +36,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
 import com.elliewonderland.achtsamkeit.ui.navigation.Screen
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import kotlinx.coroutines.launch
 
 @Composable
 fun QuoteScreen(navController: NavController, entryId: String) {
     val vm: QuoteViewModel = viewModel()
     val uiState by vm.uiState.collectAsState()
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val userId = Firebase.auth.currentUser?.uid ?: ""
 
     LaunchedEffect(entryId) {
@@ -79,6 +86,39 @@ fun QuoteScreen(navController: NavController, entryId: String) {
                 }
             }
             is QuoteUiState.Ready -> {
+                if (s.showFavoriteLimitDialog) {
+                    AlertDialog(
+                        onDismissRequest = { vm.dismissFavoriteLimitDialog() },
+                        title = { Text("Favoriten-Limit erreicht") },
+                        text = {
+                            Text(
+                                "Als kostenfreie Nutzerin kannst du bis zu 3 Sprüche favorisieren. Upgrade auf Premium, um unbegrenzt Lieblingssprüche zu speichern.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = AppTheme.colors.inkSoft,
+                            )
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    vm.dismissFavoriteLimitDialog()
+                                    scope.launch {
+                                        val activity = context as? Activity ?: return@launch
+                                        PremiumRepository.purchase(activity)
+                                    }
+                                },
+                                colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.accent),
+                            ) {
+                                Text("Upgrade")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { vm.dismissFavoriteLimitDialog() }) {
+                                Text("Abbrechen")
+                            }
+                        },
+                    )
+                }
+
                 Text(
                     text      = "\u201E${s.quote.text}\u201C",
                     style     = MaterialTheme.typography.headlineSmall,
