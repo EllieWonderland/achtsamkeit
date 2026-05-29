@@ -37,18 +37,33 @@ class QuoteRepository(private val loader: QuoteLoader) {
     suspend fun pickQuote(userId: String, tags: List<String>): Quote {
         val allQuotes  = withContext(Dispatchers.IO) { loader.quotes }
         val cooldowns  = loadCooldowns(userId)
+        val disliked   = loadDisliked(userId)
         val cooldownMs = 90L * 24 * 60 * 60 * 1000
         val now        = System.currentTimeMillis()
 
         val eligible = allQuotes.filter { q ->
-            (now - (cooldowns[q.id] ?: 0L)) > cooldownMs
+            q.id !in disliked && (now - (cooldowns[q.id] ?: 0L)) > cooldownMs
         }
         val matching = eligible.filter { q -> q.tags.any { it in tags } }
-        val pool     = matching.ifEmpty { eligible }.ifEmpty { allQuotes }
+        val pool     = matching.ifEmpty { eligible }
+            .ifEmpty { allQuotes.filter { it.id !in disliked } }
+            .ifEmpty { allQuotes }
 
         val picked = pool.random()
         saveCooldown(userId, picked.id)
         return picked
+    }
+
+    suspend fun dislikeQuote(userId: String, quoteId: String) {
+        db.collection("users").document(userId)
+            .collection("disliked").document(quoteId)
+            .set(mapOf("disliked_at" to FieldValue.serverTimestamp())).await()
+    }
+
+    suspend fun loadDisliked(userId: String): Set<String> {
+        val snap = db.collection("users").document(userId)
+            .collection("disliked").get().await()
+        return snap.documents.map { it.id }.toSet()
     }
 
     suspend fun getQuoteById(id: String): Quote? = withContext(Dispatchers.IO) {

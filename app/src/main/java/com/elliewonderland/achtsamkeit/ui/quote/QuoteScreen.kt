@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.ThumbDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -158,6 +159,14 @@ fun QuoteScreen(navController: NavController, entryId: String) {
                         Icon(
                             imageVector        = Icons.Outlined.Share,
                             contentDescription = "Spruch teilen",
+                            tint               = AppTheme.colors.inkSoft,
+                            modifier           = Modifier.size(28.dp),
+                        )
+                    }
+                    IconButton(onClick = { vm.dislikeQuote(userId, entryId) }) {
+                        Icon(
+                            imageVector        = Icons.Outlined.ThumbDown,
+                            contentDescription = "Spruch nicht mehr anzeigen",
                             tint               = AppTheme.colors.inkSoft,
                             modifier           = Modifier.size(28.dp),
                         )

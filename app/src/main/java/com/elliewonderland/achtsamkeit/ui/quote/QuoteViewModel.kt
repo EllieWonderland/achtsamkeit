@@ -93,4 +93,23 @@ class QuoteViewModel(application: Application) : AndroidViewModel(application) {
         val current = _uiState.value as? QuoteUiState.Ready ?: return
         _uiState.value = current.copy(showFavoriteLimitDialog = false)
     }
+
+    fun dislikeQuote(userId: String, entryId: String) {
+        val current = _uiState.value as? QuoteUiState.Ready ?: return
+        _uiState.value = QuoteUiState.Loading
+        viewModelScope.launch {
+            runCatching {
+                repo.dislikeQuote(userId, current.quote.id)
+                val snap = Firebase.firestore
+                    .collection("users").document(userId)
+                    .collection("entries").document(entryId)
+                    .get().await()
+                val newQuote = pickAndSave(userId, entryId, snap)
+                val isFav = repo.isFavorite(userId, newQuote.id)
+                _uiState.value = QuoteUiState.Ready(newQuote, isFav)
+            }.onFailure {
+                _uiState.value = QuoteUiState.Error(it.message ?: "Fehler beim Ausblenden des Spruchs")
+            }
+        }
+    }
 }
