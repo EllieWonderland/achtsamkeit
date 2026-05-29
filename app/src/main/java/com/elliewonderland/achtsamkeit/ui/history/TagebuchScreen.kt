@@ -185,7 +185,7 @@ private fun FavoritesCarousel(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "FAVORISIERTE SPRÜCHE",
+                text = "DEINE FAVORITEN",
                 style = MaterialTheme.typography.labelSmall,
                 color = colors.inkSoft,
             )
@@ -232,30 +232,39 @@ private fun FavoritesCarousel(
                         )
                 )
 
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp),
-                    verticalAlignment = Alignment.Top,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = if (fav.isLifehack) "💡 LIFEHACK" else "✨ SPRUCH",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = colors.accent,
+                        )
+                        IconButton(
+                            onClick = { onUnfavorite(fav) },
+                            modifier = Modifier.size(36.dp),
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Favorite,
+                                contentDescription = "Aus Favoriten entfernen",
+                                tint = colors.accent,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    }
                     Text(
                         text = fav.text,
                         style = SerifItalic.copy(fontSize = 16.sp),
                         color = colors.ink,
-                        modifier = Modifier.weight(1f),
                     )
-                    Spacer(Modifier.width(12.dp))
-                    IconButton(
-                        onClick = { onUnfavorite(fav) },
-                        modifier = Modifier.size(36.dp),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = "Aus Favoriten entfernen",
-                            tint = colors.accent,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
                 }
             }
         }
