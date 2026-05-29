@@ -56,6 +56,7 @@ data class HeuteUiState(
     val quoteOfDay: Quote? = null,
     val quoteIsFavorite: Boolean = false,
     val lifehackOfDay: Lifehack? = null,
+    val lifehackIsFavorite: Boolean = false,
     val userFirstName: String? = null,
     val photoUrl: String? = null,
     val photoScale: Float = 1.0f,
@@ -110,6 +111,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
             }
             val isFav = if (quote != null) runCatching { quoteRepo.isFavorite(userId, quote.id) }.getOrDefault(false) else false
             val lifehack = lifehackD.await()
+            val isHackFav = if (lifehack != null) runCatching { quoteRepo.isFavorite(userId, lifehack.id) }.getOrDefault(false) else false
             val monthEntries  = monthEntriesD.await()
             val prevMonthEntries = prevMonthD.await()
             val displayName   = displayNameD.await()
@@ -147,6 +149,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
                 quoteOfDay          = quote,
                 quoteIsFavorite     = isFav,
                 lifehackOfDay       = lifehack,
+                lifehackIsFavorite  = isHackFav,
                 userFirstName       = firstName,
                 photoUrl            = photoUrl,
                 photoScale          = cropParams.first,
@@ -163,6 +166,16 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             runCatching { quoteRepo.toggleFavorite(userId, quote) }
             _uiState.value = state.copy(quoteIsFavorite = !state.quoteIsFavorite)
+        }
+    }
+
+    fun toggleFavoriteLifehack() {
+        val state = _uiState.value
+        val hack = state.lifehackOfDay ?: return
+        val userId = authRepo.getCurrentUser()?.uid ?: return
+        viewModelScope.launch {
+            runCatching { quoteRepo.toggleFavoriteLifehack(userId, hack) }
+            _uiState.value = state.copy(lifehackIsFavorite = !state.lifehackIsFavorite)
         }
     }
 
