@@ -95,6 +95,11 @@ dependencies {
     // Bildladen (Profilbild)
     implementation(libs.coil.compose)
 
+    // Google Sign-In via Credential Manager
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+
     // Splash Screen
     implementation(libs.androidx.core.splashscreen)
 

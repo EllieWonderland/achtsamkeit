@@ -249,6 +249,8 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
             ProfilButton("Benachrichtigungen") { navController.navigate(Screen.NotifSettings.route) }
             Spacer(Modifier.height(12.dp))
             ProfilButton("Favorisierte Sprüche") { navController.navigate(Screen.Favorites.route) }
+            Spacer(Modifier.height(12.dp))
+            ProfilButton("Impuls-Personalisierung") { navController.navigate(Screen.LifeProfile.route) }
 
             Spacer(Modifier.height(32.dp))
             HorizontalDivider(color = AppTheme.colors.hair)

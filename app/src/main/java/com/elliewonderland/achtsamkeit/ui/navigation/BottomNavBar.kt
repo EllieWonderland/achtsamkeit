@@ -43,13 +43,14 @@ fun BottomNavBar(navController: NavController, currentRoute: String?) {
             val selected = currentRoute == item.screen.route
             NavigationBarItem(
                 selected = selected,
-                onClick  = {
+                onClick = {
                     navController.navigate(item.screen.route) {
                         popUpTo(Screen.Heute.route) {
-                            saveState = true
+                            inclusive = item.screen == Screen.Heute
+                            saveState = item.screen != Screen.Heute
                         }
-                        launchSingleTop = true
-                        restoreState    = true
+                        launchSingleTop = item.screen != Screen.Heute
+                        restoreState    = item.screen != Screen.Heute
                     }
                 },
                 icon  = {

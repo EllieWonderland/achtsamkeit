@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Achtsamkeit in 3 Minuten</string>
+    <!-- Firebase Console → Authentication → Sign-in methods → Google → Web-Client-ID hier eintragen -->
+    <string name="google_web_client_id">1007038767175-16hg72kgbsscaij7c6h7h4msph1c0lu4.apps.googleusercontent.com</string>
 </resources>

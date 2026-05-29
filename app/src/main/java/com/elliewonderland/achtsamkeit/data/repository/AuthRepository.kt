@@ -1,6 +1,7 @@
 package com.elliewonderland.achtsamkeit.data.repository
 
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
@@ -19,6 +20,12 @@ class AuthRepository {
     suspend fun registerWithEmail(email: String, password: String, name: String): Result<Unit> = runCatching {
         auth.createUserWithEmailAndPassword(email, password).await()
         ensureUserDocument(auth.currentUser!!, name)
+    }
+
+    suspend fun loginWithGoogle(idToken: String): Result<Unit> = runCatching {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential).await()
+        ensureUserDocument(auth.currentUser!!)
     }
 
     suspend fun isOnboardingComplete(uid: String): Boolean {
@@ -104,6 +111,19 @@ class AuthRepository {
         }
     }
 
+    suspend fun getUserProfile(userId: String): Map<String, Boolean> {
+        val snap = db.collection("users").document(userId).get().await()
+        val profileField = snap.get("profile") as? Map<*, *>
+        return profileField?.mapNotNull { (k, v) ->
+            if (k != null) k.toString() to (v as? Boolean ?: false) else null
+        }?.toMap() ?: emptyMap()
+    }
+
+    suspend fun saveUserProfile(userId: String, profile: Map<String, Boolean>) {
+        db.collection("users").document(userId)
+            .update("profile", profile).await()
+    }
+
     private suspend fun ensureUserDocument(user: FirebaseUser, name: String = "") {
         val doc  = db.collection("users").document(user.uid)
         val snap = doc.get().await()
@@ -118,6 +138,7 @@ class AuthRepository {
                 "current_streak"            to 0,
                 "last_entry_date"           to "",
                 "streak_freeze_used_month"  to "",
+                "profile"                   to emptyMap<String, Boolean>(),
             )).await()
         }
     }

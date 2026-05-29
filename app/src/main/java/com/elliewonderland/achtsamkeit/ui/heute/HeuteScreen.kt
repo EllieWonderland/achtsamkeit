@@ -118,6 +118,10 @@ fun HeuteScreen(navController: NavController) {
                 onClick          = {},
             )
 
+            LifehackCard(
+                lifehack = uiState.lifehackOfDay,
+            )
+
             if (uiState.isLoading) {
                 Box(
                     modifier         = Modifier.fillMaxWidth().height(120.dp),

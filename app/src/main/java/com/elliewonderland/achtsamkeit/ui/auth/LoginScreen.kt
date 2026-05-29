@@ -24,17 +24,27 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.elliewonderland.achtsamkeit.R
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(navController: NavController, vm: AuthViewModel = viewModel()) {
@@ -43,6 +53,9 @@ fun LoginScreen(navController: NavController, vm: AuthViewModel = viewModel()) {
     var password      by remember { mutableStateOf("") }
     var showPassword  by remember { mutableStateOf(false) }
     val snackbarState = remember { SnackbarHostState() }
+    val context           = LocalContext.current
+    val coroutineScope    = rememberCoroutineScope()
+    val credentialManager = remember { CredentialManager.create(context) }
 
     LaunchedEffect(uiState) {
         when (val s = uiState) {
@@ -118,7 +131,32 @@ fun LoginScreen(navController: NavController, vm: AuthViewModel = viewModel()) {
             }
             Spacer(Modifier.height(12.dp))
             OutlinedButton(
-                onClick = { /* Google Sign-In — folgt nach Phase 3 */ },
+                onClick  = {
+                    coroutineScope.launch {
+                        try {
+                            val googleIdOption = GetGoogleIdOption.Builder()
+                                .setFilterByAuthorizedAccounts(false)
+                                .setServerClientId(context.getString(R.string.google_web_client_id))
+                                .build()
+                            val request = GetCredentialRequest.Builder()
+                                .addCredentialOption(googleIdOption)
+                                .build()
+                            val result     = credentialManager.getCredential(context, request)
+                            val credential = result.credential
+                            if (credential is CustomCredential &&
+                                credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+                            ) {
+                                val tokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                                vm.loginWithGoogle(tokenCredential.idToken)
+                            } else {
+                                snackbarState.showSnackbar("Google-Anmeldung fehlgeschlagen")
+                            }
+                        } catch (e: GetCredentialException) {
+                            snackbarState.showSnackbar(e.message ?: "Google-Anmeldung fehlgeschlagen")
+                        }
+                    }
+                },
+                enabled  = uiState !is AuthUiState.Loading,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text("Mit Google anmelden")

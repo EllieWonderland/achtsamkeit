@@ -40,4 +40,18 @@ class AuthViewModel : ViewModel() {
             )
         }
     }
+
+    fun loginWithGoogle(idToken: String) {
+        viewModelScope.launch {
+            uiState.value = AuthUiState.Loading
+            repo.loginWithGoogle(idToken).fold(
+                onSuccess = {
+                    val uid  = repo.getCurrentUser()!!.uid
+                    val done = repo.isOnboardingComplete(uid)
+                    uiState.value = AuthUiState.Success(done)
+                },
+                onFailure = { uiState.value = AuthUiState.Error(it.message ?: "Google-Anmeldung fehlgeschlagen") }
+            )
+        }
+    }
 }

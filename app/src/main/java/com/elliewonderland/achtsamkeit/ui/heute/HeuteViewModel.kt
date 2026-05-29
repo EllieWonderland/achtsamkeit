@@ -7,8 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.elliewonderland.achtsamkeit.data.local.QuoteLoader
 import com.elliewonderland.achtsamkeit.data.repository.AuthRepository
 import com.elliewonderland.achtsamkeit.data.repository.EntryRepository
+import com.elliewonderland.achtsamkeit.data.local.LifehackLoader
+import com.elliewonderland.achtsamkeit.data.repository.LifehackRepository
 import com.elliewonderland.achtsamkeit.data.repository.QuoteRepository
 import com.elliewonderland.achtsamkeit.data.repository.ReviewRepository
+import com.elliewonderland.achtsamkeit.model.Lifehack
 import com.elliewonderland.achtsamkeit.model.Quote
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,6 +55,7 @@ data class HeuteUiState(
     val weekMaxCount: Int = 14,
     val quoteOfDay: Quote? = null,
     val quoteIsFavorite: Boolean = false,
+    val lifehackOfDay: Lifehack? = null,
     val userFirstName: String? = null,
     val photoUrl: String? = null,
     val photoScale: Float = 1.0f,
@@ -65,6 +69,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
     private val reviewRepo = ReviewRepository()
     private val authRepo   = AuthRepository()
     private val quoteRepo  = QuoteRepository(QuoteLoader(app))
+    private val lifehackRepo = LifehackRepository(LifehackLoader(app))
 
     private val _uiState = MutableStateFlow(HeuteUiState())
     val uiState: StateFlow<HeuteUiState> = _uiState.asStateFlow()
@@ -83,15 +88,18 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
             val displayNameD   = async { runCatching { authRepo.getUserDisplayName(userId) }.getOrDefault("") }
             val photoUrlD      = async { runCatching { authRepo.getUserPhotoUrl(userId) }.getOrDefault("") }
             val cropParamsD    = async { runCatching { authRepo.getPhotoCropParams(userId) }.getOrDefault(Triple(1.0f, 0.0f, 0.0f)) }
+            val lifehackD      = async { runCatching { lifehackRepo.getOrPickLifehackOfDay(userId) }.getOrNull() }
 
             val morningEntry = morningD.await()
             val eveningEntry = eveningD.await()
+            val weekEntries  = weekEntriesD.await()
 
             // Den Spruch vom letzten abgeschlossenen Eintrag des Tages zeigen (Abend hat Vorrang)
             val lastEntry = eveningEntry ?: morningEntry
             val userTags = buildList {
                 morningEntry?.let { addAll(repo.deriveTags(it)) }
                 eveningEntry?.let { addAll(repo.deriveTags(it)) }
+                weekEntries.forEach { addAll(repo.deriveTags(it)) }
             }.distinct()
             val quote = when {
                 lastEntry != null && lastEntry.quoteId.isNotBlank() ->
@@ -101,8 +109,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
                     runCatching { quoteRepo.getOrPickQuoteOfDay(userId, userTags) }.getOrNull()
             }
             val isFav = if (quote != null) runCatching { quoteRepo.isFavorite(userId, quote.id) }.getOrDefault(false) else false
-
-            val weekEntries   = weekEntriesD.await()
+            val lifehack = lifehackD.await()
             val monthEntries  = monthEntriesD.await()
             val prevMonthEntries = prevMonthD.await()
             val displayName   = displayNameD.await()
@@ -139,6 +146,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
                 weekMaxCount        = 14,
                 quoteOfDay          = quote,
                 quoteIsFavorite     = isFav,
+                lifehackOfDay       = lifehack,
                 userFirstName       = firstName,
                 photoUrl            = photoUrl,
                 photoScale          = cropParams.first,

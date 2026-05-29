@@ -25,4 +25,5 @@ sealed class Screen(val route: String) {
     }
     object Impressum     : Screen("impressum")
     object Datenschutz   : Screen("datenschutz")
+    object LifeProfile   : Screen("life_profile")
 }
