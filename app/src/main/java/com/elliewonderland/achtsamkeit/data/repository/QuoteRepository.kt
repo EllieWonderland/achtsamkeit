@@ -2,6 +2,7 @@ package com.elliewonderland.achtsamkeit.data.repository
 
 import com.elliewonderland.achtsamkeit.data.local.QuoteLoader
 import com.elliewonderland.achtsamkeit.model.FavoriteQuote
+import com.elliewonderland.achtsamkeit.model.Lifehack
 import com.elliewonderland.achtsamkeit.model.Quote
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FieldValue
@@ -72,16 +73,31 @@ class QuoteRepository(private val loader: QuoteLoader) {
         }
     }
 
+    suspend fun toggleFavoriteLifehack(userId: String, lifehack: Lifehack) {
+        val ref = db.collection("users").document(userId)
+            .collection("favorites").document(lifehack.id)
+        if (ref.get().await().exists()) {
+            ref.delete().await()
+        } else {
+            ref.set(mapOf(
+                "saved_at"      to FieldValue.serverTimestamp(),
+                "lifehack_text" to lifehack.text,
+            )).await()
+        }
+    }
+
     suspend fun getFavorites(userId: String): List<FavoriteQuote> {
         val snap = db.collection("users").document(userId)
             .collection("favorites")
             .orderBy("saved_at", Query.Direction.DESCENDING)
             .get().await()
         return snap.documents.map { doc ->
+            val isHack = doc.contains("lifehack_text")
             FavoriteQuote(
-                id      = doc.id,
-                text    = doc.getString("quote_text") ?: "",
-                savedAt = doc.getTimestamp("saved_at")?.toDate()?.time ?: 0L,
+                id         = doc.id,
+                text       = doc.getString(if (isHack) "lifehack_text" else "quote_text") ?: "",
+                savedAt    = doc.getTimestamp("saved_at")?.toDate()?.time ?: 0L,
+                isLifehack = isHack,
             )
         }
     }
