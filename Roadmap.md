@@ -24,9 +24,9 @@
   - [ ] Release Track: **Intern → Geschlossen (Beta) → Produktion**.
 
 ### 🚀 Prio 1
-- [ ] **Premium:** Favoriten-Liste ohne Limit (noch fehlend aus Phase 12).
-- [ ] **Daumen-runter für Sprüche:** Sprüche, die man nicht mag, dauerhaft ausblenden (Firestore: `disliked/{quoteId}`).
-- [ ] **Wochen-Strip Interaktivität & Navigation:** Klick auf einen Tag in der „Diese Woche"-Card springt direkt zu diesem Eintrag im Tagebuch. Zusätzlich können die Wochen per Swipe/Geste durchgewischt werden, um auch ältere Wochen und deren Einträge schnell zu finden.
+- [x] **Premium:** Favoriten-Liste ohne Limit (noch fehlend aus Phase 12).
+- [x] **Daumen-runter für Sprüche:** Sprüche, die man nicht mag, dauerhaft ausblenden (Firestore: `disliked/{quoteId}`).
+- [x] **Wochen-Strip Interaktivität & Navigation:** Klick auf einen Tag in der „Diese Woche"-Card springt direkt zu diesem Eintrag im Tagebuch. Zusätzlich können die Wochen per Swipe/Geste durchgewischt werden, um auch ältere Wochen und deren Einträge schnell zu finden.
 
 ### 🚀 Backlog (Nach MVP)
 - [ ] **Jahresrückblick:** Vollständiger Jahresrückblick mit tiefen Reflexionsfragen (geplant für Dezember).
