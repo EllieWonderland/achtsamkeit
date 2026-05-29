@@ -251,6 +251,8 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
             ProfilButton("Impulse personalisieren") { navController.navigate(Screen.LifeProfile.route) }
             Spacer(Modifier.height(12.dp))
             ProfilButton("Benachrichtigungen") { navController.navigate(Screen.NotifSettings.route) }
+            Spacer(Modifier.height(12.dp))
+            ProfilButton("Meine Daten exportieren") { vm.showExportDialog() }
 
             Spacer(Modifier.height(32.dp))
             HorizontalDivider(color = AppTheme.colors.hair)
@@ -259,8 +261,6 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
             ProfilButton("Impressum") { navController.navigate(Screen.Impressum.route) }
             Spacer(Modifier.height(12.dp))
             ProfilButton("Datenschutzerklärung") { navController.navigate(Screen.Datenschutz.route) }
-            Spacer(Modifier.height(12.dp))
-            ProfilButton("Meine Daten exportieren") { vm.showExportDialog() }
             Spacer(Modifier.height(12.dp))
             ProfilButton("Alle Einträge zurücksetzen") { vm.showResetDialog() }
             Spacer(Modifier.height(12.dp))
