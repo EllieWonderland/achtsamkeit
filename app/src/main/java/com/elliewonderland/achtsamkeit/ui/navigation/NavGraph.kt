@@ -68,7 +68,16 @@ fun AppNavHost(choice: ThemeChoice) {
             composable(Screen.Register.route)      { RegisterScreen(navController) }
             composable(Screen.Onboarding.route)    { OnboardingScreen(navController) }
             composable(Screen.Heute.route)         { HeuteScreen(navController) }
-            composable(Screen.Tagebuch.route)      { TagebuchScreen(navController) }
+            composable(
+                route     = Screen.Tagebuch.route,
+                arguments = listOf(navArgument("scrollToDate") {
+                    type         = NavType.StringType
+                    nullable     = true
+                    defaultValue = null
+                })
+            ) { back ->
+                TagebuchScreen(navController, back.arguments?.getString("scrollToDate"))
+            }
             composable(Screen.Statistik.route)     { StatistikScreen(navController) }
             composable(Screen.Profil.route)        { ProfilScreen(navController, choice) }
             composable(Screen.ThemePicker.route)   { ThemePickerScreen(choice, navController) }

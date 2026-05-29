@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -222,13 +224,69 @@ fun HeuteScreen(navController: NavController) {
                             }
                         }
                         "week_strip" -> {
-                            if (!uiState.isLoading && uiState.weekDays.isNotEmpty()) {
-                                WeekStripCard(
-                                    weekDays       = uiState.weekDays,
-                                    completedCount = uiState.weekCompletedCount,
-                                    maxCount       = uiState.weekMaxCount,
-                                    onClick        = { navController.navigate(Screen.Statistik.route) },
-                                )
+                            if (!uiState.isLoading) {
+                                val weekPagerState = rememberPagerState(initialPage = 51, pageCount = { 52 })
+                                
+                                LaunchedEffect(weekPagerState.currentPage, userId) {
+                                    if (userId.isNotBlank()) {
+                                        val offset = weekPagerState.currentPage - 51
+                                        vm.loadWeekOffset(userId, offset)
+                                    }
+                                }
+
+                                HorizontalPager(
+                                    state = weekPagerState,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) { page ->
+                                    val offset = page - 51
+                                    val weekDays = uiState.weekOffsetData[offset] ?: emptyList()
+                                    
+                                    if (weekDays.isNotEmpty()) {
+                                        val completed = weekDays.sumOf {
+                                            (if (it.morningDone) 1 else 0) + (if (it.eveningDone) 1 else 0)
+                                        }
+                                        val weekTitle = when (offset) {
+                                            0 -> "Diese Woche"
+                                            -1 -> "Letzte Woche"
+                                            else -> {
+                                                val start = weekDays.first().date
+                                                val end = weekDays.last().date
+                                                "Woche vom ${start.dayOfMonth}.${start.monthValue}. bis ${end.dayOfMonth}.${end.monthValue}."
+                                            }
+                                        }
+
+                                        WeekStripCard(
+                                            weekDays = weekDays,
+                                            completedCount = completed,
+                                            maxCount = 14,
+                                            title = weekTitle,
+                                            onDayClick = { date ->
+                                                val dayStatus = weekDays.firstOrNull { it.date == date }
+                                                if (dayStatus != null && (dayStatus.morningDone || dayStatus.eveningDone)) {
+                                                    navController.navigate(Screen.Tagebuch.createRoute(date.toString()))
+                                                } else {
+                                                    android.widget.Toast.makeText(
+                                                        context,
+                                                        "An diesem Tag hast du keine Einträge verfasst.",
+                                                        android.widget.Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            }
+                                        )
+                                    } else {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(130.dp)
+                                                .clip(RoundedCornerShape(22.dp))
+                                                .border(1.dp, AppTheme.colors.hair, RoundedCornerShape(22.dp))
+                                                .background(AppTheme.colors.surface),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            CircularProgressIndicator(color = AppTheme.colors.accent)
+                                        }
+                                    }
+                                }
                             }
                         }
                         "reviews" -> {

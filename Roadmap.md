@@ -23,19 +23,20 @@
   - [ ] Screenshots (Pflicht: mind. 2 Phone-Screenshots), Kurz- und Langbeschreibung auf Deutsch.
   - [ ] Release Track: **Intern → Geschlossen (Beta) → Produktion**.
 
-### 🚀 Backlog (Nach MVP)
-
+### 🚀 Prio 1
 - [ ] **Premium:** Favoriten-Liste ohne Limit (noch fehlend aus Phase 12).
+- [ ] **Daumen-runter für Sprüche:** Sprüche, die man nicht mag, dauerhaft ausblenden (Firestore: `disliked/{quoteId}`).
+- [ ] **Wochen-Strip Interaktivität & Navigation:** Klick auf einen Tag in der „Diese Woche"-Card springt direkt zu diesem Eintrag im Tagebuch. Zusätzlich können die Wochen per Swipe/Geste durchgewischt werden, um auch ältere Wochen und deren Einträge schnell zu finden.
+
+### 🚀 Backlog (Nach MVP)
 - [ ] **Jahresrückblick:** Vollständiger Jahresrückblick mit tiefen Reflexionsfragen (geplant für Dezember).
 - [ ] **Monatsrückblick ausbauen:** Mehr Visualisierungen (Mood-Verlauf, Streak-Jahreskalender) direkt im Monatsrückblick.
 - [ ] **Weitere Anpassungsmöglichkeiten:** Eigene Akzentfarbe wählen (über die 4 Paletten hinaus).
 - [ ] **Weitere Statistiken:** Wochentag-Analyse (an welchen Tagen bin ich am ausgeglichensten?), Energie-Trend, Selbstfürsorge-Häufigkeit.
 - [ ] **Sprüche-Pool erweitern:** Neue Sprüche zu bestehenden Tags.
 - [ ] **Umstellung der Sprache auf Englisch.**
-- [ ] **Daumen-runter für Sprüche:** Sprüche, die man nicht mag, dauerhaft ausblenden (Firestore: `disliked/{quoteId}`).
 - [ ] **Neue rotierende Fragen:** Fragen-Pool weiter ausbauen.
 - [ ] **Widget:** Android-Home-Screen-Widget.
-- [ ] **Wochen-Strip Interaktivität & Navigation:** Klick auf einen Tag in der „Diese Woche"-Card springt direkt zu diesem Eintrag im Tagebuch. Zusätzlich können die Wochen per Swipe/Geste durchgewischt werden, um auch ältere Wochen und deren Einträge schnell zu finden.
 
 ### 🔧 Tech Debt (Niedrige Priorität)
 

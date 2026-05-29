@@ -25,12 +25,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
+import java.time.LocalDate
+
 @Composable
 fun WeekStripCard(
     weekDays: List<WeekDayStatus>,
     completedCount: Int,
     maxCount: Int,
-    onClick: () -> Unit,
+    title: String,
+    onDayClick: (LocalDate) -> Unit,
 ) {
     val colors = AppTheme.colors
 
@@ -40,7 +43,6 @@ fun WeekStripCard(
             .clip(RoundedCornerShape(22.dp))
             .border(1.dp, colors.hair, RoundedCornerShape(22.dp))
             .background(colors.surface)
-            .clickable(onClick = onClick)
             .padding(vertical = 16.dp, horizontal = 14.dp),
     ) {
         Row(
@@ -49,7 +51,7 @@ fun WeekStripCard(
             verticalAlignment     = Alignment.CenterVertically,
         ) {
             Text(
-                "Diese Woche",
+                title,
                 style = MaterialTheme.typography.labelSmall,
                 color = colors.inkSoft,
             )
@@ -73,6 +75,7 @@ fun WeekStripCard(
                                 Modifier.background(colors.accent.copy(alpha = 0.12f))
                             else Modifier
                         )
+                        .clickable { onDayClick(day.date) }
                         .padding(vertical = 10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {

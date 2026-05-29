@@ -65,7 +65,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun TagebuchScreen(navController: NavController) {
+fun TagebuchScreen(navController: NavController, scrollToDate: String? = null) {
     val vm: HistoryViewModel = viewModel()
     val uiState by vm.uiState.collectAsState()
     val userId = Firebase.auth.currentUser?.uid ?: ""
@@ -108,6 +108,15 @@ fun TagebuchScreen(navController: NavController) {
             else -> {
                 // Das interaktive 3D-Buch zum Durchblättern
                 val pagerState = rememberPagerState(pageCount = { visibleEntries.size })
+                
+                LaunchedEffect(scrollToDate, visibleEntries) {
+                    if (!scrollToDate.isNullOrBlank() && visibleEntries.isNotEmpty()) {
+                        val index = visibleEntries.indexOfFirst { it.dateStr == scrollToDate }
+                        if (index >= 0) {
+                            pagerState.scrollToPage(index)
+                        }
+                    }
+                }
                 
                 Column(
                     modifier = Modifier

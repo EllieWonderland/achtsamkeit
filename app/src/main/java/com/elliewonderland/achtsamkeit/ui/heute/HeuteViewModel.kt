@@ -67,6 +67,7 @@ data class HeuteUiState(
     val photoOffsetX: Float = 0.0f,
     val photoOffsetY: Float = 0.0f,
     val showFavoriteLimitDialog: Boolean = false,
+    val weekOffsetData: Map<Int, List<WeekDayStatus>> = emptyMap(),
 )
 
 class HeuteViewModel(app: Application) : AndroidViewModel(app) {
@@ -160,6 +161,8 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
                 photoScale          = cropParams.first,
                 photoOffsetX         = cropParams.second,
                 photoOffsetY         = cropParams.third,
+                showFavoriteLimitDialog = false,
+                weekOffsetData      = mapOf(0 to weekDays),
             )
         }
     }
@@ -206,6 +209,21 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
 
     fun dismissFavoriteLimitDialog() {
         _uiState.update { it.copy(showFavoriteLimitDialog = false) }
+    }
+
+    fun loadWeekOffset(userId: String, offset: Int) {
+        if (_uiState.value.weekOffsetData.containsKey(offset)) return
+        viewModelScope.launch {
+            val today = LocalDate.now()
+            val weekStart = today.plusWeeks(offset.toLong()).with(DayOfWeek.MONDAY)
+            val weekEntries = runCatching { repo.getEntriesForWeek(userId, weekStart) }.getOrDefault(emptyList())
+            val weekDays = buildWeekDays(weekEntries, weekStart, today)
+            _uiState.update { state ->
+                state.copy(
+                    weekOffsetData = state.weekOffsetData + (offset to weekDays)
+                )
+            }
+        }
     }
 
     private fun buildMoodMonth(entries: List<com.elliewonderland.achtsamkeit.model.Entry>, daysInMonth: Int): List<MoodPoint?> {

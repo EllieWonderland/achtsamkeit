@@ -5,7 +5,9 @@ sealed class Screen(val route: String) {
     object Register      : Screen("register")
     object Onboarding    : Screen("onboarding")
     object Heute         : Screen("heute")
-    object Tagebuch      : Screen("tagebuch")
+    object Tagebuch      : Screen("tagebuch?scrollToDate={scrollToDate}") {
+        fun createRoute(scrollToDate: String) = "tagebuch?scrollToDate=$scrollToDate"
+    }
     object Statistik     : Screen("statistik")
     object Profil        : Screen("profil")
     object ThemePicker   : Screen("theme_picker")
