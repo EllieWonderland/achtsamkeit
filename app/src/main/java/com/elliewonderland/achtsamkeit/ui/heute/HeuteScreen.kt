@@ -128,7 +128,9 @@ fun HeuteScreen(navController: NavController) {
                         }
                         "lifehack" -> {
                             LifehackCard(
-                                lifehack = uiState.lifehackOfDay,
+                                lifehack         = uiState.lifehackOfDay,
+                                isFavorite       = uiState.lifehackIsFavorite,
+                                onFavoriteToggle = { vm.toggleFavoriteLifehack() },
                             )
                         }
                         "routines" -> {

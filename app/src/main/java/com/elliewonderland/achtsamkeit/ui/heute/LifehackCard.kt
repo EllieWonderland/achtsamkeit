@@ -1,5 +1,11 @@
 package com.elliewonderland.achtsamkeit.ui.heute
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +20,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +42,8 @@ import com.elliewonderland.achtsamkeit.ui.theme.SerifItalic
 @Composable
 fun LifehackCard(
     lifehack: Lifehack?,
+    isFavorite: Boolean,
+    onFavoriteToggle: () -> Unit,
 ) {
     if (lifehack == null) return
     val colors = AppTheme.colors
@@ -97,6 +110,23 @@ fun LifehackCard(
                                 color = colors.inkSoft,
                             )
                         }
+                    }
+                }
+
+                AnimatedContent(
+                    targetState = isFavorite,
+                    transitionSpec = {
+                        (scaleIn() + fadeIn()) togetherWith (scaleOut() + fadeOut())
+                    },
+                    label = "heart",
+                ) { fav ->
+                    IconButton(onClick = onFavoriteToggle) {
+                        Icon(
+                            imageVector     = if (fav) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            contentDescription = if (fav) "Aus Favoriten entfernen" else "Zu Favoriten hinzufügen",
+                            tint     = colors.accent,
+                            modifier = Modifier.size(20.dp),
+                        )
                     }
                 }
             }
