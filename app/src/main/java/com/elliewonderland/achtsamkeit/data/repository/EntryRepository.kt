@@ -1,6 +1,10 @@
 package com.elliewonderland.achtsamkeit.data.repository
 
 import com.elliewonderland.achtsamkeit.model.Entry
+import com.elliewonderland.achtsamkeit.model.EnergyKey
+import com.elliewonderland.achtsamkeit.model.GratitudeKey
+import com.elliewonderland.achtsamkeit.model.MoodKey
+import com.elliewonderland.achtsamkeit.model.SelfCareKey
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.firestore
@@ -17,35 +21,39 @@ class EntryRepository {
 
         // Stimmung → Tags (alte + neue Keys)
         when (entry.mood) {
-            "stress", "anxiety", "overwhelmed"            -> { tags.add("Stress"); tags.add("Angst") }
-            "joy", "excitement", "satisfaction", "relief" -> tags.add("Freude")
-            "balance", "peace"                            -> tags.add("Ausgeglichenheit")
-            "sadness", "melancholy", "loneliness"         -> { tags.add("Traurigkeit"); tags.add("Trauer") }
+            MoodKey.STRESS, MoodKey.ANXIETY, MoodKey.OVERWHELMED ->
+                { tags.add("Stress"); tags.add("Angst") }
+            MoodKey.JOY, MoodKey.EXCITEMENT, MoodKey.SATISFACTION, MoodKey.RELIEF ->
+                tags.add("Freude")
+            MoodKey.BALANCE, MoodKey.PEACE ->
+                tags.add("Ausgeglichenheit")
+            MoodKey.SADNESS, MoodKey.MELANCHOLY, MoodKey.LONELINESS ->
+                { tags.add("Traurigkeit"); tags.add("Trauer") }
         }
 
         // Energie → Tags (neue Abend-Keys; "empty" nur bei Stress-Stimmung)
         when (entry.energyLevel) {
-            "full", "satisfied_tired" -> tags.add("Energie")
-            "empty" -> if (entry.mood in listOf("stress", "anxiety", "overwhelmed")) tags.add("Stress")
+            EnergyKey.FULL, EnergyKey.SATISFIED_TIRED -> tags.add("Energie")
+            EnergyKey.EMPTY -> if (entry.mood in listOf(MoodKey.STRESS, MoodKey.ANXIETY, MoodKey.OVERWHELMED)) tags.add("Stress")
         }
 
         // Dankbarkeit → Tags (alte + neue Keys)
         val gratitudeKeys = entry.gratitudeAreas
-        if ("achievement" in gratitudeKeys || "encounter" in gratitudeKeys ||
-            "relations"   in gratitudeKeys || "opportunity" in gratitudeKeys) tags.add("Dankbarkeit")
-        if ("self_compassion" in gratitudeKeys || "learning" in gratitudeKeys ||
-            "comfort_received" in gratitudeKeys)                              tags.add("Selbstfürsorge")
+        if (GratitudeKey.ACHIEVEMENT in gratitudeKeys || GratitudeKey.ENCOUNTER   in gratitudeKeys ||
+            GratitudeKey.RELATIONS   in gratitudeKeys || GratitudeKey.OPPORTUNITY in gratitudeKeys) tags.add("Dankbarkeit")
+        if (GratitudeKey.SELF_COMPASSION  in gratitudeKeys || GratitudeKey.LEARNING        in gratitudeKeys ||
+            GratitudeKey.COMFORT_RECEIVED in gratitudeKeys)                                           tags.add("Selbstfürsorge")
         if (entry.dayRating >= 3) tags.add("Dankbarkeit")
 
         // Selbstfürsorge → Tags (alte + neue Keys)
         val selfCareKeys = entry.selfCare
-        if ("breathing"  in selfCareKeys || "outside"   in selfCareKeys ||
-            "stillness"  in selfCareKeys || "compassion" in selfCareKeys ||
-            "release"    in selfCareKeys || "forgiveness" in selfCareKeys) tags.add("Selbstfürsorge")
+        if (SelfCareKey.BREATHING  in selfCareKeys || SelfCareKey.OUTSIDE     in selfCareKeys ||
+            SelfCareKey.STILLNESS  in selfCareKeys || SelfCareKey.COMPASSION  in selfCareKeys ||
+            SelfCareKey.RELEASE    in selfCareKeys || SelfCareKey.FORGIVENESS in selfCareKeys) tags.add("Selbstfürsorge")
 
         // Schwere Tage → mitfühlende Sprüche (Trost, Selbstfürsorge, Traurigkeit)
-        if ("struggled" in gratitudeKeys || "none" in gratitudeKeys ||
-            "neglected" in selfCareKeys  || "no_energy" in selfCareKeys) {
+        if (GratitudeKey.STRUGGLED in gratitudeKeys || GratitudeKey.NONE   in gratitudeKeys ||
+            SelfCareKey.NEGLECTED  in selfCareKeys   || SelfCareKey.NO_ENERGY in selfCareKeys) {
             tags.add("Trost")
             tags.add("Selbstfürsorge")
             tags.add("Traurigkeit")
@@ -75,7 +83,7 @@ class EntryRepository {
         )
         val ref = db.collection("users").document(userId)
             .collection("entries").document()
-        ref.set(map).await()
+        ref.set(map)
         return ref.id
     }
 
@@ -145,6 +153,10 @@ private fun DocumentSnapshot.toEntry(): Entry? = runCatching {
     )
 }.getOrNull()
 
+// date_str speichert das lokale Gerätedatum (mit 04:00-Tagesgrenze).
+// Bekannte Einschränkung: Wechselt die Nutzerin beim Reisen die Geräte-Zeitzone, kann
+// ein Abend-Eintrag zum falschen Kalender-Tag gehören. Für MVP akzeptiert; eine spätere
+// Version sollte date_str UTC-basiert berechnen und nur in der UI umrechnen.
 private fun todayJournalDate(): String {
     val now = LocalDateTime.now()
     return (if (now.hour < 5) now.toLocalDate().minusDays(1) else now.toLocalDate()).toString()

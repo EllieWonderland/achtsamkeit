@@ -14,26 +14,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.elliewonderland.achtsamkeit.model.SelfCareKey
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
 private val morningOptions = listOf(
-    "physical"      to "💧 Körper & Pflege – Ausreichend Wasser trinken, gesund essen, sanft bewegen",
-    "boundaries"    to "🛑 Gesunde Grenzen – Bewusst 'Nein' sagen, Überlastung vermeiden, rechtzeitig stoppen",
-    "digital_detox" to "📱 Digitaler Schutz – Den Morgen/Tag ohne sinnloses Scrollen auf dem Handy verbringen",
-    "soul"          to "🎨 Seelennahrung – Etwas tun, das mir Freude bringt (Musik, Lesen, Hobby, Kreativität)",
-    "stillness"     to "🧘 Ruhemomente – Tiefes Durchatmen, eine kurze Meditation oder Dehnen einbauen",
-    "compassion"    to "🕊️ Selbstmitgefühl – Nett zu mir selbst sprechen, mir Fehler verzeihen, Druck rausnehmen",
-    "no_energy"     to "🪫 Keine Kraft für Vorsätze – Ich bin heute im reinen Überlebensmodus und erlege mir keinen Druck auf.",
+    SelfCareKey.PHYSICAL      to "💧 Körper & Pflege – Ausreichend Wasser trinken, gesund essen, sanft bewegen",
+    SelfCareKey.BOUNDARIES    to "🛑 Gesunde Grenzen – Bewusst 'Nein' sagen, Überlastung vermeiden, rechtzeitig stoppen",
+    SelfCareKey.DIGITAL_DETOX to "📱 Digitaler Schutz – Den Morgen/Tag ohne sinnloses Scrollen auf dem Handy verbringen",
+    SelfCareKey.SOUL          to "🎨 Seelennahrung – Etwas tun, das mir Freude bringt (Musik, Lesen, Hobby, Kreativität)",
+    SelfCareKey.STILLNESS     to "🧘 Ruhemomente – Tiefes Durchatmen, eine kurze Meditation oder Dehnen einbauen",
+    SelfCareKey.COMPASSION    to "🕊️ Selbstmitgefühl – Nett zu mir selbst sprechen, mir Fehler verzeihen, Druck rausnehmen",
+    SelfCareKey.NO_ENERGY     to "🪫 Keine Kraft für Vorsätze – Ich bin heute im reinen Überlebensmodus und erlege mir keinen Druck auf.",
 )
 
 private val eveningOptions = listOf(
-    "needs_met"      to "💧 Bedürfnisse geachtet – Genug getrunken, gegessen oder meinem Körper Ruhe gegönnt",
-    "boundaries_kept" to "🛑 Grenzen gesetzt – Mich abgegrenzt (z. B. rechtzeitig Feierabend gemacht, 'Nein' gesagt)",
-    "unplugged"      to "📱 Abschaltzeit gegönnt – Offline-Zeit genossen, bewusst Abstand zu Bildschirmen gehalten",
-    "joyful_moment"  to "🎨 Seelenbalsam – Zeit mit Dingen verbracht, die mir Spaß machen und mich nähren",
-    "release"        to "🌬️ Druck abgelassen – Bewusst durchgeatmet, Stress abgeschüttelt, Tränen zugelassen oder gedehnt",
-    "forgiveness"    to "🕊️ Selbstvergebung – Mich so akzeptiert, wie ich heute war – auch mit Fehlern und ohne Perfektion",
-    "neglected"      to "🚨 Mich selbst vernachlässigt – Keine Zeit oder Kraft für mich gehabt, eigene Bedürfnisse übergangen.",
+    SelfCareKey.NEEDS_MET       to "💧 Bedürfnisse geachtet – Genug getrunken, gegessen oder meinem Körper Ruhe gegönnt",
+    SelfCareKey.BOUNDARIES_KEPT to "🛑 Grenzen gesetzt – Mich abgegrenzt (z. B. rechtzeitig Feierabend gemacht, 'Nein' gesagt)",
+    SelfCareKey.UNPLUGGED       to "📱 Abschaltzeit gegönnt – Offline-Zeit genossen, bewusst Abstand zu Bildschirmen gehalten",
+    SelfCareKey.JOYFUL_MOMENT   to "🎨 Seelenbalsam – Zeit mit Dingen verbracht, die mir Spaß machen und mich nähren",
+    SelfCareKey.RELEASE         to "🌬️ Druck abgelassen – Bewusst durchgeatmet, Stress abgeschüttelt, Tränen zugelassen oder gedehnt",
+    SelfCareKey.FORGIVENESS     to "🕊️ Selbstvergebung – Mich so akzeptiert, wie ich heute war – auch mit Fehlern und ohne Perfektion",
+    SelfCareKey.NEGLECTED       to "🚨 Mich selbst vernachlässigt – Keine Zeit oder Kraft für mich gehabt, eigene Bedürfnisse übergangen.",
 )
 
 @Composable

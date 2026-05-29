@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.elliewonderland.achtsamkeit.model.EnergyKey
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.elliewonderland.achtsamkeit.ui.theme.SerifItalic
 
@@ -32,10 +33,10 @@ fun EnergyBarChart(distribution: Map<String, Int>) {
     val colors = AppTheme.colors
     val energyGroups = remember(colors) {
         listOf(
-            EnergyGroup(listOf("full", "satisfied_tired"), "Voll",    colors.accent),
-            EnergyGroup(listOf("medium", "wired"),         "Mittel",  colors.accent2),
-            EnergyGroup(listOf("low"),                     "Niedrig", colors.accent3),
-            EnergyGroup(listOf("empty"),                   "Leer",    colors.inkSoft.copy(alpha = 0.45f)),
+            EnergyGroup(listOf(EnergyKey.FULL, EnergyKey.SATISFIED_TIRED), "Voll",    colors.accent),
+            EnergyGroup(listOf(EnergyKey.MEDIUM, EnergyKey.WIRED),         "Mittel",  colors.accent2),
+            EnergyGroup(listOf(EnergyKey.LOW),                              "Niedrig", colors.accent3),
+            EnergyGroup(listOf(EnergyKey.EMPTY),                            "Leer",    colors.inkSoft.copy(alpha = 0.45f)),
         )
     }
 

@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.elliewonderland.achtsamkeit.model.MoodKey
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.elliewonderland.achtsamkeit.ui.theme.SerifItalic
 
@@ -32,11 +33,11 @@ fun MoodBarChart(distribution: Map<String, Int>) {
     val colors = AppTheme.colors
     val moodGroups = remember(colors) {
         listOf(
-            MoodGroup(listOf("joy", "excitement", "satisfaction", "relief"), "Freude",       colors.accent),
-            MoodGroup(listOf("balance", "peace"),                            "Balance",      colors.accent2),
-            MoodGroup(listOf("stress", "anxiety", "overwhelmed"),            "Anspannung",   colors.accent3),
-            MoodGroup(listOf("sadness", "melancholy", "loneliness",
-                             "tiredness", "exhaustion"),                     "Schwere",      colors.inkSoft.copy(alpha = 0.45f)),
+            MoodGroup(listOf(MoodKey.JOY, MoodKey.EXCITEMENT, MoodKey.SATISFACTION, MoodKey.RELIEF), "Freude",     colors.accent),
+            MoodGroup(listOf(MoodKey.BALANCE, MoodKey.PEACE),                                        "Balance",    colors.accent2),
+            MoodGroup(listOf(MoodKey.STRESS, MoodKey.ANXIETY, MoodKey.OVERWHELMED),                  "Anspannung", colors.accent3),
+            MoodGroup(listOf(MoodKey.SADNESS, MoodKey.MELANCHOLY, MoodKey.LONELINESS,
+                             MoodKey.TIREDNESS, MoodKey.EXHAUSTION),                                 "Schwere",    colors.inkSoft.copy(alpha = 0.45f)),
         )
     }
 

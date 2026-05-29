@@ -14,26 +14,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.elliewonderland.achtsamkeit.model.GratitudeKey
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
 private val morningOptions = listOf(
-    "relations"       to "👥 Menschen & Beziehungen – Familie, enge Freunde, Liebe, eine treue Partnerschaft",
-    "comfort"         to "🏡 Sicherheit & Komfort – Ein warmes Bett, ein sicheres Zuhause, Frieden, Privilegien",
-    "health"          to "🩺 Gesundheit & Vitalität – Körperliche Gesundheit, atmen können, schmerzfreier Zustand",
-    "nature"          to "🌲 Natur & Umgebung – Morgensonne, Vogelgezwitscher, frische Luft, Jahreszeiten",
-    "opportunity"     to "🚀 Chancen & Neubeginn – Ein neuer Tag, die Möglichkeit zu lernen, zu arbeiten oder zu gestalten",
-    "self_compassion" to "🌸 Selbstannahme & eigener Weg – Die eigene Resilienz, gemachte Fortschritte, Geduld mit sich selbst",
-    "struggled"       to "🌧️ Dankbarkeit fällt mir heute schwer – Es gibt Tage, an denen alles grau ist. Das ist völlig okay.",
+    GratitudeKey.RELATIONS       to "👥 Menschen & Beziehungen – Familie, enge Freunde, Liebe, eine treue Partnerschaft",
+    GratitudeKey.COMFORT         to "🏡 Sicherheit & Komfort – Ein warmes Bett, ein sicheres Zuhause, Frieden, Privilegien",
+    GratitudeKey.HEALTH          to "🩺 Gesundheit & Vitalität – Körperliche Gesundheit, atmen können, schmerzfreier Zustand",
+    GratitudeKey.NATURE          to "🌲 Natur & Umgebung – Morgensonne, Vogelgezwitscher, frische Luft, Jahreszeiten",
+    GratitudeKey.OPPORTUNITY     to "🚀 Chancen & Neubeginn – Ein neuer Tag, die Möglichkeit zu lernen, zu arbeiten oder zu gestalten",
+    GratitudeKey.SELF_COMPASSION to "🌸 Selbstannahme & eigener Weg – Die eigene Resilienz, gemachte Fortschritte, Geduld mit sich selbst",
+    GratitudeKey.STRUGGLED       to "🌧️ Dankbarkeit fällt mir heute schwer – Es gibt Tage, an denen alles grau ist. Das ist völlig okay.",
 )
 
 private val eveningOptions = listOf(
-    "encounter"        to "💬 Wertvolle Begegnung – Ein tiefes Gespräch, ein Lächeln, unerwartete Hilfe, nette Gesten",
-    "micro_joys"       to "☕ Kleine Alltagsfreuden – Ein gutes Essen, warme Dusche, Lieblingslied, gemütliche Decke",
-    "achievement"      to "🏆 Erfolg & Fortschritt – Ein gelöstes Problem, etwas Erledigtes, Stolz auf das eigene Schaffen",
-    "learning"         to "💡 Erkenntnis & Wachstum – Etwas Wichtiges gelernt (auch aus Fehlern oder schweren Zeiten)",
-    "comfort_received" to "🛡️ Trost & Beistand – Ein sicherer Hafen, Mitgefühl erhalten, die Hürde wurde bewältigt",
-    "connection"       to "🤝 Gelungenes Miteinander – Ein geklärtes Missverständnis, tiefe Verbundenheit mit Partner/Familie",
-    "none"             to "🌧️ Keiner – mir fiel Dankbarkeit heute extrem schwer – Heute gab es keinen Lichtblick. Das ist okay.",
+    GratitudeKey.ENCOUNTER        to "💬 Wertvolle Begegnung – Ein tiefes Gespräch, ein Lächeln, unerwartete Hilfe, nette Gesten",
+    GratitudeKey.MICRO_JOYS       to "☕ Kleine Alltagsfreuden – Ein gutes Essen, warme Dusche, Lieblingslied, gemütliche Decke",
+    GratitudeKey.ACHIEVEMENT      to "🏆 Erfolg & Fortschritt – Ein gelöstes Problem, etwas Erledigtes, Stolz auf das eigene Schaffen",
+    GratitudeKey.LEARNING         to "💡 Erkenntnis & Wachstum – Etwas Wichtiges gelernt (auch aus Fehlern oder schweren Zeiten)",
+    GratitudeKey.COMFORT_RECEIVED to "🛡️ Trost & Beistand – Ein sicherer Hafen, Mitgefühl erhalten, die Hürde wurde bewältigt",
+    GratitudeKey.CONNECTION       to "🤝 Gelungenes Miteinander – Ein geklärtes Missverständnis, tiefe Verbundenheit mit Partner/Familie",
+    GratitudeKey.NONE             to "🌧️ Keiner – mir fiel Dankbarkeit heute extrem schwer – Heute gab es keinen Lichtblick. Das ist okay.",
 )
 
 @Composable

@@ -51,8 +51,9 @@ class QuoteRepository(private val loader: QuoteLoader) {
         return picked
     }
 
-    fun getQuoteById(id: String): Quote? =
+    suspend fun getQuoteById(id: String): Quote? = withContext(Dispatchers.IO) {
         loader.quotes.firstOrNull { it.id == id }
+    }
 
     suspend fun isFavorite(userId: String, quoteId: String): Boolean {
         return db.collection("users").document(userId)

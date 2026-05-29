@@ -11,7 +11,9 @@ import com.elliewonderland.achtsamkeit.data.local.LifehackLoader
 import com.elliewonderland.achtsamkeit.data.repository.LifehackRepository
 import com.elliewonderland.achtsamkeit.data.repository.QuoteRepository
 import com.elliewonderland.achtsamkeit.data.repository.ReviewRepository
+import com.elliewonderland.achtsamkeit.model.EnergyKey
 import com.elliewonderland.achtsamkeit.model.Lifehack
+import com.elliewonderland.achtsamkeit.model.MoodKey
 import com.elliewonderland.achtsamkeit.model.Quote
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -216,16 +218,28 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun entryToScore(entry: com.elliewonderland.achtsamkeit.model.Entry): Int {
         val base = when (entry.mood) {
-            "joy"     -> 100
-            "balance" -> 75
-            "sadness" -> 50
-            "stress"  -> 25
-            else      -> 50
+            // Morgen-Stimmungen
+            MoodKey.EXCITEMENT   -> 90
+            MoodKey.PEACE        -> 75
+            MoodKey.TIREDNESS    -> 40
+            MoodKey.ANXIETY      -> 30
+            MoodKey.MELANCHOLY   -> 20
+            // Abend-Stimmungen
+            MoodKey.SATISFACTION -> 90
+            MoodKey.RELIEF       -> 75
+            MoodKey.EXHAUSTION   -> 40
+            MoodKey.OVERWHELMED  -> 25
+            MoodKey.LONELINESS   -> 20
+            else                 -> 50
         }
         val modifier = when (entry.energyLevel) {
-            "full"  -> 10
-            "empty" -> -10
-            else    -> 0
+            EnergyKey.FULL            -> 10
+            EnergyKey.SATISFIED_TIRED -> 5
+            EnergyKey.WIRED           -> 0
+            EnergyKey.MEDIUM          -> 0
+            EnergyKey.LOW             -> -5
+            EnergyKey.EMPTY           -> -10
+            else                      -> 0
         }
         return (base + modifier).coerceIn(5, 100)
     }

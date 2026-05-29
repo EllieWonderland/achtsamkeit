@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.elliewonderland.achtsamkeit.model.GratitudeKey
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import kotlin.math.min
 
@@ -35,31 +36,31 @@ fun GratitudePieChart(distribution: Map<String, Int>) {
     val gratitudeGroups = remember(colors) {
         listOf(
             GratitudeGroup(
-                listOf("relations", "encounter", "connection", "people"),
+                listOf(GratitudeKey.RELATIONS, GratitudeKey.ENCOUNTER, GratitudeKey.CONNECTION, GratitudeKey.PEOPLE),
                 "Beziehungen & Begegnungen", colors.accent,
             ),
             GratitudeGroup(
-                listOf("health", "body"),
+                listOf(GratitudeKey.HEALTH, GratitudeKey.BODY),
                 "Gesundheit & Körper", colors.accent2,
             ),
             GratitudeGroup(
-                listOf("achievement", "opportunity"),
+                listOf(GratitudeKey.ACHIEVEMENT, GratitudeKey.OPPORTUNITY),
                 "Erfolg & Chancen", colors.accent3,
             ),
             GratitudeGroup(
-                listOf("nature"),
+                listOf(GratitudeKey.NATURE),
                 "Natur & Umgebung", colors.accent.copy(alpha = 0.65f),
             ),
             GratitudeGroup(
-                listOf("comfort", "micro_joys", "pleasure"),
+                listOf(GratitudeKey.COMFORT, GratitudeKey.MICRO_JOYS, GratitudeKey.PLEASURE),
                 "Genuss & Alltagsfreuden", colors.accent2.copy(alpha = 0.65f),
             ),
             GratitudeGroup(
-                listOf("self_compassion", "learning", "comfort_received"),
+                listOf(GratitudeKey.SELF_COMPASSION, GratitudeKey.LEARNING, GratitudeKey.COMFORT_RECEIVED),
                 "Selbstfürsorge & Erkenntnis", colors.accent3.copy(alpha = 0.65f),
             ),
             GratitudeGroup(
-                listOf("struggled", "none"),
+                listOf(GratitudeKey.STRUGGLED, GratitudeKey.NONE),
                 "Schwere Tage", colors.inkSoft.copy(alpha = 0.45f),
             ),
         )

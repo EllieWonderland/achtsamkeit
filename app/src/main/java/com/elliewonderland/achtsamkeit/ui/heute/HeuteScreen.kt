@@ -30,7 +30,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,7 +61,13 @@ fun HeuteScreen(navController: NavController) {
         .collectAsState(initial = CardPreferences.defaultHeuteCards)
 
     val userId    = Firebase.auth.currentUser?.uid ?: ""
-    val hour               = LocalTime.now().hour
+    val hour by produceState(initialValue = LocalTime.now().hour) {
+        while (true) {
+            val now = LocalTime.now()
+            delay(((60 - now.second) * 1_000L).coerceAtLeast(1_000L))
+            value = LocalTime.now().hour
+        }
+    }
     val isEvening          = hour >= 17 || hour < 5
     val isMorningLocked    = isEvening && !uiState.hasMorningEntry
     val isEveningLocked    = !isEvening && !uiState.hasEveningEntry
