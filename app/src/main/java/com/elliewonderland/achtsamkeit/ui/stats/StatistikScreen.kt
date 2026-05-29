@@ -270,7 +270,7 @@ private fun MitfuehlenderImpulsCard(avgRating: Double) {
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             Text(
-                text  = "Achtsamer Impuls",
+                text  = "Mitfühlender Impuls",
                 style = MaterialTheme.typography.titleSmall,
                 color = colors.accent,
             )

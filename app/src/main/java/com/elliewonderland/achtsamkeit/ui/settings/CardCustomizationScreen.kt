@@ -314,8 +314,8 @@ private fun CustomizableCardItem(
 
 private fun getHeuteCardLabel(id: String): String = when (id) {
     "mood_trend" -> "Stimmungstrend"
-    "quote"      -> "Achtsamer Spruch"
-    "lifehack"   -> "Tagesimpuls"
+    "quote"      -> "Spruch des Tages"
+    "lifehack"   -> "Lifehack"
     "routines"   -> "Tägliche Routinen"
     "week_strip" -> "Wochenübersicht"
     "reviews"    -> "Rückblicke"
@@ -324,8 +324,8 @@ private fun getHeuteCardLabel(id: String): String = when (id) {
 
 private fun getHeuteCardDesc(id: String): String = when (id) {
     "mood_trend" -> "Deine durchschnittliche Stimmung im Monatsverlauf."
-    "quote"      -> "Dein persönlicher täglicher Spruch des Tages."
-    "lifehack"   -> "Ein kurzer achtsamer Impuls für deinen Alltag."
+    "quote"      -> "Dein täglicher inspirierender Spruch."
+    "lifehack"   -> "Ein praktischer und achtsamer Lifehack für deinen Alltag."
     "routines"   -> "Morgen- & Abendroutine für deine Achtsamkeit."
     "week_strip" -> "Deine wöchentliche Aktivitätsübersicht im Streifen."
     "reviews"    -> "Wochen-, Monats- und Jahresrückblicke verfassen."
@@ -339,7 +339,7 @@ private fun getStatsCardLabel(id: String): String = when (id) {
     "focus"     -> "Achtsamkeits-Fokus"
     "gratitude" -> "Dankbarkeits-Momente"
     "self_care" -> "Selbstfürsorge-Säulen"
-    "impulse"   -> "Achtsamer Impuls"
+    "impulse"   -> "Mitfühlender Impuls"
     else        -> id
 }
 
