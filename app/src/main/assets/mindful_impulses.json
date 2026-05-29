@@ -1,0 +1,18 @@
+[
+  {
+    "range": "<=0.0",
+    "text": "Nimm dir heute 3 Minuten Zeit, um einfach nur zu atmen. Kein Ziel, keine Leistung, nur du."
+  },
+  {
+    "range": "<3.0",
+    "text": "Die letzten Tage waren spürbar schwer für dich. Das ist vollkommen okay. Sei besonders sanft und liebevoll zu dir selbst. Setze heute bewusste Grenzen und lass allen Druck los."
+  },
+  {
+    "range": "<4.0",
+    "text": "Du erlebst eine ausgewogene Zeit mit kleinen Hürden. Vergiss nicht, dir selbst Vergebung zu schenken, wenn etwas nicht perfekt war. Jede kleine Pause ist ein Erfolg!"
+  },
+  {
+    "range": "else",
+    "text": "Dein Kompass zeigt auf viel Klarheit und Zufriedenheit. Atme diese positive Energie ein und speichere sie ab – für Tage, an denen die Wolken wieder dichter stehen."
+  }
+]

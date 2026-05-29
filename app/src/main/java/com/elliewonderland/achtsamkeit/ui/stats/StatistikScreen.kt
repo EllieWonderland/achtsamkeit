@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.elliewonderland.achtsamkeit.data.local.MindfulImpulseLoader
 import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
 import com.elliewonderland.achtsamkeit.ui.components.ShimmerCard
 import com.elliewonderland.achtsamkeit.ui.premium.PaywallCard
@@ -250,21 +251,9 @@ private fun AchtsamkeitsKompassCard(state: StatsUiState) {
 @Composable
 private fun MitfuehlenderImpulsCard(avgRating: Double) {
     val colors = AppTheme.colors
-    
-    val tipText = when {
-        avgRating <= 0.0 -> {
-            "Nimm dir heute 3 Minuten Zeit, um einfach nur zu atmen. Kein Ziel, keine Leistung, nur du."
-        }
-        avgRating < 3.0 -> {
-            "Die letzten Tage waren spürbar schwer für dich. Das ist vollkommen okay. Sei besonders sanft und liebevoll zu dir selbst. Setze heute bewusste Grenzen und lass allen Druck los."
-        }
-        avgRating < 4.0 -> {
-            "Du erlebst eine ausgewogene Zeit mit kleinen Hürden. Vergiss nicht, dir selbst Vergebung zu schenken, wenn etwas nicht perfekt war. Jede kleine Pause ist ein Erfolg!"
-        }
-        else -> {
-            "Dein Kompass zeigt auf viel Klarheit und Zufriedenheit. Atme diese positive Energie ein und speichere sie ab – für Tage, an denen die Wolken wieder dichter stehen."
-        }
-    }
+    val context = LocalContext.current
+    val loader = remember(context) { MindfulImpulseLoader(context) }
+    val tipText = remember(avgRating, loader) { loader.getImpulseForRating(avgRating) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
