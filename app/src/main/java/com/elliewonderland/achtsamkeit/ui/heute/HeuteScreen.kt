@@ -62,7 +62,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun HeuteScreen(navController: NavController) {
+fun HeuteScreen(navController: NavController, isActive: Boolean = true) {
     val vm: HeuteViewModel = viewModel()
     val uiState by vm.uiState.collectAsState()
     val context = LocalContext.current
@@ -127,9 +127,8 @@ fun HeuteScreen(navController: NavController) {
         today.format(DateTimeFormatter.ofPattern("EEEE · d. MMMM", Locale.GERMAN))
     }
 
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    LaunchedEffect(navBackStackEntry?.destination?.route, userId) {
-        if (navBackStackEntry?.destination?.route == Screen.Heute.route && userId.isNotBlank()) {
+    LaunchedEffect(isActive, userId) {
+        if (isActive && userId.isNotBlank()) {
             vm.loadTodayStatus(userId)
         }
     }
@@ -174,6 +173,7 @@ fun HeuteScreen(navController: NavController) {
                                 quote            = uiState.quoteOfDay,
                                 isFavorite       = uiState.quoteIsFavorite,
                                 onFavoriteToggle = { vm.toggleFavoriteQuote() },
+                                onDislike        = { vm.dislikeQuote() },
                                 onClick          = {},
                             )
                         }

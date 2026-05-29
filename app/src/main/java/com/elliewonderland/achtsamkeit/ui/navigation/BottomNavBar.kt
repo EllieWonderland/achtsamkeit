@@ -35,7 +35,11 @@ private val navItems = listOf(
 )
 
 @Composable
-fun BottomNavBar(navController: NavController, currentRoute: String?) {
+fun BottomNavBar(
+    navController: NavController,
+    currentRoute: String?,
+    onTabClick: ((Screen) -> Unit)? = null
+) {
     NavigationBar(
         containerColor = AppTheme.colors.surface,
     ) {
@@ -44,13 +48,17 @@ fun BottomNavBar(navController: NavController, currentRoute: String?) {
             NavigationBarItem(
                 selected = selected,
                 onClick = {
-                    navController.navigate(item.screen.route) {
-                        popUpTo(Screen.Heute.route) {
-                            inclusive = item.screen == Screen.Heute
-                            saveState = item.screen != Screen.Heute
+                    if (onTabClick != null) {
+                        onTabClick(item.screen)
+                    } else {
+                        navController.navigate(item.screen.route) {
+                            popUpTo(Screen.Heute.route) {
+                                inclusive = item.screen == Screen.Heute
+                                saveState = item.screen != Screen.Heute
+                            }
+                            launchSingleTop = item.screen != Screen.Heute
+                            restoreState    = item.screen != Screen.Heute
                         }
-                        launchSingleTop = item.screen != Screen.Heute
-                        restoreState    = item.screen != Screen.Heute
                     }
                 },
                 icon  = {

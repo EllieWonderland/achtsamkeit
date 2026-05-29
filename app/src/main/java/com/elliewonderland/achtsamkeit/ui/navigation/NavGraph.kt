@@ -35,13 +35,6 @@ import com.elliewonderland.achtsamkeit.ui.theme.ThemeChoice
 import com.elliewonderland.achtsamkeit.ui.weekly.WeeklyReviewScreen
 import com.elliewonderland.achtsamkeit.ui.yearly.YearlyReviewScreen
 
-private val bottomNavRoutes = setOf(
-    Screen.Heute.route,
-    Screen.Tagebuch.route,
-    Screen.Statistik.route,
-    Screen.Profil.route,
-)
-
 @Composable
 fun AppNavHost(choice: ThemeChoice) {
     val navController = rememberNavController()
@@ -49,37 +42,38 @@ fun AppNavHost(choice: ThemeChoice) {
     val startDest     = if (authRepo.getCurrentUser() != null) Screen.Heute.route
                         else Screen.Login.route
 
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute   = backStackEntry?.destination?.route
-
-    Scaffold(
-        bottomBar = {
-            if (currentRoute in bottomNavRoutes) {
-                BottomNavBar(navController = navController, currentRoute = currentRoute)
-            }
-        }
-    ) { innerPadding ->
-        NavHost(
-            navController    = navController,
-            startDestination = startDest,
-            modifier         = Modifier.padding(innerPadding),
-        ) {
-            composable(Screen.Login.route)         { LoginScreen(navController) }
-            composable(Screen.Register.route)      { RegisterScreen(navController) }
-            composable(Screen.Onboarding.route)    { OnboardingScreen(navController) }
-            composable(Screen.Heute.route)         { HeuteScreen(navController) }
-            composable(
-                route     = Screen.Tagebuch.route,
-                arguments = listOf(navArgument("scrollToDate") {
-                    type         = NavType.StringType
-                    nullable     = true
+    NavHost(
+        navController    = navController,
+        startDestination = startDest,
+    ) {
+        composable(Screen.Login.route)         { LoginScreen(navController) }
+        composable(Screen.Register.route)      { RegisterScreen(navController) }
+        composable(Screen.Onboarding.route)    { OnboardingScreen(navController) }
+        
+        composable(
+            route = "main_tabs?tab={tab}&scrollToDate={scrollToDate}",
+            arguments = listOf(
+                navArgument("tab") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = "heute"
+                },
+                navArgument("scrollToDate") {
+                    type = NavType.StringType
+                    nullable = true
                     defaultValue = null
-                })
-            ) { back ->
-                TagebuchScreen(navController, back.arguments?.getString("scrollToDate"))
-            }
-            composable(Screen.Statistik.route)     { StatistikScreen(navController) }
-            composable(Screen.Profil.route)        { ProfilScreen(navController, choice) }
+                }
+            )
+        ) { back ->
+            val tab = back.arguments?.getString("tab") ?: "heute"
+            val scrollToDate = back.arguments?.getString("scrollToDate")
+            MainTabContainerScreen(
+                navController = navController,
+                choice = choice,
+                initialTab = tab,
+                scrollToDate = scrollToDate,
+            )
+        }
             composable(Screen.ThemePicker.route)   { ThemePickerScreen(choice, navController) }
             composable(Screen.NotifSettings.route) { NotificationSettingsScreen(navController) }
             composable(Screen.Favorites.route)     { FavoritesScreen(navController) }
@@ -110,4 +104,3 @@ fun AppNavHost(choice: ThemeChoice) {
             }
         }
     }
-}

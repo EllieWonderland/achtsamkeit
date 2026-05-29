@@ -60,6 +60,7 @@ import java.util.Locale
 fun StatistikScreen(
     navController: NavController,
     vm: StatsViewModel = viewModel(),
+    isActive: Boolean = true
 ) {
     val state by vm.state.collectAsState()
     val context = LocalContext.current
@@ -68,9 +69,11 @@ fun StatistikScreen(
         .collectAsState(initial = CardPreferences.defaultStatsCards)
 
     var isPremium by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        vm.reload()
-        isPremium = PremiumRepository.isPremium()
+    LaunchedEffect(isActive) {
+        if (isActive) {
+            vm.reload()
+            isPremium = PremiumRepository.isPremium()
+        }
     }
 
     val colors = AppTheme.colors

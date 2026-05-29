@@ -65,14 +65,18 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun TagebuchScreen(navController: NavController, scrollToDate: String? = null) {
+fun TagebuchScreen(
+    navController: NavController,
+    scrollToDate: String? = null,
+    isActive: Boolean = true
+) {
     val vm: HistoryViewModel = viewModel()
     val uiState by vm.uiState.collectAsState()
     val userId = Firebase.auth.currentUser?.uid ?: ""
     val colors = AppTheme.colors
 
-    LaunchedEffect(userId) {
-        if (userId.isNotBlank()) vm.load(userId)
+    LaunchedEffect(userId, isActive) {
+        if (userId.isNotBlank() && isActive) vm.load(userId)
     }
 
     val visibleEntries = uiState.entries

@@ -16,6 +16,9 @@ import com.elliewonderland.achtsamkeit.model.Lifehack
 import com.elliewonderland.achtsamkeit.model.MoodKey
 import com.elliewonderland.achtsamkeit.model.Quote
 import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -184,6 +187,54 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
             }
             runCatching { quoteRepo.toggleFavorite(userId, quote) }
             _uiState.update { it.copy(quoteIsFavorite = !state.quoteIsFavorite) }
+        }
+    }
+
+    fun dislikeQuote() {
+        val state = _uiState.value
+        val quote = state.quoteOfDay ?: return
+        val userId = authRepo.getCurrentUser()?.uid ?: return
+        viewModelScope.launch {
+            // 1. Mark as disliked in Firestore
+            runCatching { quoteRepo.dislikeQuote(userId, quote.id) }
+            
+            // 2. Load today's entry (evening or morning)
+            val today = LocalDate.now()
+            val morningEntry = runCatching { repo.getTodayEntry(userId, "morning") }.getOrNull()
+            val eveningEntry = runCatching { repo.getTodayEntry(userId, "evening") }.getOrNull()
+            val lastEntry = eveningEntry ?: morningEntry
+            
+            // 3. Derive user tags and pick new quote
+            val weekStart = today.with(DayOfWeek.MONDAY)
+            val weekEntries = runCatching { repo.getEntriesForWeek(userId, weekStart) }.getOrDefault(emptyList())
+            val userTags = buildList {
+                morningEntry?.let { addAll(repo.deriveTags(it)) }
+                eveningEntry?.let { addAll(repo.deriveTags(it)) }
+                weekEntries.forEach { addAll(repo.deriveTags(it)) }
+            }.distinct()
+            
+            val newQuote = runCatching { quoteRepo.pickQuote(userId, userTags) }.getOrNull()
+            if (newQuote != null) {
+                // Update today's entry's quoteId in Firestore if it matched the old one
+                if (lastEntry != null && lastEntry.quoteId == quote.id) {
+                    runCatching { repo.updateEntryQuoteId(userId, lastEntry.id, newQuote.id) }
+                }
+                
+                // Update general quote of the day in user's profile
+                runCatching {
+                    Firebase.firestore.collection("users").document(userId).update(mapOf(
+                        "quote_of_day_id" to newQuote.id,
+                        "quote_of_day_date" to today.toString()
+                    )).await()
+                }
+                
+                val isFav = runCatching { quoteRepo.isFavorite(userId, newQuote.id) }.getOrDefault(false)
+                
+                _uiState.update { it.copy(
+                    quoteOfDay = newQuote,
+                    quoteIsFavorite = isFav
+                ) }
+            }
         }
     }
 
