@@ -53,11 +53,14 @@ fun EntryListItem(entry: Entry, onClick: () -> Unit) {
             Spacer(Modifier.height(6.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = moodEmoji(entry.mood),
-                    style = MaterialTheme.typography.titleMedium,
-                )
-                Spacer(Modifier.width(8.dp))
+                val emoji = moodEmoji(entry.mood)
+                if (emoji.isNotEmpty()) {
+                    Text(
+                        text = emoji,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    Spacer(Modifier.width(8.dp))
+                }
                 val preview = entry.freeText.ifBlank { entry.guidedAnswer }
                 Text(
                     text = if (preview.length > 60) "${preview.take(60)}…" else preview.ifBlank { "—" },
@@ -79,16 +82,16 @@ fun EntryListItem(entry: Entry, onClick: () -> Unit) {
     }
 }
 
-private fun formatDate(dateStr: String): String {
+internal fun formatDate(dateStr: String): String {
     return runCatching {
         val date = LocalDate.parse(dateStr)
-        date.format(DateTimeFormatter.ofPattern("d. MMMM yyyy", Locale("de")))
+        date.format(DateTimeFormatter.ofPattern("EEEE, d. MMMM yyyy", Locale("de")))
     }.getOrDefault(dateStr)
 }
 
 private fun typeLabel(type: String): String = when (type) {
-    "morning"        -> "Morgenroutine"
-    "evening"        -> "Abendroutine"
+    "morning"        -> "☀️"
+    "evening"        -> "🌙"
     "weekly_review"  -> "Wochenrückblick"
     "monthly_review" -> "Monatsrückblick"
     "yearly_review"  -> "Jahresrückblick"
@@ -100,5 +103,5 @@ private fun moodEmoji(mood: String): String = when (mood) {
     "stress"  -> "🌩️"
     "balance" -> "🌿"
     "sadness" -> "🌧️"
-    else      -> "📖"
+    else      -> ""
 }
