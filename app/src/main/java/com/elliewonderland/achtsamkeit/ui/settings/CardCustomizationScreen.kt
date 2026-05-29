@@ -90,44 +90,47 @@ fun CardCustomizationScreen(navController: NavController) {
                     .padding(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                val pillModifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(20.dp))
-                    .padding(vertical = 10.dp)
-                
+                val tab0Selected = selectedTab == 0
                 Box(
-                    modifier = pillModifier
-                        .background(if (selectedTab == 0) colors.surface else colors.surfaceAlt)
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(if (tab0Selected) colors.surface else colors.surfaceAlt)
                         .border(
                             1.dp,
-                            if (selectedTab == 0) colors.hair else colors.surfaceAlt,
+                            if (tab0Selected) colors.hair else colors.surfaceAlt,
                             RoundedCornerShape(20.dp)
                         )
-                        .clickable { selectedTab = 0 },
+                        .clickable { selectedTab = 0 }
+                        .padding(vertical = 12.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         "Heute-Tab",
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                        color = if (selectedTab == 0) colors.ink else colors.inkSoft
+                        color = if (tab0Selected) colors.ink else colors.inkSoft
                     )
                 }
 
+                val tab1Selected = selectedTab == 1
                 Box(
-                    modifier = pillModifier
-                        .background(if (selectedTab == 1) colors.surface else colors.surfaceAlt)
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(if (tab1Selected) colors.surface else colors.surfaceAlt)
                         .border(
                             1.dp,
-                            if (selectedTab == 1) colors.hair else colors.surfaceAlt,
+                            if (tab1Selected) colors.hair else colors.surfaceAlt,
                             RoundedCornerShape(20.dp)
                         )
-                        .clickable { selectedTab = 1 },
+                        .clickable { selectedTab = 1 }
+                        .padding(vertical = 12.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         "Statistik",
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                        color = if (selectedTab == 1) colors.ink else colors.inkSoft
+                        color = if (tab1Selected) colors.ink else colors.inkSoft
                     )
                 }
             }
