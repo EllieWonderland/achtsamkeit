@@ -26,21 +26,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -79,78 +75,30 @@ fun TagebuchScreen(navController: NavController) {
         if (userId.isNotBlank()) vm.load(userId)
     }
 
-    val visibleEntries = remember(uiState.entries, uiState.searchText) {
-        val text = uiState.searchText.trim()
-        if (text.isEmpty()) uiState.entries
-        else uiState.entries.filter { e ->
-            val formattedDate = formatDate(e.dateStr)
-            e.freeText.contains(text, ignoreCase = true) ||
-            e.guidedAnswer.contains(text, ignoreCase = true) ||
-            formattedDate.contains(text, ignoreCase = true)
-        }
-    }
+    val visibleEntries = uiState.entries
 
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(Modifier.height(24.dp))
 
         Text(
-            text = "Mein Tagebuch",
+            text = "Liebes Tagebuch,...",
             style = MaterialTheme.typography.headlineSmall,
             color = AppTheme.colors.ink,
             modifier = Modifier.padding(horizontal = 16.dp),
         )
-        Spacer(Modifier.height(12.dp))
-
-        OutlinedTextField(
-            value = uiState.searchText,
-            onValueChange = vm::setSearchText,
-            placeholder = { Text("Suchen nach Text, Datum, Wochentag…", color = AppTheme.colors.inkSoft) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            singleLine = true,
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = null,
-                    tint = AppTheme.colors.inkSoft,
-                )
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor   = AppTheme.colors.accent,
-                unfocusedBorderColor = AppTheme.colors.hair,
-                cursorColor          = AppTheme.colors.accent,
-                focusedTextColor     = AppTheme.colors.ink,
-                unfocusedTextColor   = AppTheme.colors.ink,
-            ),
-            shape = MaterialTheme.shapes.medium,
-        )
         Spacer(Modifier.height(16.dp))
-
-        // Elegantes Favoriten-Karussell (nur wenn Favoriten vorhanden sind und nicht gesucht wird)
-        if (uiState.favorites.isNotEmpty() && uiState.searchText.isEmpty()) {
-            FavoritesCarousel(
-                favorites = uiState.favorites,
-                onUnfavorite = { fav -> vm.toggleFavorite(userId, fav) },
-            )
-            Spacer(Modifier.height(16.dp))
-        }
 
         when {
             uiState.isLoading -> {
-                Column(modifier = Modifier.fillMaxSize()) {
+                Column(modifier = Modifier.fillMaxSize().weight(1f)) {
                     repeat(6) { ShimmerListItem() }
                 }
             }
             visibleEntries.isEmpty() -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.fillMaxSize().weight(1f), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Spacer(Modifier.height(12.dp))
                         Text(
-                            text = if (uiState.searchText.isNotBlank())
-                                "Keine Einträge gefunden."
-                            else
-                                "Noch keine Einträge vorhanden.",
+                            text = "Noch keine Einträge vorhanden.",
                             style = MaterialTheme.typography.bodyLarge,
                             color = AppTheme.colors.inkSoft,
                         )
@@ -239,6 +187,15 @@ fun TagebuchScreen(navController: NavController) {
                     Spacer(Modifier.height(8.dp))
                 }
             }
+        }
+
+        // Elegantes Favoriten-Karussell (unter dem Tagebuch platziert)
+        if (uiState.favorites.isNotEmpty()) {
+            FavoritesCarousel(
+                favorites = uiState.favorites,
+                onUnfavorite = { fav -> vm.toggleFavorite(userId, fav) },
+            )
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
@@ -367,12 +324,22 @@ private fun BookPage(
                 // Stimmung-Indicator falls vorhanden
                 val mood = entry.mood
                 if (mood.isNotBlank() && mood != "none") {
-                    val moodText = when (mood) {
-                        "joy" -> "Stimmung: Voller Freude ☀️"
-                        "stress" -> "Stimmung: Gestresst 🌩️"
-                        "balance" -> "Stimmung: Ausgeglichen 🌿"
-                        "sadness" -> "Stimmung: Betrübt 🌧️"
-                        else -> "Stimmung: $mood"
+                    val moodText = when (mood.lowercase(Locale.ROOT).trim()) {
+                        "excitement" -> "Stimmung: Voller Vorfreude ✨"
+                        "peace"      -> "Stimmung: Gelassen 🕊️"
+                        "tiredness"  -> "Stimmung: Müde 😴"
+                        "anxiety"    -> "Stimmung: Ängstlich/Unruhig 😟"
+                        "melancholy" -> "Stimmung: Schwermütig 🌧️"
+                        "stress", "gestresst" -> "Stimmung: Gestresst 🌩️"
+                        "satisfaction" -> "Stimmung: Zufrieden 😊"
+                        "relief"     -> "Stimmung: Erleichtert 😌"
+                        "exhaustion" -> "Stimmung: Erschöpft 🥱"
+                        "overwhelmed" -> "Stimmung: Überfordert 🤯"
+                        "loneliness" -> "Stimmung: Einsam 👤"
+                        "joy"        -> "Stimmung: Voller Freude ☀️"
+                        "balance"    -> "Stimmung: Ausgeglichen 🌿"
+                        "sadness"    -> "Stimmung: Betrübt 🌧️"
+                        else -> "Stimmung: ${mood.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.GERMAN) else it.toString() }}"
                     }
                     Text(
                         text = moodText,
