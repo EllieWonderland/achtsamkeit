@@ -29,6 +29,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +54,8 @@ fun QuoteScreen(navController: NavController, entryId: String) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val userId = Firebase.auth.currentUser?.uid ?: ""
+
+    var showDislikeConfirmDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(entryId) {
         if (userId.isNotBlank() && entryId.isNotBlank()) vm.load(userId, entryId)
@@ -163,7 +168,7 @@ fun QuoteScreen(navController: NavController, entryId: String) {
                             modifier           = Modifier.size(28.dp),
                         )
                     }
-                    IconButton(onClick = { vm.dislikeQuote(userId, entryId) }) {
+                    IconButton(onClick = { showDislikeConfirmDialog = true }) {
                         Icon(
                             imageVector        = Icons.Outlined.ThumbDown,
                             contentDescription = "Spruch nicht mehr anzeigen",
@@ -171,6 +176,36 @@ fun QuoteScreen(navController: NavController, entryId: String) {
                             modifier           = Modifier.size(28.dp),
                         )
                     }
+                }
+
+                if (showDislikeConfirmDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showDislikeConfirmDialog = false },
+                        title = { Text("Spruch ausblenden?") },
+                        text = {
+                            Text(
+                                "Möchtest du diesen Spruch wirklich dauerhaft ausblenden? Er wird dir in Zukunft nicht mehr angezeigt.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = AppTheme.colors.inkSoft,
+                            )
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    showDislikeConfirmDialog = false
+                                    vm.dislikeQuote(userId, entryId)
+                                },
+                                colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.accent),
+                            ) {
+                                Text("Ja, ausblenden")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showDislikeConfirmDialog = false }) {
+                                Text("Abbrechen")
+                            }
+                        }
+                    )
                 }
                 Spacer(Modifier.height(48.dp))
                 Button(

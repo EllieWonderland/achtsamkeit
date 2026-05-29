@@ -32,6 +32,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import kotlinx.coroutines.delay
@@ -69,6 +71,69 @@ fun HeuteScreen(navController: NavController, isActive: Boolean = true) {
     val scope = rememberCoroutineScope()
     val cardsConfig by remember(context) { CardPreferences.getHeuteCards(context) }
         .collectAsState(initial = CardPreferences.defaultHeuteCards)
+
+    var showQuoteDislikeConfirmDialog by remember { mutableStateOf(false) }
+    var showLifehackDislikeConfirmDialog by remember { mutableStateOf(false) }
+
+    if (showQuoteDislikeConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = { showQuoteDislikeConfirmDialog = false },
+            title = { Text("Spruch ausblenden?") },
+            text = {
+                Text(
+                    "Möchtest du diesen Spruch wirklich dauerhaft ausblenden? Er wird dir in Zukunft nicht mehr angezeigt.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = AppTheme.colors.inkSoft,
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showQuoteDislikeConfirmDialog = false
+                        vm.dislikeQuote()
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.accent),
+                ) {
+                    Text("Ja, ausblenden")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showQuoteDislikeConfirmDialog = false }) {
+                    Text("Abbrechen")
+                }
+            },
+        )
+    }
+
+    if (showLifehackDislikeConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = { showLifehackDislikeConfirmDialog = false },
+            title = { Text("Lifehack ausblenden?") },
+            text = {
+                Text(
+                    "Möchtest du diesen Lifehack wirklich dauerhaft ausblenden? Er wird dir in Zukunft nicht mehr angezeigt.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = AppTheme.colors.inkSoft,
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showLifehackDislikeConfirmDialog = false
+                        vm.dislikeLifehack()
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.accent),
+                ) {
+                    Text("Ja, ausblenden")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showLifehackDislikeConfirmDialog = false }) {
+                    Text("Abbrechen")
+                }
+            },
+        )
+    }
 
     if (uiState.showFavoriteLimitDialog) {
         AlertDialog(
@@ -173,7 +238,7 @@ fun HeuteScreen(navController: NavController, isActive: Boolean = true) {
                                 quote            = uiState.quoteOfDay,
                                 isFavorite       = uiState.quoteIsFavorite,
                                 onFavoriteToggle = { vm.toggleFavoriteQuote() },
-                                onDislike        = { vm.dislikeQuote() },
+                                onDislike        = { showQuoteDislikeConfirmDialog = true },
                                 onClick          = {},
                             )
                         }
@@ -182,6 +247,7 @@ fun HeuteScreen(navController: NavController, isActive: Boolean = true) {
                                 lifehack         = uiState.lifehackOfDay,
                                 isFavorite       = uiState.lifehackIsFavorite,
                                 onFavoriteToggle = { vm.toggleFavoriteLifehack() },
+                                onDislike        = { showLifehackDislikeConfirmDialog = true },
                             )
                         }
                         "routines" -> {

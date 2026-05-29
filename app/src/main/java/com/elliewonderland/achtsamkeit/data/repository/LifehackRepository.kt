@@ -4,6 +4,7 @@ import com.elliewonderland.achtsamkeit.data.local.LifehackLoader
 import com.elliewonderland.achtsamkeit.model.Lifehack
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 
@@ -31,15 +32,28 @@ class LifehackRepository(private val loader: LifehackLoader) {
         return lifehack
     }
 
+    suspend fun dislikeLifehack(userId: String, lifehackId: String) {
+        db.collection("users").document(userId)
+            .collection("disliked_lifehacks").document(lifehackId)
+            .set(mapOf("disliked_at" to FieldValue.serverTimestamp())).await()
+    }
+
+    suspend fun loadDislikedLifehacks(userId: String): Set<String> {
+        val snap = db.collection("users").document(userId)
+            .collection("disliked_lifehacks").get().await()
+        return snap.documents.map { it.id }.toSet()
+    }
+
     suspend fun pickLifehack(userId: String): Lifehack? {
         val allLifehacks = loader.lifehacks
         if (allLifehacks.isEmpty()) return null
 
+        val disliked = loadDislikedLifehacks(userId)
         val profile = getUserProfile(userId)
         val activeSpecificKeys = profile.filterValues { it == true }.keys
 
         val pool = allLifehacks.filter { lh ->
-            lh.tags.all { it == "Alltag" || it == "Haushalt" } || lh.tags.any { tag ->
+            lh.id !in disliked && (lh.tags.all { it == "Alltag" || it == "Haushalt" } || lh.tags.any { tag ->
                 val key = when (tag) {
                     "Arbeit" -> "arbeit"
                     "Mama" -> "mama"
@@ -51,13 +65,13 @@ class LifehackRepository(private val loader: LifehackLoader) {
                     else -> null
                 }
                 key != null && key in activeSpecificKeys
-            }
+            })
         }
 
-        if (pool.isEmpty()) return null
+        val finalPool = pool.ifEmpty { allLifehacks.filter { it.id !in disliked } }.ifEmpty { allLifehacks }
+        if (finalPool.isEmpty()) return null
 
-        val dayIndex = LocalDate.now().dayOfYear
-        return pool[dayIndex % pool.size]
+        return finalPool.random()
     }
 
     fun getLifehackById(id: String): Lifehack? =

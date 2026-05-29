@@ -238,6 +238,36 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun dislikeLifehack() {
+        val state = _uiState.value
+        val hack = state.lifehackOfDay ?: return
+        val userId = authRepo.getCurrentUser()?.uid ?: return
+        viewModelScope.launch {
+            // 1. Mark as disliked in Firestore
+            runCatching { lifehackRepo.dislikeLifehack(userId, hack.id) }
+            
+            // 2. Pick a new lifehack (which automatically excludes disliked ones)
+            val newHack = runCatching { lifehackRepo.pickLifehack(userId) }.getOrNull()
+            if (newHack != null) {
+                // Update general lifehack of the day in user's profile
+                runCatching {
+                    val today = LocalDate.now().toString()
+                    Firebase.firestore.collection("users").document(userId).update(mapOf(
+                        "lifehack_of_day_id" to newHack.id,
+                        "lifehack_of_day_date" to today
+                    )).await()
+                }
+                
+                val isFav = runCatching { quoteRepo.isFavorite(userId, newHack.id) }.getOrDefault(false)
+                
+                _uiState.update { it.copy(
+                    lifehackOfDay = newHack,
+                    lifehackIsFavorite = isFav
+                ) }
+            }
+        }
+    }
+
     fun toggleFavoriteLifehack() {
         val state = _uiState.value
         val hack = state.lifehackOfDay ?: return

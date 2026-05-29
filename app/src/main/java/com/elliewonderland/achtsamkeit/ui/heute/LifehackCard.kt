@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.ThumbDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +45,7 @@ fun LifehackCard(
     lifehack: Lifehack?,
     isFavorite: Boolean,
     onFavoriteToggle: () -> Unit,
+    onDislike: () -> Unit,
 ) {
     if (lifehack == null) return
     val colors = AppTheme.colors
@@ -113,20 +115,31 @@ fun LifehackCard(
                     }
                 }
 
-                AnimatedContent(
-                    targetState = isFavorite,
-                    transitionSpec = {
-                        (scaleIn() + fadeIn()) togetherWith (scaleOut() + fadeOut())
-                    },
-                    label = "heart",
-                ) { fav ->
-                    IconButton(onClick = onFavoriteToggle) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = onDislike) {
                         Icon(
-                            imageVector     = if (fav) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                            contentDescription = if (fav) "Aus Favoriten entfernen" else "Zu Favoriten hinzufügen",
-                            tint     = colors.accent,
-                            modifier = Modifier.size(20.dp),
+                            imageVector        = Icons.Outlined.ThumbDown,
+                            contentDescription = "Lifehack ausblenden",
+                            tint               = colors.inkSoft,
+                            modifier           = Modifier.size(20.dp),
                         )
+                    }
+
+                    AnimatedContent(
+                        targetState = isFavorite,
+                        transitionSpec = {
+                            (scaleIn() + fadeIn()) togetherWith (scaleOut() + fadeOut())
+                        },
+                        label = "heart",
+                    ) { fav ->
+                        IconButton(onClick = onFavoriteToggle) {
+                            Icon(
+                                imageVector     = if (fav) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                contentDescription = if (fav) "Aus Favoriten entfernen" else "Zu Favoriten hinzufügen",
+                                tint     = colors.accent,
+                                modifier = Modifier.size(20.dp),
+                            )
+                        }
                     }
                 }
             }
