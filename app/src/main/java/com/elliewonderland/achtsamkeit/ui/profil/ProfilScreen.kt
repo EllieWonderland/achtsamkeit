@@ -246,6 +246,8 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
 
             ProfilButton("Aussehen anpassen") { navController.navigate(Screen.ThemePicker.route) }
             Spacer(Modifier.height(12.dp))
+            ProfilButton("Bereiche personalisieren") { navController.navigate(Screen.CardCustomization.route) }
+            Spacer(Modifier.height(12.dp))
             ProfilButton("Benachrichtigungen") { navController.navigate(Screen.NotifSettings.route) }
             Spacer(Modifier.height(12.dp))
             ProfilButton("Favorisierte Sprüche") { navController.navigate(Screen.Favorites.route) }

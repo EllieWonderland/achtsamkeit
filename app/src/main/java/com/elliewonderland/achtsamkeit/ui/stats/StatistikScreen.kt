@@ -44,6 +44,7 @@ import com.elliewonderland.achtsamkeit.data.local.MindfulImpulseLoader
 import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
 import com.elliewonderland.achtsamkeit.ui.components.ShimmerCard
 import com.elliewonderland.achtsamkeit.ui.premium.PaywallCard
+import com.elliewonderland.achtsamkeit.data.local.CardPreferences
 import com.elliewonderland.achtsamkeit.ui.stats.components.EnergyBarChart
 import com.elliewonderland.achtsamkeit.ui.stats.components.GratitudePieChart
 import com.elliewonderland.achtsamkeit.ui.stats.components.MindfulnessFocusChart
@@ -63,6 +64,8 @@ fun StatistikScreen(
     val state by vm.state.collectAsState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val statsCardsConfig by remember(context) { CardPreferences.getStatsCards(context) }
+        .collectAsState(initial = CardPreferences.defaultStatsCards)
 
     var isPremium by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
@@ -119,36 +122,41 @@ fun StatistikScreen(
                     },
                 )
             } else {
-                // 1. Dein Achtsamkeits-Kompass Hero Card
-                AchtsamkeitsKompassCard(state = state)
-
-                // 2. Stimmungsverteilung
-                StatCard(title = "Stimmungsverteilung") {
-                    MoodBarChart(distribution = state.moodDistribution)
+                statsCardsConfig.forEach { card ->
+                    if (card.visible) {
+                        when (card.id) {
+                            "kompass" -> AchtsamkeitsKompassCard(state = state)
+                            "mood_dist" -> {
+                                StatCard(title = "Stimmungsverteilung") {
+                                    MoodBarChart(distribution = state.moodDistribution)
+                                }
+                            }
+                            "energy" -> {
+                                StatCard(title = "Energielevel") {
+                                    EnergyBarChart(distribution = state.energyDistribution)
+                                }
+                            }
+                            "focus" -> {
+                                StatCard(title = "Achtsamkeits-Fokus") {
+                                    MindfulnessFocusChart(distribution = state.focusDistribution)
+                                }
+                            }
+                            "gratitude" -> {
+                                StatCard(title = "Dankbarkeits-Momente") {
+                                    GratitudePieChart(distribution = state.gratitudeDistribution)
+                                }
+                            }
+                            "self_care" -> {
+                                StatCard(title = "Selbstfürsorge-Säulen") {
+                                    SelfCarePillarsList(distribution = state.selfCareDistribution)
+                                }
+                            }
+                            "impulse" -> {
+                                MitfuehlenderImpulsCard(avgRating = state.avgDayRating)
+                            }
+                        }
+                    }
                 }
-
-                // 3. Energielevel
-                StatCard(title = "Energielevel") {
-                    EnergyBarChart(distribution = state.energyDistribution)
-                }
-
-                // 4. Achtsamkeits-Fokus
-                StatCard(title = "Achtsamkeits-Fokus") {
-                    MindfulnessFocusChart(distribution = state.focusDistribution)
-                }
-
-                // 5. Dankbarkeits-Momente
-                StatCard(title = "Dankbarkeits-Momente") {
-                    GratitudePieChart(distribution = state.gratitudeDistribution)
-                }
-
-                // 6. Top Selbstfürsorge
-                StatCard(title = "Selbstfürsorge-Säulen") {
-                    SelfCarePillarsList(distribution = state.selfCareDistribution)
-                }
-
-                // 7. Mitfühlender Impuls Card
-                MitfuehlenderImpulsCard(avgRating = state.avgDayRating)
             }
         }
     }

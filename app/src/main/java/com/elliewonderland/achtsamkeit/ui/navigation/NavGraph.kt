@@ -29,6 +29,7 @@ import com.elliewonderland.achtsamkeit.ui.profil.ProfilScreen
 import com.elliewonderland.achtsamkeit.ui.quote.QuoteScreen
 import com.elliewonderland.achtsamkeit.ui.screens.ThemePickerScreen
 import com.elliewonderland.achtsamkeit.ui.settings.NotificationSettingsScreen
+import com.elliewonderland.achtsamkeit.ui.settings.CardCustomizationScreen
 import com.elliewonderland.achtsamkeit.ui.stats.StatistikScreen
 import com.elliewonderland.achtsamkeit.ui.theme.ThemeChoice
 import com.elliewonderland.achtsamkeit.ui.weekly.WeeklyReviewScreen
@@ -79,6 +80,7 @@ fun AppNavHost(choice: ThemeChoice) {
             composable(Screen.Impressum.route)     { ImpressumScreen(navController) }
             composable(Screen.Datenschutz.route)   { DatenschutzScreen(navController) }
             composable(Screen.LifeProfile.route)   { LifeProfileScreen(navController) }
+            composable(Screen.CardCustomization.route) { CardCustomizationScreen(navController) }
             composable(
                 route     = Screen.Entry.route,
                 arguments = listOf(navArgument("type") { type = NavType.StringType }),

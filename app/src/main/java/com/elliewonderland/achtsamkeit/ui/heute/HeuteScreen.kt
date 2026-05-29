@@ -43,6 +43,8 @@ import com.elliewonderland.achtsamkeit.ui.navigation.Screen
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import androidx.compose.ui.platform.LocalContext
+import com.elliewonderland.achtsamkeit.data.local.CardPreferences
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -52,6 +54,9 @@ import java.util.Locale
 fun HeuteScreen(navController: NavController) {
     val vm: HeuteViewModel = viewModel()
     val uiState by vm.uiState.collectAsState()
+    val context = LocalContext.current
+    val cardsConfig by remember(context) { CardPreferences.getHeuteCards(context) }
+        .collectAsState(initial = CardPreferences.defaultHeuteCards)
 
     val userId    = Firebase.auth.currentUser?.uid ?: ""
     val hour               = LocalTime.now().hour
@@ -102,113 +107,125 @@ fun HeuteScreen(navController: NavController) {
                 .padding(bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            // Spacer removed for unified spacing
-
-            MoodMonthCard(
-                moodMonth    = uiState.moodMonth,
-                moodTrendPct = uiState.moodTrendPct,
-                today        = today,
-                onClick      = { navController.navigate(Screen.Statistik.route) },
-            )
-
-            QuoteOfDayCard(
-                quote            = uiState.quoteOfDay,
-                isFavorite       = uiState.quoteIsFavorite,
-                onFavoriteToggle = { vm.toggleFavoriteQuote() },
-                onClick          = {},
-            )
-
-            LifehackCard(
-                lifehack = uiState.lifehackOfDay,
-            )
-
-            if (uiState.isLoading) {
-                Box(
-                    modifier         = Modifier.fillMaxWidth().height(120.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator(color = AppTheme.colors.accent)
-                }
-            } else {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    RoutineCard(
-                        emoji    = "☀️",
-                        title    = "Morgenroutine",
-                        subtitle = when {
-                            uiState.hasMorningEntry -> uiState.morningCompletedAt
-                                ?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
-                            isMorningLocked         -> "Nur bis 17:00 Uhr verfügbar"
-                            else                    -> "Jetzt starten · 3 Minuten"
-                        },
-                        isDone   = uiState.hasMorningEntry,
-                        isLocked = isMorningLocked,
-                        onClick  = { navController.navigate(Screen.Entry.createRoute("morning")) },
-                    )
-                    RoutineCard(
-                        emoji    = "🌙",
-                        title    = "Abendroutine",
-                        subtitle = when {
-                            uiState.hasEveningEntry -> uiState.eveningCompletedAt
-                                ?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
-                            isEveningLocked         -> "Erst ab 17:00 Uhr verfügbar"
-                            else                    -> "Jetzt starten"
-                        },
-                        isDone   = uiState.hasEveningEntry,
-                        isLocked = isEveningLocked,
-                        onClick  = { navController.navigate(Screen.Entry.createRoute("evening")) },
-                    )
-                }
-            }
-
-            if (!uiState.isLoading && uiState.weekDays.isNotEmpty()) {
-                WeekStripCard(
-                    weekDays       = uiState.weekDays,
-                    completedCount = uiState.weekCompletedCount,
-                    maxCount       = uiState.weekMaxCount,
-                    onClick        = { navController.navigate(Screen.Statistik.route) },
-                )
-            }
-
-            if (!uiState.isLoading) {
-                Text(
-                    "RÜCKBLICKE",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = AppTheme.colors.inkSoft,
-                )
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    ReviewCard(
-                        title    = "Wochenrückblick",
-                        subtitle = when {
-                            uiState.hasWeeklyReview  -> "Diese Woche verfasst"
-                            uiState.weeklyUnlocked   -> "Jetzt schreiben"
-                            else                     -> "Am Wochenende verfügbar"
-                        },
-                        isDone   = uiState.hasWeeklyReview,
-                        isLocked = !uiState.weeklyUnlocked,
-                        onClick  = { navController.navigate(Screen.WeeklyReview.route) },
-                    )
-                    ReviewCard(
-                        title    = "Monatsrückblick",
-                        subtitle = when {
-                            uiState.hasMonthlyReview -> "Diesen Monat verfasst"
-                            uiState.monthlyUnlocked  -> "Jetzt schreiben"
-                            else                     -> "In der letzten Woche des Monats verfügbar"
-                        },
-                        isDone   = uiState.hasMonthlyReview,
-                        isLocked = !uiState.monthlyUnlocked,
-                        onClick  = { navController.navigate(Screen.MonthlyReview.route) },
-                    )
-                    ReviewCard(
-                        title    = "Jahresrückblick",
-                        subtitle = when {
-                            uiState.hasYearlyReview -> "Dieses Jahr verfasst"
-                            uiState.yearlyUnlocked  -> "Jetzt schreiben"
-                            else                    -> "Im Dezember verfügbar"
-                        },
-                        isDone   = uiState.hasYearlyReview,
-                        isLocked = !uiState.yearlyUnlocked,
-                        onClick  = { navController.navigate(Screen.YearlyReview.route) },
-                    )
+            cardsConfig.forEach { card ->
+                if (card.visible) {
+                    when (card.id) {
+                        "mood_trend" -> {
+                            MoodMonthCard(
+                                moodMonth    = uiState.moodMonth,
+                                moodTrendPct = uiState.moodTrendPct,
+                                today        = today,
+                                onClick      = { navController.navigate(Screen.Statistik.route) },
+                            )
+                        }
+                        "quote" -> {
+                            QuoteOfDayCard(
+                                quote            = uiState.quoteOfDay,
+                                isFavorite       = uiState.quoteIsFavorite,
+                                onFavoriteToggle = { vm.toggleFavoriteQuote() },
+                                onClick          = {},
+                            )
+                        }
+                        "lifehack" -> {
+                            LifehackCard(
+                                lifehack = uiState.lifehackOfDay,
+                            )
+                        }
+                        "routines" -> {
+                            if (uiState.isLoading) {
+                                Box(
+                                    modifier         = Modifier.fillMaxWidth().height(120.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    CircularProgressIndicator(color = AppTheme.colors.accent)
+                                }
+                            } else {
+                                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                    RoutineCard(
+                                        emoji    = "☀️",
+                                        title    = "Morgenroutine",
+                                        subtitle = when {
+                                            uiState.hasMorningEntry -> uiState.morningCompletedAt
+                                                ?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
+                                            isMorningLocked         -> "Nur bis 17:00 Uhr verfügbar"
+                                            else                    -> "Jetzt starten · 3 Minuten"
+                                        },
+                                        isDone   = uiState.hasMorningEntry,
+                                        isLocked = isMorningLocked,
+                                        onClick  = { navController.navigate(Screen.Entry.createRoute("morning")) },
+                                    )
+                                    RoutineCard(
+                                        emoji    = "🌙",
+                                        title    = "Abendroutine",
+                                        subtitle = when {
+                                            uiState.hasEveningEntry -> uiState.eveningCompletedAt
+                                                ?.let { "Erledigt um %02d:%02d".format(it.hour, it.minute) } ?: "Erledigt"
+                                            isEveningLocked         -> "Erst ab 17:00 Uhr verfügbar"
+                                            else                    -> "Jetzt starten"
+                                        },
+                                        isDone   = uiState.hasEveningEntry,
+                                        isLocked = isEveningLocked,
+                                        onClick  = { navController.navigate(Screen.Entry.createRoute("evening")) },
+                                    )
+                                }
+                            }
+                        }
+                        "week_strip" -> {
+                            if (!uiState.isLoading && uiState.weekDays.isNotEmpty()) {
+                                WeekStripCard(
+                                    weekDays       = uiState.weekDays,
+                                    completedCount = uiState.weekCompletedCount,
+                                    maxCount       = uiState.weekMaxCount,
+                                    onClick        = { navController.navigate(Screen.Statistik.route) },
+                                )
+                            }
+                        }
+                        "reviews" -> {
+                            if (!uiState.isLoading) {
+                                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                    Text(
+                                        "RÜCKBLICKE",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = AppTheme.colors.inkSoft,
+                                        modifier = Modifier.padding(top = 4.dp, bottom = 2.dp)
+                                    )
+                                    ReviewCard(
+                                        title    = "Wochenrückblick",
+                                        subtitle = when {
+                                            uiState.hasWeeklyReview  -> "Diese Woche verfasst"
+                                            uiState.weeklyUnlocked   -> "Jetzt schreiben"
+                                            else                     -> "Am Wochenende verfügbar"
+                                        },
+                                        isDone   = uiState.hasWeeklyReview,
+                                        isLocked = !uiState.weeklyUnlocked,
+                                        onClick  = { navController.navigate(Screen.WeeklyReview.route) },
+                                    )
+                                    ReviewCard(
+                                        title    = "Monatsrückblick",
+                                        subtitle = when {
+                                            uiState.hasMonthlyReview -> "Diesen Monat verfasst"
+                                            uiState.monthlyUnlocked  -> "Jetzt schreiben"
+                                            else                     -> "In der letzten Woche des Monats verfügbar"
+                                        },
+                                        isDone   = uiState.hasMonthlyReview,
+                                        isLocked = !uiState.monthlyUnlocked,
+                                        onClick  = { navController.navigate(Screen.MonthlyReview.route) },
+                                    )
+                                    ReviewCard(
+                                        title    = "Jahresrückblick",
+                                        subtitle = when {
+                                            uiState.hasYearlyReview -> "Dieses Jahr verfasst"
+                                            uiState.yearlyUnlocked  -> "Jetzt schreiben"
+                                            else                    -> "Im Dezember verfügbar"
+                                        },
+                                        isDone   = uiState.hasYearlyReview,
+                                        isLocked = !uiState.yearlyUnlocked,
+                                        onClick  = { navController.navigate(Screen.YearlyReview.route) },
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
