@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.profil
+package com.elliewonderland.achtsamkeit.ui.profile
 
 import android.app.Application
 import android.content.Context
@@ -29,7 +29,7 @@ import java.io.File
 
 enum class ExportFormat { JSON, PDF, EXCEL }
 
-data class ProfilUiState(
+data class ProfileUiState(
     val displayName: String = "",
     val email: String = "",
     val photoUrl: String = "",
@@ -45,14 +45,14 @@ data class ProfilUiState(
     val errorMessage: String? = null,
 )
 
-class ProfilViewModel(app: Application) : AndroidViewModel(app) {
+class ProfileViewModel(app: Application) : AndroidViewModel(app) {
 
     private val authRepo    = AuthRepository()
     private val historyRepo = HistoryRepository()
     private val quoteRepo   = QuoteRepository(QuoteLoader(app))
 
-    private val _uiState = MutableStateFlow(ProfilUiState())
-    val uiState: StateFlow<ProfilUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(ProfileUiState())
+    val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
     private val _navigateToLogin = MutableStateFlow(false)
     val navigateToLogin: StateFlow<Boolean> = _navigateToLogin.asStateFlow()
@@ -60,7 +60,7 @@ class ProfilViewModel(app: Application) : AndroidViewModel(app) {
     fun loadProfile(userId: String) {
         viewModelScope.launch {
             val name = runCatching { authRepo.getUserDisplayName(userId) }
-                .onFailure { Log.e("ProfilViewModel", "getUserDisplayName failed", it) }
+                .onFailure { Log.e("ProfileViewModel", "getUserDisplayName failed", it) }
                 .getOrDefault("")
             val photoUrl = runCatching { authRepo.getUserPhotoUrl(userId) }.getOrDefault("")
             val crop = runCatching { authRepo.getPhotoCropParams(userId) }.getOrDefault(Triple(1f, 0f, 0f))
@@ -212,7 +212,7 @@ class ProfilViewModel(app: Application) : AndroidViewModel(app) {
     fun hideExportDialog()  { _uiState.value = _uiState.value.copy(showExportDialog = false) }
     fun clearError()        { _uiState.value = _uiState.value.copy(errorMessage = null) }
 
-    // ── Daten zurücksetzen ───────────────────────────────────────────────────
+    // ── Reset data ───────────────────────────────────────────────────
 
     fun resetAllData(userId: String) {
         viewModelScope.launch {
@@ -229,7 +229,7 @@ class ProfilViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    // ── Abmelden / Löschen ───────────────────────────────────────────────────
+    // ── Sign out / delete ───────────────────────────────────────────────────
 
     fun logout() {
         authRepo.logout()

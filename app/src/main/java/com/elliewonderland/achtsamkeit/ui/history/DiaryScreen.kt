@@ -65,7 +65,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun TagebuchScreen(
+fun DiaryScreen(
     navController: NavController,
     scrollToDate: String? = null,
     isActive: Boolean = true
@@ -110,7 +110,7 @@ fun TagebuchScreen(
                 }
             }
             else -> {
-                // Das interaktive 3D-Buch zum Durchblättern
+                // Interactive 3D flip-through book
                 val pagerState = rememberPagerState(pageCount = { visibleEntries.size })
                 
                 LaunchedEffect(scrollToDate, visibleEntries) {
@@ -129,7 +129,7 @@ fun TagebuchScreen(
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Edler Notizbuch-Lederordner-Hintergrund (Cover-Rücken)
+                    // Leather notebook background (cover spine)
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -153,7 +153,7 @@ fun TagebuchScreen(
                         ) { page ->
                             val entry = visibleEntries[page]
                             
-                            // 3D Buch-Blättereffekt-Berechnungen
+                            // 3D page-flip effect calculations
                             val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
                             val rotation = (pageOffset * -35f).coerceIn(-90f, 90f)
                             
@@ -202,7 +202,7 @@ fun TagebuchScreen(
             }
         }
 
-        // Elegantes Favoriten-Karussell (unter dem Tagebuch platziert)
+        // Elegant favorites carousel (placed below the diary)
         if (uiState.favorites.isNotEmpty()) {
             FavoritesCarousel(
                 favorites = uiState.favorites,
@@ -234,7 +234,7 @@ private fun BookPage(
         Box(modifier = Modifier.fillMaxSize()) {
             // Liniertes Papier (Ruled Lines Canvas)
             Canvas(modifier = Modifier.fillMaxSize()) {
-                // Feine graue Schreiblinien zeichnen (mathematisch abgestimmt auf Handschrift-Höhe)
+                // Draw faint gray writing lines (aligned to handwriting height)
                 val spacing = 26.sp.toPx()
                 var y = spacing * 2.8f
                 while (y < size.height) {
@@ -257,7 +257,7 @@ private fun BookPage(
                 )
             }
 
-            // Binderringe-Effekt auf der linken Seite (Spiralbindung)
+            // Binder-ring effect on the left side (spiral binding)
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -275,7 +275,7 @@ private fun BookPage(
                                 .clip(CircleShape)
                                 .background(Color(0x33000000))
                         )
-                        // Der Metall-Ring selbst (nach links überstehend)
+                        // The metal ring itself (overhanging to the left)
                         Box(
                             modifier = Modifier
                                 .offset(x = (-6).dp)
@@ -303,7 +303,7 @@ private fun BookPage(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Header (Datum & Typ)
+                // Header (date & type)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -334,7 +334,7 @@ private fun BookPage(
                     )
                 }
 
-                // Stimmung-Indicator falls vorhanden
+                // Mood indicator if present
                 val mood = entry.mood
                 if (mood.isNotBlank() && mood != "none") {
                     val moodText = when (mood.lowercase(Locale.ROOT).trim()) {
@@ -363,7 +363,7 @@ private fun BookPage(
 
                 HorizontalDivider(color = colors.hair.copy(alpha = 0.15f))
 
-                // Fließender Text (Prosa für Routinen, Q&As für Reviews)
+                // Flowing text (prose for routines, Q&As for reviews)
                 if (entry.type.endsWith("_review")) {
                     val qas = parseReviewText(entry.freeText)
                     qas.forEach { (question, answer) ->
@@ -391,7 +391,7 @@ private fun BookPage(
                         )
                     }
 
-                    // Geführte Impulsfrage + Antwort (erstes Freitextfeld der Routine)
+                    // Guided impulse question + answer (first free-text field of the routine)
                     if (entry.guidedQuestion.isNotBlank() && entry.guidedAnswer.isNotBlank()) {
                         if (prose.isNotBlank()) {
                             HorizontalDivider(color = colors.hair.copy(alpha = 0.1f))
@@ -436,7 +436,7 @@ private fun BookPage(
     }
 }
 
-// ─── Hilfsmethoden für Prosa-Erstellung (Narratives Tagebuch)
+// ─── Helpers for prose generation (narrative diary)
 
 private fun buildNarrativeProse(e: Entry): String {
     return if (e.type == "morning") {

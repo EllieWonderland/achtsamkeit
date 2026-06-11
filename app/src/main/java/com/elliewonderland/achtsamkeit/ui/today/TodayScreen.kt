@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.heute
+package com.elliewonderland.achtsamkeit.ui.today
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -64,13 +64,13 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun HeuteScreen(navController: NavController, isActive: Boolean = true) {
-    val vm: HeuteViewModel = viewModel()
+fun TodayScreen(navController: NavController, isActive: Boolean = true) {
+    val vm: TodayViewModel = viewModel()
     val uiState by vm.uiState.collectAsState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val cardsConfig by remember(context) { CardPreferences.getHeuteCards(context) }
-        .collectAsState(initial = CardPreferences.defaultHeuteCards)
+    val cardsConfig by remember(context) { CardPreferences.getTodayCards(context) }
+        .collectAsState(initial = CardPreferences.defaultTodayCards)
 
     var showQuoteDislikeConfirmDialog by remember { mutableStateOf(false) }
     var showLifehackDislikeConfirmDialog by remember { mutableStateOf(false) }
@@ -212,7 +212,7 @@ fun HeuteScreen(navController: NavController, isActive: Boolean = true) {
             photoScale     = uiState.photoScale,
             photoOffsetX    = uiState.photoOffsetX,
             photoOffsetY    = uiState.photoOffsetY,
-            onProfileClick = { navController.navigate(Screen.Profil.route) },
+            onProfileClick = { navController.navigate(Screen.Profile.route) },
         )
 
         Column(
@@ -230,7 +230,7 @@ fun HeuteScreen(navController: NavController, isActive: Boolean = true) {
                                 moodMonth    = uiState.moodMonth,
                                 moodTrendPct = uiState.moodTrendPct,
                                 today        = today,
-                                onClick      = { navController.navigate(Screen.Statistik.route) },
+                                onClick      = { navController.navigate(Screen.Statistics.route) },
                             )
                         }
                         "quote" -> {
@@ -329,7 +329,7 @@ fun HeuteScreen(navController: NavController, isActive: Boolean = true) {
                                             onDayClick = { date ->
                                                 val dayStatus = weekDays.firstOrNull { it.date == date }
                                                 if (dayStatus != null && (dayStatus.morningDone || dayStatus.eveningDone)) {
-                                                    navController.navigate(Screen.Tagebuch.createRoute(date.toString()))
+                                                    navController.navigate(Screen.Diary.createRoute(date.toString()))
                                                 } else {
                                                     android.widget.Toast.makeText(
                                                         context,

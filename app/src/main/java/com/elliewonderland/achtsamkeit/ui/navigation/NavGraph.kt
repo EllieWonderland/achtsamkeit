@@ -16,21 +16,21 @@ import com.elliewonderland.achtsamkeit.data.repository.AuthRepository
 import com.elliewonderland.achtsamkeit.ui.auth.LoginScreen
 import com.elliewonderland.achtsamkeit.ui.auth.RegisterScreen
 import com.elliewonderland.achtsamkeit.ui.entry.EntryScreen
-import com.elliewonderland.achtsamkeit.ui.heute.HeuteScreen
+import com.elliewonderland.achtsamkeit.ui.today.TodayScreen
 import com.elliewonderland.achtsamkeit.ui.history.EntryDetailScreen
-import com.elliewonderland.achtsamkeit.ui.history.TagebuchScreen
+import com.elliewonderland.achtsamkeit.ui.history.DiaryScreen
 import com.elliewonderland.achtsamkeit.ui.monthly.MonthlyReviewScreen
 import com.elliewonderland.achtsamkeit.ui.onboarding.OnboardingScreen
 import com.elliewonderland.achtsamkeit.ui.favorites.FavoritesScreen
-import com.elliewonderland.achtsamkeit.ui.datenschutz.DatenschutzScreen
-import com.elliewonderland.achtsamkeit.ui.impressum.ImpressumScreen
-import com.elliewonderland.achtsamkeit.ui.profil.LifeProfileScreen
-import com.elliewonderland.achtsamkeit.ui.profil.ProfilScreen
+import com.elliewonderland.achtsamkeit.ui.privacy.PrivacyScreen
+import com.elliewonderland.achtsamkeit.ui.imprint.ImprintScreen
+import com.elliewonderland.achtsamkeit.ui.profile.LifeProfileScreen
+import com.elliewonderland.achtsamkeit.ui.profile.ProfileScreen
 import com.elliewonderland.achtsamkeit.ui.quote.QuoteScreen
-import com.elliewonderland.achtsamkeit.ui.screens.ThemePickerScreen
+import com.elliewonderland.achtsamkeit.ui.theme.ThemePickerScreen
 import com.elliewonderland.achtsamkeit.ui.settings.NotificationSettingsScreen
 import com.elliewonderland.achtsamkeit.ui.settings.CardCustomizationScreen
-import com.elliewonderland.achtsamkeit.ui.stats.StatistikScreen
+import com.elliewonderland.achtsamkeit.ui.stats.StatisticsScreen
 import com.elliewonderland.achtsamkeit.ui.theme.ThemeChoice
 import com.elliewonderland.achtsamkeit.ui.weekly.WeeklyReviewScreen
 import com.elliewonderland.achtsamkeit.ui.yearly.YearlyReviewScreen
@@ -39,7 +39,7 @@ import com.elliewonderland.achtsamkeit.ui.yearly.YearlyReviewScreen
 fun AppNavHost(choice: ThemeChoice) {
     val navController = rememberNavController()
     val authRepo      = remember { AuthRepository() }
-    val startDest     = if (authRepo.getCurrentUser() != null) Screen.Heute.route
+    val startDest     = if (authRepo.getCurrentUser() != null) Screen.Today.route
                         else Screen.Login.route
 
     NavHost(
@@ -56,7 +56,7 @@ fun AppNavHost(choice: ThemeChoice) {
                 navArgument("tab") {
                     type = NavType.StringType
                     nullable = true
-                    defaultValue = "heute"
+                    defaultValue = "today"
                 },
                 navArgument("scrollToDate") {
                     type = NavType.StringType
@@ -65,7 +65,7 @@ fun AppNavHost(choice: ThemeChoice) {
                 }
             )
         ) { back ->
-            val tab = back.arguments?.getString("tab") ?: "heute"
+            val tab = back.arguments?.getString("tab") ?: "today"
             val scrollToDate = back.arguments?.getString("scrollToDate")
             MainTabContainerScreen(
                 navController = navController,
@@ -80,8 +80,8 @@ fun AppNavHost(choice: ThemeChoice) {
             composable(Screen.WeeklyReview.route)  { WeeklyReviewScreen(navController) }
             composable(Screen.MonthlyReview.route) { MonthlyReviewScreen(navController) }
             composable(Screen.YearlyReview.route)  { YearlyReviewScreen(navController) }
-            composable(Screen.Impressum.route)     { ImpressumScreen(navController) }
-            composable(Screen.Datenschutz.route)   { DatenschutzScreen(navController) }
+            composable(Screen.Imprint.route)     { ImprintScreen(navController) }
+            composable(Screen.Privacy.route)   { PrivacyScreen(navController) }
             composable(Screen.LifeProfile.route)   { LifeProfileScreen(navController) }
             composable(Screen.CardCustomization.route) { CardCustomizationScreen(navController) }
             composable(

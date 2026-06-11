@@ -40,7 +40,7 @@ class QuoteViewModel(application: Application) : AndroidViewModel(application) {
                     .collection("entries").document(entryId)
                     .get().await()
 
-                // Falls für diesen Eintrag schon ein Spruch ausgewählt wurde, denselben zeigen
+                // If a quote was already chosen for this entry, show the same one
                 val savedQuoteId = snap.getString("quote_id")
                 val quote = if (!savedQuoteId.isNullOrBlank()) {
                     repo.getQuoteById(savedQuoteId) ?: pickAndSave(userId, entryId, snap)

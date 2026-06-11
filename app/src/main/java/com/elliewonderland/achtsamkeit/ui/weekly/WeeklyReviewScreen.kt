@@ -138,8 +138,8 @@ fun WeeklyReviewScreen(navController: NavController) {
                         runCatching { repo.saveReview(uid, "weekly_review", pairs) }
                             .onSuccess {
                                 snackbar.showSnackbar("Wochenrückblick gespeichert!")
-                                navController.navigate(Screen.Tagebuch.route) {
-                                    popUpTo(Screen.Heute.route) { inclusive = false }
+                                navController.navigate(Screen.Diary.route) {
+                                    popUpTo(Screen.Today.route) { inclusive = false }
                                 }
                             }
                             .onFailure {

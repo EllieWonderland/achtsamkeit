@@ -7,7 +7,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 /**
- * Schreibt Einträge als echtes .xlsx (Office Open XML / ZIP+XML) ohne externe Bibliothek.
+ * Writes entries as a real .xlsx (Office Open XML / ZIP+XML) without an external library.
  */
 object ExcelExporter {
 
@@ -23,7 +23,7 @@ object ExcelExporter {
         }
     }
 
-    // ── XML-Bausteine ────────────────────────────────────────────────────────
+    // ── XML building blocks ────────────────────────────────────────────────────────
 
     private fun contentTypes() = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
@@ -149,7 +149,7 @@ object ExcelExporter {
         return sb.toString()
     }
 
-    // ── Hilfsfunktionen ──────────────────────────────────────────────────────
+    // ── Helpers ──────────────────────────────────────────────────────
 
     private fun col(index: Int): String {
         var n = index

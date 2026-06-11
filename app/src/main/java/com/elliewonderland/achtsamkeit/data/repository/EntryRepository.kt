@@ -19,7 +19,7 @@ class EntryRepository {
     fun deriveTags(entry: Entry): List<String> {
         val tags = mutableListOf<String>()
 
-        // Stimmung → Tags (alte + neue Keys)
+        // Mood → tags (old + new keys)
         when (entry.mood) {
             MoodKey.STRESS, MoodKey.ANXIETY, MoodKey.OVERWHELMED ->
                 { tags.add("Stress"); tags.add("Angst") }
@@ -31,7 +31,7 @@ class EntryRepository {
                 { tags.add("Traurigkeit"); tags.add("Trauer") }
         }
 
-        // Energie → Tags (neue Abend-Keys; "empty" nur bei Stress-Stimmung)
+        // Energy → tags (new evening keys; "empty" only for stressed mood)
         when (entry.energyLevel) {
             EnergyKey.FULL, EnergyKey.SATISFIED_TIRED -> tags.add("Energie")
             EnergyKey.EMPTY -> if (entry.mood in listOf(MoodKey.STRESS, MoodKey.ANXIETY, MoodKey.OVERWHELMED)) tags.add("Stress")
@@ -45,13 +45,13 @@ class EntryRepository {
             GratitudeKey.COMFORT_RECEIVED in gratitudeKeys)                                           tags.add("Selbstfürsorge")
         if (entry.dayRating >= 3) tags.add("Dankbarkeit")
 
-        // Selbstfürsorge → Tags (alte + neue Keys)
+        // Self-care → tags (old + new keys)
         val selfCareKeys = entry.selfCare
         if (SelfCareKey.BREATHING  in selfCareKeys || SelfCareKey.OUTSIDE     in selfCareKeys ||
             SelfCareKey.STILLNESS  in selfCareKeys || SelfCareKey.COMPASSION  in selfCareKeys ||
             SelfCareKey.RELEASE    in selfCareKeys || SelfCareKey.FORGIVENESS in selfCareKeys) tags.add("Selbstfürsorge")
 
-        // Schwere Tage → mitfühlende Sprüche (Trost, Selbstfürsorge, Traurigkeit)
+        // Hard days → compassionate quotes (comfort, self-care, sadness)
         if (GratitudeKey.STRUGGLED in gratitudeKeys || GratitudeKey.NONE   in gratitudeKeys ||
             SelfCareKey.NEGLECTED  in selfCareKeys   || SelfCareKey.NO_ENERGY in selfCareKeys) {
             tags.add("Trost")
@@ -153,10 +153,10 @@ private fun DocumentSnapshot.toEntry(): Entry? = runCatching {
     )
 }.getOrNull()
 
-// date_str speichert das lokale Gerätedatum (mit 04:00-Tagesgrenze).
-// Bekannte Einschränkung: Wechselt die Nutzerin beim Reisen die Geräte-Zeitzone, kann
-// ein Abend-Eintrag zum falschen Kalender-Tag gehören. Für MVP akzeptiert; eine spätere
-// Version sollte date_str UTC-basiert berechnen und nur in der UI umrechnen.
+// date_str stores the local device date (with a 04:00 day boundary).
+// Known limitation: if the device time zone changes while traveling, an
+// evening entry may belong to the wrong calendar day. Accepted for MVP; a later
+// version should compute date_str in UTC and convert only in the UI.
 private fun todayJournalDate(): String {
     val now = LocalDateTime.now()
     return (if (now.hour < 5) now.toLocalDate().minusDays(1) else now.toLocalDate()).toString()

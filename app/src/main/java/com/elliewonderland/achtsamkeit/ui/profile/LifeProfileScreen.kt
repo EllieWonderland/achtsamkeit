@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.profil
+package com.elliewonderland.achtsamkeit.ui.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

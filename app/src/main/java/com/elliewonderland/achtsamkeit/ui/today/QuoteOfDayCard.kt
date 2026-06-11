@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.heute
+package com.elliewonderland.achtsamkeit.ui.today
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -8,6 +8,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -36,18 +36,19 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.elliewonderland.achtsamkeit.model.Lifehack
+import com.elliewonderland.achtsamkeit.model.Quote
 import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 import com.elliewonderland.achtsamkeit.ui.theme.SerifItalic
 
 @Composable
-fun LifehackCard(
-    lifehack: Lifehack?,
+fun QuoteOfDayCard(
+    quote: Quote?,
     isFavorite: Boolean,
     onFavoriteToggle: () -> Unit,
     onDislike: () -> Unit,
+    onClick: () -> Unit,
 ) {
-    if (lifehack == null) return
+    if (quote == null) return
     val colors = AppTheme.colors
 
     Box(
@@ -59,37 +60,33 @@ fun LifehackCard(
                 Brush.linearGradient(
                     colors = listOf(
                         colors.surface,
-                        colors.accent2.copy(alpha = 0.18f),
+                        colors.accent3.copy(alpha = 0.20f),
                     )
                 )
             )
+            .clickable(onClick = onClick)
     ) {
-        // Glow orb top-right with secondary accent color (Salbei/Nebel)
+        // Glow orb top-right
         Box(
             modifier = Modifier
                 .size(120.dp)
                 .align(Alignment.TopEnd)
                 .offset(x = 40.dp, y = (-40).dp)
                 .background(
-                    Brush.radialGradient(
-                        colors = listOf(
-                            colors.accent3.copy(alpha = 0.4f),
-                            Color.Transparent
-                        )
-                    )
+                    Brush.radialGradient(colors = listOf(colors.accent2, Color.Transparent))
                 )
         )
 
         Column(modifier = Modifier.padding(22.dp)) {
             Text(
-                "💡 LIFEHACK FÜR DICH",
+                "DEIN SPRUCH HEUTE",
                 style = MaterialTheme.typography.labelSmall,
                 color = colors.inkSoft,
             )
             Spacer(Modifier.height(12.dp))
             Text(
-                lifehack.text,
-                style = SerifItalic.copy(fontSize = 18.sp, lineHeight = 24.sp),
+                quote.text,
+                style = SerifItalic,
                 color = colors.ink,
             )
             Spacer(Modifier.height(16.dp))
@@ -99,7 +96,7 @@ fun LifehackCard(
                 verticalAlignment     = Alignment.CenterVertically,
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    lifehack.tags.take(3).forEach { tag ->
+                    quote.tags.take(3).forEach { tag ->
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(12.dp))
@@ -119,7 +116,7 @@ fun LifehackCard(
                     IconButton(onClick = onDislike) {
                         Icon(
                             imageVector        = Icons.Outlined.ThumbDown,
-                            contentDescription = "Lifehack ausblenden",
+                            contentDescription = "Spruch ausblenden",
                             tint               = colors.inkSoft,
                             modifier           = Modifier.size(20.dp),
                         )

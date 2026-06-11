@@ -88,7 +88,7 @@ fun RatingSection(selected: Int, onSelect: (Int) -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Dynamisches Reflexions-Kärtchen
+            // Dynamic reflection card
             val reflectionTitle = when (selected) {
                 1 -> "Sehr herausfordernd"
                 2 -> "Eher unruhig"

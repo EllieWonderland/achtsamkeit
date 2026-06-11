@@ -9,7 +9,7 @@ import java.io.File
 
 object PdfExporter {
 
-    private const val PAGE_WIDTH  = 595   // A4 bei 72 dpi
+    private const val PAGE_WIDTH  = 595   // A4 at 72 dpi
     private const val PAGE_HEIGHT = 842
     private const val MARGIN      = 48f
     private const val LINE_H      = 18f
@@ -65,7 +65,7 @@ object PdfExporter {
         canvas.drawLine(MARGIN, MARGIN + 44f, PAGE_WIDTH - MARGIN, MARGIN + 44f, paintLine)
         y = MARGIN + 54f
 
-        // ── Einträge ──────────────────────────────────────────────────────────
+        // ── Entries ──────────────────────────────────────────────────────────
         for (entry in entries) {
             ensureSpace(LINE_H * 6)
 

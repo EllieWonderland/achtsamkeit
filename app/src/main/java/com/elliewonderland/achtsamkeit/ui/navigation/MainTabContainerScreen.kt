@@ -16,10 +16,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.elliewonderland.achtsamkeit.ui.heute.HeuteScreen
-import com.elliewonderland.achtsamkeit.ui.history.TagebuchScreen
-import com.elliewonderland.achtsamkeit.ui.profil.ProfilScreen
-import com.elliewonderland.achtsamkeit.ui.stats.StatistikScreen
+import com.elliewonderland.achtsamkeit.ui.today.TodayScreen
+import com.elliewonderland.achtsamkeit.ui.history.DiaryScreen
+import com.elliewonderland.achtsamkeit.ui.profile.ProfileScreen
+import com.elliewonderland.achtsamkeit.ui.stats.StatisticsScreen
 import com.elliewonderland.achtsamkeit.ui.theme.ThemeChoice
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 fun MainTabContainerScreen(
     navController: NavController,
     choice: ThemeChoice,
-    initialTab: String = "heute",
+    initialTab: String = "today",
     scrollToDate: String? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -37,10 +37,10 @@ fun MainTabContainerScreen(
 
     val pagerState = rememberPagerState(
         initialPage = when (initialTab) {
-            "heute" -> 0
-            "tagebuch" -> 1
-            "statistik" -> 2
-            "profil" -> 3
+            "today" -> 0
+            "diary" -> 1
+            "statistics" -> 2
+            "profile" -> 3
             else -> 0
         },
         pageCount = { 4 }
@@ -49,10 +49,10 @@ fun MainTabContainerScreen(
     // Sync external arguments with the active page index
     LaunchedEffect(initialTab) {
         val targetPage = when (initialTab) {
-            "heute" -> 0
-            "tagebuch" -> 1
-            "statistik" -> 2
-            "profil" -> 3
+            "today" -> 0
+            "diary" -> 1
+            "statistics" -> 2
+            "profile" -> 3
             else -> 0
         }
         if (pagerState.currentPage != targetPage) {
@@ -100,21 +100,21 @@ fun MainTabContainerScreen(
     Scaffold(
         bottomBar = {
             val currentRoute = when (pagerState.currentPage) {
-                0 -> Screen.Heute.route
-                1 -> Screen.Tagebuch.route
-                2 -> Screen.Statistik.route
-                3 -> Screen.Profil.route
-                else -> Screen.Heute.route
+                0 -> Screen.Today.route
+                1 -> Screen.Diary.route
+                2 -> Screen.Statistics.route
+                3 -> Screen.Profile.route
+                else -> Screen.Today.route
             }
             BottomNavBar(
                 navController = navController,
                 currentRoute = currentRoute,
                 onTabClick = { screen ->
                     val targetPage = when (screen) {
-                        Screen.Heute -> 0
-                        Screen.Tagebuch -> 1
-                        Screen.Statistik -> 2
-                        Screen.Profil -> 3
+                        Screen.Today -> 0
+                        Screen.Diary -> 1
+                        Screen.Statistics -> 2
+                        Screen.Profile -> 3
                         else -> 0
                     }
                     coroutineScope.launch {
@@ -131,10 +131,10 @@ fun MainTabContainerScreen(
                 .padding(innerPadding),
         ) { page ->
             when (page) {
-                0 -> HeuteScreen(navController = navController, isActive = (pagerState.currentPage == 0))
-                1 -> TagebuchScreen(navController = navController, scrollToDate = scrollToDate, isActive = (pagerState.currentPage == 1))
-                2 -> StatistikScreen(navController = navController, isActive = (pagerState.currentPage == 2))
-                3 -> ProfilScreen(navController = navController, choice = choice)
+                0 -> TodayScreen(navController = navController, isActive = (pagerState.currentPage == 0))
+                1 -> DiaryScreen(navController = navController, scrollToDate = scrollToDate, isActive = (pagerState.currentPage == 1))
+                2 -> StatisticsScreen(navController = navController, isActive = (pagerState.currentPage == 2))
+                3 -> ProfileScreen(navController = navController, choice = choice)
             }
         }
     }

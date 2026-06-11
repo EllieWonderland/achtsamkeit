@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.profil
+package com.elliewonderland.achtsamkeit.ui.profile
 
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel

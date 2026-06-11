@@ -23,7 +23,7 @@ class NotificationReceiver : BroadcastReceiver() {
         val requestCode = intent.getIntExtra(EXTRA_REQUEST_CODE, -1)
         val type        = intent.getStringExtra(EXTRA_TYPE) ?: ""
 
-        // Nicht anzeigen wenn Eintrag für heute bereits gespeichert wurde
+        // Skip if an entry for today is already saved
         val today     = LocalDate.now().toString()
         val prefs     = context.getSharedPreferences(NotificationScheduler.PREFS_NAME, Context.MODE_PRIVATE)
         val alreadyDone = prefs.getString("${type}_done_date", "") == today
@@ -32,7 +32,7 @@ class NotificationReceiver : BroadcastReceiver() {
             showNotification(context, title, body)
         }
 
-        // Immer für den nächsten Tag neu einplanen
+        // Always reschedule for the next day
         if (hour >= 0 && minute >= 0 && requestCode >= 0) {
             val nextDay = Calendar.getInstance().apply {
                 set(Calendar.HOUR_OF_DAY, hour)

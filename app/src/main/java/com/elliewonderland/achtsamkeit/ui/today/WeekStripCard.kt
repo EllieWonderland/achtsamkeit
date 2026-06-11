@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.heute
+package com.elliewonderland.achtsamkeit.ui.today
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

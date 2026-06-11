@@ -168,7 +168,7 @@ fun EntryDetailScreen(navController: NavController, entryId: String) {
                                 }
                             }
                         } else {
-                            // Rückblicke können gelöscht werden
+                            // Reviews can be deleted
                             IconButton(onClick = { showDeleteDialog = true }) {
                                 Icon(Icons.Outlined.Delete, contentDescription = "Eintrag löschen", tint = AppTheme.colors.inkSoft)
                             }
@@ -213,7 +213,7 @@ fun EntryDetailScreen(navController: NavController, entryId: String) {
                             verticalArrangement = Arrangement.spacedBy(20.dp),
                         ) {
                             
-                            // 1. Die Narrative Tagebuch-Erzählung (nur für Routinen)
+                            // 1. The narrative diary prose (routines only)
                             val prose = remember(e) { buildNarrativeProse(e) }
                             if (prose.isNotBlank()) {
                                 Text(
@@ -224,7 +224,7 @@ fun EntryDetailScreen(navController: NavController, entryId: String) {
                                 HorizontalDivider(color = AppTheme.colors.hair)
                             }
 
-                            // 2. Geführte Impulsfrage
+                            // 2. Guided impulse question
                             if (e.guidedQuestion.isNotBlank()) {
                                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                     Text(
@@ -257,9 +257,9 @@ fun EntryDetailScreen(navController: NavController, entryId: String) {
                                 HorizontalDivider(color = AppTheme.colors.hair)
                             }
 
-                            // 3. Freie Gedanken oder Frage-Antwort-Struktur bei Rückblicken
+                            // 3. Free thoughts or question-answer structure for reviews
                             if (e.type.endsWith("_review")) {
-                                // Q&A-Splitter für Rückblicke
+                                // Q&A splitter for reviews
                                 val qas = remember(e.freeText) { parseReviewText(e.freeText) }
                                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                                     qas.forEachIndexed { index, (question, answer) ->
@@ -338,7 +338,7 @@ fun EntryDetailScreen(navController: NavController, entryId: String) {
     }
 }
 
-// ─── Hilfsmethoden für Prosa-Erstellung
+// ─── Helpers for prose generation
 
 private fun buildNarrativeProse(e: Entry): String {
     return if (e.type == "morning") {

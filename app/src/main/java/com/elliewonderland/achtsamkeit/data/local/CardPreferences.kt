@@ -15,7 +15,7 @@ object CardPreferences {
     private val KEY_HEUTE_CARDS = stringPreferencesKey("heute_cards_config")
     private val KEY_STATS_CARDS = stringPreferencesKey("stats_cards_config")
 
-    val defaultHeuteCards = listOf(
+    val defaultTodayCards = listOf(
         CardConfig("mood_trend", true),
         CardConfig("quote", true),
         CardConfig("lifehack", true),
@@ -34,18 +34,18 @@ object CardPreferences {
         CardConfig("impulse", true)
     )
 
-    fun getHeuteCards(context: Context): Flow<List<CardConfig>> {
+    fun getTodayCards(context: Context): Flow<List<CardConfig>> {
         return context.cardDataStore.data.map { prefs ->
             val str = prefs[KEY_HEUTE_CARDS]
             if (str.isNullOrBlank()) {
-                defaultHeuteCards
+                defaultTodayCards
             } else {
-                parseConfig(str, defaultHeuteCards)
+                parseConfig(str, defaultTodayCards)
             }
         }
     }
 
-    suspend fun saveHeuteCards(context: Context, cards: List<CardConfig>) {
+    suspend fun saveTodayCards(context: Context, cards: List<CardConfig>) {
         context.cardDataStore.edit { prefs ->
             prefs[KEY_HEUTE_CARDS] = serializeConfig(cards)
         }

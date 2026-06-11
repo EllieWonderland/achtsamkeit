@@ -124,12 +124,12 @@ fun OnboardingScreen(navController: NavController, vm: OnboardingViewModel = vie
         )
     }
 
-    val navigateToHeute = {
-        navController.navigate("heute") { popUpTo("onboarding") { inclusive = true } }
+    val navigateToToday = {
+        navController.navigate("today") { popUpTo("onboarding") { inclusive = true } }
     }
     val notifPermLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) { _ -> navigateToHeute() }
+    ) { _ -> navigateToToday() }
 
     val handleOnboardingComplete = { withProfile: Boolean ->
         val finalProfile = if (withProfile) profileMap.toMap() else emptyMap()
@@ -137,13 +137,13 @@ fun OnboardingScreen(navController: NavController, vm: OnboardingViewModel = vie
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             showNotifRationale = true
         } else {
-            navigateToHeute()
+            navigateToToday()
         }
     }
 
     if (showNotifRationale) {
         AlertDialog(
-            onDismissRequest = { showNotifRationale = false; navigateToHeute() },
+            onDismissRequest = { showNotifRationale = false; navigateToToday() },
             title = { Text("Erinnerungen aktivieren?") },
             text  = {
                 Text(
@@ -161,7 +161,7 @@ fun OnboardingScreen(navController: NavController, vm: OnboardingViewModel = vie
                 }) { Text("Aktivieren") }
             },
             dismissButton = {
-                TextButton(onClick = { showNotifRationale = false; navigateToHeute() }) {
+                TextButton(onClick = { showNotifRationale = false; navigateToToday() }) {
                     Text("Vielleicht später")
                 }
             },

@@ -64,7 +64,7 @@ fun EntryScreen(navController: NavController, type: String) {
     LaunchedEffect(saveState) {
         when (val s = saveState) {
             is EntrySaveState.Saved  -> navController.navigate(Screen.Quote.createRoute(s.entryId)) {
-                popUpTo(Screen.Heute.route)
+                popUpTo(Screen.Today.route)
             }
             is EntrySaveState.Error  -> snackbarHostState.showSnackbar(s.message)
             else -> Unit

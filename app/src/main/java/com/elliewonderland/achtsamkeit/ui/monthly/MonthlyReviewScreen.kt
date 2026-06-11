@@ -180,8 +180,8 @@ fun MonthlyReviewScreen(navController: NavController) {
                                 runCatching { repo.saveReview(uid, "monthly_review", pairs) }
                                     .onSuccess {
                                         snackbar.showSnackbar("Monatsrückblick gespeichert!")
-                                        navController.navigate(Screen.Tagebuch.route) {
-                                            popUpTo(Screen.Heute.route) { inclusive = false }
+                                        navController.navigate(Screen.Diary.route) {
+                                            popUpTo(Screen.Today.route) { inclusive = false }
                                         }
                                     }
                                     .onFailure {

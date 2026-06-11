@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.profil
+package com.elliewonderland.achtsamkeit.ui.profile
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -71,8 +71,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 @Composable
-fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
-    val vm: ProfilViewModel = viewModel()
+fun ProfileScreen(navController: NavController, choice: ThemeChoice) {
+    val vm: ProfileViewModel = viewModel()
     val uiState by vm.uiState.collectAsState()
     val navigateToLogin by vm.navigateToLogin.collectAsState()
     val context = LocalContext.current
@@ -244,27 +244,27 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
 
             Spacer(Modifier.height(40.dp))
 
-            ProfilButton("Aussehen anpassen") { navController.navigate(Screen.ThemePicker.route) }
+            ProfileButton("Aussehen anpassen") { navController.navigate(Screen.ThemePicker.route) }
             Spacer(Modifier.height(12.dp))
-            ProfilButton("Bereiche personalisieren") { navController.navigate(Screen.CardCustomization.route) }
+            ProfileButton("Bereiche personalisieren") { navController.navigate(Screen.CardCustomization.route) }
             Spacer(Modifier.height(12.dp))
-            ProfilButton("Impulse personalisieren") { navController.navigate(Screen.LifeProfile.route) }
+            ProfileButton("Impulse personalisieren") { navController.navigate(Screen.LifeProfile.route) }
             Spacer(Modifier.height(12.dp))
-            ProfilButton("Benachrichtigungen") { navController.navigate(Screen.NotifSettings.route) }
+            ProfileButton("Benachrichtigungen") { navController.navigate(Screen.NotifSettings.route) }
             Spacer(Modifier.height(12.dp))
-            ProfilButton("Meine Daten exportieren") { vm.showExportDialog() }
+            ProfileButton("Meine Daten exportieren") { vm.showExportDialog() }
 
             Spacer(Modifier.height(32.dp))
             HorizontalDivider(color = AppTheme.colors.hair)
             Spacer(Modifier.height(32.dp))
 
-            ProfilButton("Impressum") { navController.navigate(Screen.Impressum.route) }
+            ProfileButton("Impressum") { navController.navigate(Screen.Imprint.route) }
             Spacer(Modifier.height(12.dp))
-            ProfilButton("Datenschutzerklärung") { navController.navigate(Screen.Datenschutz.route) }
+            ProfileButton("Datenschutzerklärung") { navController.navigate(Screen.Privacy.route) }
             Spacer(Modifier.height(12.dp))
-            ProfilButton("Alle Einträge zurücksetzen") { vm.showResetDialog() }
+            ProfileButton("Alle Einträge zurücksetzen") { vm.showResetDialog() }
             Spacer(Modifier.height(12.dp))
-            ProfilButton("Abmelden") { vm.logout() }
+            ProfileButton("Abmelden") { vm.logout() }
 
             Spacer(Modifier.height(24.dp))
 
@@ -296,7 +296,7 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
         ) { data -> Snackbar(snackbarData = data) }
     }
 
-    // ── Konto löschen ────────────────────────────────────────────────────────
+    // ── Delete account ────────────────────────────────────────────────────────
     if (uiState.showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { vm.hideDeleteDialog() },
@@ -321,7 +321,7 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
         )
     }
 
-    // ── Daten zurücksetzen ───────────────────────────────────────────────────
+    // ── Reset data ───────────────────────────────────────────────────
     if (uiState.showResetDialog) {
         AlertDialog(
             onDismissRequest = { vm.hideResetDialog() },
@@ -346,7 +346,7 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
         )
     }
 
-    // ── Export-Format wählen ─────────────────────────────────────────────────
+    // ── Choose export format ─────────────────────────────────────────────────
     if (uiState.showExportDialog) {
         AlertDialog(
             onDismissRequest = { vm.hideExportDialog() },
@@ -505,7 +505,7 @@ fun ProfilScreen(navController: NavController, choice: ThemeChoice) {
 }
 
 @Composable
-private fun ProfilButton(label: String, onClick: () -> Unit) {
+private fun ProfileButton(label: String, onClick: () -> Unit) {
     OutlinedButton(
         onClick  = onClick,
         modifier = Modifier.fillMaxWidth(),

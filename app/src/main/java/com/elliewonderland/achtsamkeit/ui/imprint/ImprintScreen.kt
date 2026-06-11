@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.impressum
+package com.elliewonderland.achtsamkeit.ui.imprint
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +27,7 @@ import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ImpressumScreen(navController: NavController) {
+fun ImprintScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -69,15 +69,15 @@ fun ImpressumScreen(navController: NavController) {
             HorizontalDivider(color = AppTheme.colors.hair)
             Spacer(Modifier.height(16.dp))
 
-            ImpressumEntry("Kontakt", "janafisenko@hotmail.com")
+            ImprintEntry("Kontakt", "janafisenko@hotmail.com")
             Spacer(Modifier.height(8.dp))
-            ImpressumEntry("Steuernummer", "123 456 789 0")
+            ImprintEntry("Steuernummer", "123 456 789 0")
         }
     }
 }
 
 @Composable
-private fun ImpressumEntry(label: String, value: String) {
+private fun ImprintEntry(label: String, value: String) {
     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Text(label, style = MaterialTheme.typography.labelMedium, color = AppTheme.colors.inkSoft)
         Text(value, style = MaterialTheme.typography.bodyLarge, color = AppTheme.colors.ink)

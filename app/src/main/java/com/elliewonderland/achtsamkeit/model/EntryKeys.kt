@@ -13,7 +13,7 @@ object MoodKey {
     const val EXHAUSTION   = "exhaustion"
     const val OVERWHELMED  = "overwhelmed"
     const val LONELINESS   = "loneliness"
-    // Legacy (Rückwärtskompatibilität)
+    // Legacy (backward compatibility)
     const val JOY     = "joy"
     const val STRESS  = "stress"
     const val BALANCE = "balance"
@@ -48,7 +48,7 @@ object GratitudeKey {
     const val COMFORT_RECEIVED = "comfort_received"
     const val CONNECTION       = "connection"
     const val NONE             = "none"
-    // Legacy (Rückwärtskompatibilität)
+    // Legacy (backward compatibility)
     const val PEOPLE   = "people"
     const val BODY     = "body"
     const val PLEASURE = "pleasure"
@@ -71,7 +71,7 @@ object SelfCareKey {
     const val RELEASE         = "release"
     const val FORGIVENESS     = "forgiveness"
     const val NEGLECTED       = "neglected"
-    // Legacy (Rückwärtskompatibilität)
+    // Legacy (backward compatibility)
     const val BREATHING = "breathing"
     const val OUTSIDE   = "outside"
 }

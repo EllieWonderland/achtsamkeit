@@ -33,13 +33,13 @@ fun CardCustomizationScreen(navController: NavController) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val heuteCardsFlow = remember(context) { CardPreferences.getHeuteCards(context) }
+    val heuteCardsFlow = remember(context) { CardPreferences.getTodayCards(context) }
     val statsCardsFlow = remember(context) { CardPreferences.getStatsCards(context) }
 
-    val heuteCards by heuteCardsFlow.collectAsState(initial = CardPreferences.defaultHeuteCards)
+    val heuteCards by heuteCardsFlow.collectAsState(initial = CardPreferences.defaultTodayCards)
     val statsCards by statsCardsFlow.collectAsState(initial = CardPreferences.defaultStatsCards)
 
-    var selectedTab by remember { mutableStateOf(0) } // 0 = Heute, 1 = Statistik
+    var selectedTab by remember { mutableStateOf(0) } // 0 = Today, 1 = Statistics
     val colors = AppTheme.colors
 
     Scaffold(
@@ -146,8 +146,8 @@ fun CardCustomizationScreen(navController: NavController) {
             ) {
                 if (selectedTab == 0) {
                     heuteCards.forEachIndexed { index, card ->
-                        val cardLabel = getHeuteCardLabel(card.id)
-                        val cardDesc = getHeuteCardDesc(card.id)
+                        val cardLabel = getTodayCardLabel(card.id)
+                        val cardDesc = getTodayCardDesc(card.id)
                         CustomizableCardItem(
                             title = cardLabel,
                             description = cardDesc,
@@ -156,7 +156,7 @@ fun CardCustomizationScreen(navController: NavController) {
                                 val updated = heuteCards.map {
                                     if (it.id == card.id) it.copy(visible = isVisible) else it
                                 }
-                                scope.launch { CardPreferences.saveHeuteCards(context, updated) }
+                                scope.launch { CardPreferences.saveTodayCards(context, updated) }
                             },
                             canMoveUp = index > 0,
                             canMoveDown = index < heuteCards.size - 1,
@@ -166,7 +166,7 @@ fun CardCustomizationScreen(navController: NavController) {
                                     val temp = updated[index]
                                     updated[index] = updated[index - 1]
                                     updated[index - 1] = temp
-                                    scope.launch { CardPreferences.saveHeuteCards(context, updated) }
+                                    scope.launch { CardPreferences.saveTodayCards(context, updated) }
                                 }
                             },
                             onMoveDown = {
@@ -175,7 +175,7 @@ fun CardCustomizationScreen(navController: NavController) {
                                     val temp = updated[index]
                                     updated[index] = updated[index + 1]
                                     updated[index + 1] = temp
-                                    scope.launch { CardPreferences.saveHeuteCards(context, updated) }
+                                    scope.launch { CardPreferences.saveTodayCards(context, updated) }
                                 }
                             }
                         )
@@ -312,7 +312,7 @@ private fun CustomizableCardItem(
     }
 }
 
-private fun getHeuteCardLabel(id: String): String = when (id) {
+private fun getTodayCardLabel(id: String): String = when (id) {
     "mood_trend" -> "Stimmungstrend"
     "quote"      -> "Spruch des Tages"
     "lifehack"   -> "Lifehack"
@@ -322,7 +322,7 @@ private fun getHeuteCardLabel(id: String): String = when (id) {
     else         -> id
 }
 
-private fun getHeuteCardDesc(id: String): String = when (id) {
+private fun getTodayCardDesc(id: String): String = when (id) {
     "mood_trend" -> "Deine durchschnittliche Stimmung im Monatsverlauf."
     "quote"      -> "Dein täglicher inspirierender Spruch."
     "lifehack"   -> "Ein praktischer und achtsamer Lifehack für deinen Alltag."

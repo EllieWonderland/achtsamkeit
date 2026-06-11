@@ -57,7 +57,7 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 
 @Composable
-fun StatistikScreen(
+fun StatisticsScreen(
     navController: NavController,
     vm: StatsViewModel = viewModel(),
     isActive: Boolean = true

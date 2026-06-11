@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.datenschutz
+package com.elliewonderland.achtsamkeit.ui.privacy
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +27,7 @@ import com.elliewonderland.achtsamkeit.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatenschutzScreen(navController: NavController) {
+fun PrivacyScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -51,12 +51,12 @@ fun DatenschutzScreen(navController: NavController) {
                 .padding(horizontal = 24.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            DatenschutzSection(
+            PrivacySection(
                 title = "1. Verantwortliche Stelle",
                 body  = "Jana Fisenko Digital Solutions\nAkazienstr. 8\n27793 Wildeshausen\n\nKontakt: janafisenko@hotmail.com",
             )
 
-            DatenschutzSection(
+            PrivacySection(
                 title = "2. Erhobene Daten",
                 body  = "Die App erhebt folgende personenbezogene Daten:\n" +
                         "• E-Mail-Adresse (für Konto-Erstellung und Login)\n" +
@@ -64,7 +64,7 @@ fun DatenschutzScreen(navController: NavController) {
                         "• Tagebucheinträge, Stimmungsdaten und Routinen (gespeichert in deinem Konto)",
             )
 
-            DatenschutzSection(
+            PrivacySection(
                 title = "3. Zweck der Datenverarbeitung",
                 body  = "Deine Daten werden ausschließlich zur Bereitstellung der App-Funktionen genutzt:\n" +
                         "• Authentifizierung über Firebase Auth\n" +
@@ -72,20 +72,20 @@ fun DatenschutzScreen(navController: NavController) {
                         "• Versand von Push-Benachrichtigungen über Firebase Cloud Messaging",
             )
 
-            DatenschutzSection(
+            PrivacySection(
                 title = "4. Drittanbieter",
                 body  = "Die App nutzt Dienste von Google Firebase (Firebase Auth, Firestore, Cloud Messaging) " +
                         "sowie RevenueCat für die Verwaltung von In-App-Käufen. " +
                         "Beide Dienste verarbeiten Daten gemäß ihren eigenen Datenschutzrichtlinien.",
             )
 
-            DatenschutzSection(
+            PrivacySection(
                 title = "5. Datenlöschung",
                 body  = "Du kannst dein Konto und alle gespeicherten Daten jederzeit über " +
                         "Profil → Konto löschen unwiderruflich entfernen.",
             )
 
-            DatenschutzSection(
+            PrivacySection(
                 title = "6. Deine Rechte",
                 body  = "Du hast das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung " +
                         "der Verarbeitung deiner personenbezogenen Daten (Art. 15–18 DSGVO). " +
@@ -105,7 +105,7 @@ fun DatenschutzScreen(navController: NavController) {
 }
 
 @Composable
-private fun DatenschutzSection(title: String, body: String) {
+private fun PrivacySection(title: String, body: String) {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(title, style = MaterialTheme.typography.titleSmall, color = AppTheme.colors.ink)
         Text(body,  style = MaterialTheme.typography.bodyMedium, color = AppTheme.colors.inkSoft)

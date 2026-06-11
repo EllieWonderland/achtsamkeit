@@ -60,7 +60,7 @@ fun LoginScreen(navController: NavController, vm: AuthViewModel = viewModel()) {
     LaunchedEffect(uiState) {
         when (val s = uiState) {
             is AuthUiState.Success -> {
-                val dest = if (s.isOnboardingDone) "heute" else "onboarding"
+                val dest = if (s.isOnboardingDone) "today" else "onboarding"
                 navController.navigate(dest) { popUpTo("login") { inclusive = true } }
             }
             is AuthUiState.Error -> snackbarState.showSnackbar(s.message)

@@ -4,12 +4,12 @@ sealed class Screen(val route: String) {
     object Login         : Screen("login")
     object Register      : Screen("register")
     object Onboarding    : Screen("onboarding")
-    object Heute         : Screen("main_tabs?tab=heute")
-    object Tagebuch      : Screen("main_tabs?tab=tagebuch&scrollToDate={scrollToDate}") {
-        fun createRoute(scrollToDate: String) = "main_tabs?tab=tagebuch&scrollToDate=$scrollToDate"
+    object Today         : Screen("main_tabs?tab=today")
+    object Diary         : Screen("main_tabs?tab=diary&scrollToDate={scrollToDate}") {
+        fun createRoute(scrollToDate: String) = "main_tabs?tab=diary&scrollToDate=$scrollToDate"
     }
-    object Statistik     : Screen("main_tabs?tab=statistik")
-    object Profil        : Screen("main_tabs?tab=profil")
+    object Statistics    : Screen("main_tabs?tab=statistics")
+    object Profile       : Screen("main_tabs?tab=profile")
     object ThemePicker   : Screen("theme_picker")
     object NotifSettings : Screen("notif_settings")
     object Favorites     : Screen("favorites")
@@ -25,8 +25,8 @@ sealed class Screen(val route: String) {
     object EntryDetail   : Screen("entry_detail/{entryId}") {
         fun createRoute(entryId: String) = "entry_detail/$entryId"
     }
-    object Impressum     : Screen("impressum")
-    object Datenschutz   : Screen("datenschutz")
+    object Imprint       : Screen("imprint")
+    object Privacy       : Screen("privacy")
     object LifeProfile   : Screen("life_profile")
     object CardCustomization : Screen("card_customization")
 }

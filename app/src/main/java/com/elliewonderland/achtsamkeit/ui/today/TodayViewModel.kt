@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.heute
+package com.elliewonderland.achtsamkeit.ui.today
 
 import android.app.Application
 import android.util.Log
@@ -43,7 +43,7 @@ data class WeekDayStatus(
     val isToday: Boolean,
 )
 
-data class HeuteUiState(
+data class TodayUiState(
     val isLoading: Boolean = true,
     val hasMorningEntry: Boolean = false,
     val hasEveningEntry: Boolean = false,
@@ -73,7 +73,7 @@ data class HeuteUiState(
     val weekOffsetData: Map<Int, List<WeekDayStatus>> = emptyMap(),
 )
 
-class HeuteViewModel(app: Application) : AndroidViewModel(app) {
+class TodayViewModel(app: Application) : AndroidViewModel(app) {
 
     private val repo       = EntryRepository()
     private val reviewRepo = ReviewRepository()
@@ -81,8 +81,8 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
     private val quoteRepo  = QuoteRepository(QuoteLoader(app))
     private val lifehackRepo = LifehackRepository(LifehackLoader(app))
 
-    private val _uiState = MutableStateFlow(HeuteUiState())
-    val uiState: StateFlow<HeuteUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(TodayUiState())
+    val uiState: StateFlow<TodayUiState> = _uiState.asStateFlow()
 
     fun loadTodayStatus(userId: String) {
         viewModelScope.launch {
@@ -104,7 +104,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
             val eveningEntry = eveningD.await()
             val weekEntries  = weekEntriesD.await()
 
-            // Den Spruch vom letzten abgeschlossenen Eintrag des Tages zeigen (Abend hat Vorrang)
+            // Show the quote from the last completed entry of the day (evening takes precedence)
             val lastEntry = eveningEntry ?: morningEntry
             val userTags = buildList {
                 morningEntry?.let { addAll(repo.deriveTags(it)) }
@@ -138,7 +138,7 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
             val firstName = displayName.split(" ").firstOrNull()?.takeIf { it.isNotBlank() }
             val photoUrl  = photoUrlD.await().takeIf { it.isNotBlank() }
 
-            _uiState.value = HeuteUiState(
+            _uiState.value = TodayUiState(
                 isLoading           = false,
                 hasMorningEntry     = morningEntry != null,
                 hasEveningEntry     = eveningEntry != null,
@@ -344,13 +344,13 @@ class HeuteViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun entryToScore(entry: com.elliewonderland.achtsamkeit.model.Entry): Int {
         val base = when (entry.mood) {
-            // Morgen-Stimmungen
+            // Morning moods
             MoodKey.EXCITEMENT   -> 90
             MoodKey.PEACE        -> 75
             MoodKey.TIREDNESS    -> 40
             MoodKey.ANXIETY      -> 30
             MoodKey.MELANCHOLY   -> 20
-            // Abend-Stimmungen
+            // Evening moods
             MoodKey.SATISFACTION -> 90
             MoodKey.RELIEF       -> 75
             MoodKey.EXHAUSTION   -> 40

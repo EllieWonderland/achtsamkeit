@@ -1,4 +1,4 @@
-package com.elliewonderland.achtsamkeit.ui.screens
+package com.elliewonderland.achtsamkeit.ui.theme
 
 import android.app.Activity
 import androidx.compose.foundation.background
@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.elliewonderland.achtsamkeit.data.repository.PremiumRepository
-import com.elliewonderland.achtsamkeit.ui.theme.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

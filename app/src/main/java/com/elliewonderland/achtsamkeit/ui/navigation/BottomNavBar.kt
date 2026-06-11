@@ -28,10 +28,10 @@ private data class NavItem(
 )
 
 private val navItems = listOf(
-    NavItem(Screen.Heute,    "Heute",     Icons.Outlined.WbSunny, Icons.Filled.WbSunny),
-    NavItem(Screen.Tagebuch, "Tagebuch",  Icons.Outlined.Book,    Icons.Filled.Book),
-    NavItem(Screen.Statistik,"Statistik", Icons.Outlined.BarChart, Icons.Filled.BarChart),
-    NavItem(Screen.Profil,   "Profil",    Icons.Outlined.Person,  Icons.Filled.Person),
+    NavItem(Screen.Today,    "Heute",     Icons.Outlined.WbSunny, Icons.Filled.WbSunny),
+    NavItem(Screen.Diary, "Tagebuch",  Icons.Outlined.Book,    Icons.Filled.Book),
+    NavItem(Screen.Statistics,"Statistik", Icons.Outlined.BarChart, Icons.Filled.BarChart),
+    NavItem(Screen.Profile,   "Profil",    Icons.Outlined.Person,  Icons.Filled.Person),
 )
 
 @Composable
@@ -52,12 +52,12 @@ fun BottomNavBar(
                         onTabClick(item.screen)
                     } else {
                         navController.navigate(item.screen.route) {
-                            popUpTo(Screen.Heute.route) {
-                                inclusive = item.screen == Screen.Heute
-                                saveState = item.screen != Screen.Heute
+                            popUpTo(Screen.Today.route) {
+                                inclusive = item.screen == Screen.Today
+                                saveState = item.screen != Screen.Today
                             }
-                            launchSingleTop = item.screen != Screen.Heute
-                            restoreState    = item.screen != Screen.Heute
+                            launchSingleTop = item.screen != Screen.Today
+                            restoreState    = item.screen != Screen.Today
                         }
                     }
                 },
