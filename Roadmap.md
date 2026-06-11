@@ -14,6 +14,8 @@
 > [!WARNING]
 > Diese Aufgaben müssen zwingend vor dem Play Store Release abgeschlossen werden!
 
+- [ ] **🔴 TEMPORÄRE TEST-FREISCHALTUNG zurücksetzen** — In `PremiumRepository.kt` ist `FORCE_PREMIUM_FOR_TESTING = true` gesetzt, wodurch `isPremium()` immer `true` zurückgibt (alle Premium-Features zum Testen freigeschaltet). **Vor Release zwingend auf `false` setzen / entfernen**, sonst erhält jede Nutzerin Premium gratis!
+- [x] **Tagebuch: Erstes Freitextfeld (geführte Impulsfrage) wird nicht angezeigt** — In der Tagebuch-Buchansicht (`BookPage` in `TagebuchScreen.kt`) wurde nur die Prosa + `freeText` gerendert, die geführte Frage + Antwort (`guidedQuestion`/`guidedAnswer`, das erste Freitextfeld der Routine) fehlte komplett. Fix: eigener Block zwischen Prosa und „Persönliche Notizen" ergänzt.
 - [ ] **Impressum: Echte Steuernummer eintragen** — Platzhalter `123 456 789 0` in `ImpressumScreen.kt` durch echte Steuernummer ersetzen. Vollständige Pflichtangaben nach § 5 TMG ergänzen. *(Produktname „CapiVision" ist bereits gefixt)*
 - [ ] **Datenschutzerklärung** — Finalisieren und in der App sowie in der Play Console verlinken.
 - [ ] **Firestore Composite Indexes** — In der Firebase Console anlegen für alle Compound-Queries (z.B. `type + created_at`, `tags + created_at`). Verhindert stumme Abstürze bei Filterungen in der Tagebuch-Historie.

@@ -11,10 +11,16 @@ object PremiumRepository {
 
     private const val ENTITLEMENT = "premium"
 
-    suspend fun isPremium(): Boolean = runCatching {
-        Purchases.sharedInstance.awaitCustomerInfo()
-            .entitlements[ENTITLEMENT]?.isActive == true
-    }.getOrDefault(false)
+    // TODO: TEMPORÄR – Premium für Tests freigeschaltet. Vor Release wieder entfernen!
+    private const val FORCE_PREMIUM_FOR_TESTING = true
+
+    suspend fun isPremium(): Boolean {
+        if (FORCE_PREMIUM_FOR_TESTING) return true
+        return runCatching {
+            Purchases.sharedInstance.awaitCustomerInfo()
+                .entitlements[ENTITLEMENT]?.isActive == true
+        }.getOrDefault(false)
+    }
 
     suspend fun purchase(activity: Activity): Boolean = runCatching {
         val offerings = Purchases.sharedInstance.awaitOfferings()

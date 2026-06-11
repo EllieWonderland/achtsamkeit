@@ -391,7 +391,29 @@ private fun BookPage(
                         )
                     }
 
+                    // Geführte Impulsfrage + Antwort (erstes Freitextfeld der Routine)
+                    if (entry.guidedQuestion.isNotBlank() && entry.guidedAnswer.isNotBlank()) {
+                        if (prose.isNotBlank()) {
+                            HorizontalDivider(color = colors.hair.copy(alpha = 0.1f))
+                        }
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(
+                                text = entry.guidedQuestion,
+                                style = HandwrittenLabelStyle.copy(fontSize = 15.sp),
+                                color = colors.inkSoft
+                            )
+                            Text(
+                                text = entry.guidedAnswer,
+                                style = HandwrittenStyle.copy(fontSize = 19.sp, lineHeight = 26.sp),
+                                color = colors.ink
+                            )
+                        }
+                    }
+
                     if (entry.freeText.isNotBlank()) {
+                        if (prose.isNotBlank() || entry.guidedAnswer.isNotBlank()) {
+                            HorizontalDivider(color = colors.hair.copy(alpha = 0.1f))
+                        }
                         if (prose.isNotBlank()) {
                             HorizontalDivider(color = colors.hair.copy(alpha = 0.1f))
                         }
